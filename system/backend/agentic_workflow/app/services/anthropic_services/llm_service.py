@@ -59,23 +59,26 @@ class AnthropicService:
         :param system_prompt: Optional system prompt
         :return: Full API response including usage data
         """
+        system_prompt_payload = []
+        
+        if system_prompt:
+            system_prompt_payload = [
+                {
+                    "type": "text",
+                    "text": system_prompt,
+                    "cache_control": {"type": "ephemeral"},
+                }
+            ]
+            
         payload = {
             "model": self.default_model,
             "max_tokens": self.default_max_tokens,
             "temperature": self.default_temperature,
+            "system": system_prompt_payload,
             "messages": [
                 {"role": "user", "content": prompt}
             ]
         }
-        
-        if system_prompt:
-            payload["system"] = [
-                {
-                    "type": "text",
-                    "text": system_prompt,
-                    "cache_control": {"type": "ephemeral"}
-                }
-            ]
 
         if web_search:
             payload["tools"] = [

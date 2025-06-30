@@ -73,6 +73,7 @@ class Helper:
         with open(f"artifacts/{request.session_id}/project_context/stage_ii.json", "r") as f:
             second_stage_output = json.load(f)
             
+        previous_output = {}
         if request.is_follow_up:
             filtered_output = {
                 key: value for key, value in second_stage_output.items()
@@ -80,8 +81,8 @@ class Helper:
             }
             second_stage_output = filtered_output
             
-        with open(f"artifacts/{request.session_id}/project_context/stage_iii_b.json", "r") as f:
-            previous_output = json.load(f)
+            with open(f"artifacts/{request.session_id}/project_context/stage_iii_b.json", "r") as f:
+                previous_output = json.load(f)
             
         user_prompt = USER_PROMPT_B.format(second_stage_output=json.dumps(second_stage_output, indent=2), previous_output=previous_output)
         response = await self.anthropic_service.generate_text(system_prompt=SYSTEM_PROMPT_B, prompt=user_prompt)
