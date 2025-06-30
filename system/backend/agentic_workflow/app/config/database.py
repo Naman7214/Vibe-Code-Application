@@ -3,7 +3,6 @@ from motor.motor_asyncio import AsyncIOMotorClient
 
 from system.backend.agentic_workflow.app.config.settings import settings
 
-
 class MongoDB:
     def __init__(self, database_url: str) -> None:
         self.database_url = database_url

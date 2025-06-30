@@ -1,4 +1,5 @@
 from pydantic import BaseModel, Field
+from typing import Dict, Any
 
 class ContextGatheringRequest(BaseModel):
     user_query: str = Field(
@@ -12,4 +13,12 @@ class ContextGatheringRequest(BaseModel):
     session_id: str = Field(
         ...,
         description="The session id to generate the context"
+    ),
+    is_follow_up: bool = Field(
+        ...,
+        description="Whether the request is a follow-up request"
+    ),
+    dict_of_screens: Dict[str, Any] = Field(
+        ...,
+        description="The list of screens to generate the context"
     )

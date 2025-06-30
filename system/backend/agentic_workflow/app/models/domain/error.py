@@ -5,7 +5,7 @@ from pydantic import BaseModel, Field
 
 
 class Error(BaseModel):
-    tool_name: str
+    phase: str
     error_message: str
     stack_trace: Optional[str] = Field(default=None)
     timestamp: str = Field(default=datetime.now().strftime("%Y-%m-%d %H:%M:%S"))
