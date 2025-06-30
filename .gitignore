@@ -210,3 +210,6 @@ marimo/_lsp/
 __marimo__/
 
 linters.sh
+
+artifacts/
+struct_logs

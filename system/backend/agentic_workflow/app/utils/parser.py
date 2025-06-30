@@ -1,5 +1,6 @@
-import re
 import json
+import re
+
 
 def parse_model_OUTPUT(text: str) -> dict:
     """
@@ -19,10 +20,10 @@ def parse_model_OUTPUT(text: str) -> dict:
     match = re.search(r"<OUTPUT>(.*?)</OUTPUT>", text, re.DOTALL)
     if not match:
         raise ValueError("No <OUTPUT>...</OUTPUT> section found in the input.")
-    
+
     # Extract and clean up the JSON string
     json_str = match.group(1).strip()
-    
+
     # Parse and return
     try:
         return json.loads(json_str)
