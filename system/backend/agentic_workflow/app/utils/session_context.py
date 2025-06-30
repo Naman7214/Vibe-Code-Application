@@ -1,4 +1,3 @@
 from contextvars import ContextVar
-from uuid import uuid4
 
-session_state = ContextVar("session_state")
+session_state: ContextVar[str] = ContextVar("session_state", default="")
