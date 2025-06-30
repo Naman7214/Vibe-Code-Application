@@ -1,8 +1,12 @@
 from fastapi import Depends, status
 from fastapi.responses import JSONResponse
 
-from system.backend.tools.app.models.schemas.context_generation_schema import DesignThemeGenerationRequest
-from system.backend.tools.app.usecases.context_generation.design_theme_usecase import DesignThemeUsecase
+from system.backend.tools.app.models.schemas.context_generation_schema import (
+    DesignThemeGenerationRequest,
+)
+from system.backend.tools.app.usecases.context_generation.design_theme_usecase import (
+    DesignThemeUsecase,
+)
 
 
 class DesignThemeController:
@@ -15,7 +19,7 @@ class DesignThemeController:
     async def execute(self, request: DesignThemeGenerationRequest):
         """Handle design theme generation request"""
         result = await self.design_theme_usecase.execute(request)
-        
+
         return JSONResponse(
             content={
                 "data": result,

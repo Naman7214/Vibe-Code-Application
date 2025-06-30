@@ -1,8 +1,12 @@
 from fastapi import Depends, status
 from fastapi.responses import JSONResponse
 
-from system.backend.tools.app.models.schemas.context_generation_schema import NavigationContextGenerationRequest
-from system.backend.tools.app.usecases.context_generation.navigation_context_usecase import NavigationContextUsecase
+from system.backend.tools.app.models.schemas.context_generation_schema import (
+    NavigationContextGenerationRequest,
+)
+from system.backend.tools.app.usecases.context_generation.navigation_context_usecase import (
+    NavigationContextUsecase,
+)
 
 
 class NavigationContextController:
@@ -15,7 +19,7 @@ class NavigationContextController:
     async def execute(self, request: NavigationContextGenerationRequest):
         """Handle navigation context generation request"""
         result = await self.navigation_context_usecase.execute(request)
-        
+
         return JSONResponse(
             content={
                 "data": result,
@@ -23,4 +27,4 @@ class NavigationContextController:
                 "error": None,
             },
             status_code=status.HTTP_200_OK,
-        ) 
+        )

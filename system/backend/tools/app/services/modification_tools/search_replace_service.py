@@ -1,12 +1,14 @@
 import asyncio
 import glob
 import os
-import sys
 import re
+import sys
 from datetime import datetime
 from typing import Any, Dict, Optional
 
-project_root = os.path.abspath(os.path.join(os.path.dirname(__file__), "../../../../.."))
+project_root = os.path.abspath(
+    os.path.join(os.path.dirname(__file__), "../../../../..")
+)
 sys.path.insert(0, project_root)
 
 from fastapi import Depends, HTTPException, status

@@ -8,17 +8,17 @@ NAVIGATION_REFERENCE_JSON = {
             "width": "240px",
             "collapsible": True,
             "defaultCollapsed": False,
-            "persistState": True
+            "persistState": True,
         },
         "secondaryNavigation": {
             "type": "tabs",
             "position": "top",
-            "style": "underlined"
+            "style": "underlined",
         },
         "mobileNavigation": {
             "type": "bottomTab",
             "hideOnScroll": False,
-            "showLabels": True
+            "showLabels": True,
         },
         "navigationItems": [
             {
@@ -30,7 +30,7 @@ NAVIGATION_REFERENCE_JSON = {
                 "badge": None,
                 "description": "Overview of your investments and portfolio performance",
                 "accessLevel": "all",
-                "category": "main"
+                "category": "main",
             },
             {
                 "id": "portfolio",
@@ -44,24 +44,24 @@ NAVIGATION_REFERENCE_JSON = {
                 "category": "main",
                 "subItems": [
                     {
-                    "id": "holdings",
-                    "label": "Holdings",
-                    "path": "/portfolio/holdings",
-                    "description": "View all your current investments"
+                        "id": "holdings",
+                        "label": "Holdings",
+                        "path": "/portfolio/holdings",
+                        "description": "View all your current investments",
                     },
                     {
-                    "id": "performance",
-                    "label": "Performance",
-                    "path": "/portfolio/performance",
-                    "description": "Analyze portfolio performance and returns"
+                        "id": "performance",
+                        "label": "Performance",
+                        "path": "/portfolio/performance",
+                        "description": "Analyze portfolio performance and returns",
                     },
                     {
-                    "id": "allocation",
-                    "label": "Asset Allocation",
-                    "path": "/portfolio/allocation",
-                    "description": "Review and adjust your asset allocation"
-                    }
-                ]
+                        "id": "allocation",
+                        "label": "Asset Allocation",
+                        "path": "/portfolio/allocation",
+                        "description": "Review and adjust your asset allocation",
+                    },
+                ],
             },
             {
                 "id": "markets",
@@ -75,24 +75,24 @@ NAVIGATION_REFERENCE_JSON = {
                 "category": "main",
                 "subItems": [
                     {
-                    "id": "watchlist",
-                    "label": "Watchlist",
-                    "path": "/markets/watchlist",
-                    "description": "Track your favorite stocks and securities"
+                        "id": "watchlist",
+                        "label": "Watchlist",
+                        "path": "/markets/watchlist",
+                        "description": "Track your favorite stocks and securities",
                     },
                     {
-                    "id": "screener",
-                    "label": "Stock Screener",
-                    "path": "/markets/screener",
-                    "description": "Find investment opportunities based on criteria"
+                        "id": "screener",
+                        "label": "Stock Screener",
+                        "path": "/markets/screener",
+                        "description": "Find investment opportunities based on criteria",
                     },
                     {
-                    "id": "news",
-                    "label": "Market News",
-                    "path": "/markets/news",
-                    "description": "Latest financial news and market updates"
-                    }
-                ]
+                        "id": "news",
+                        "label": "Market News",
+                        "path": "/markets/news",
+                        "description": "Latest financial news and market updates",
+                    },
+                ],
             },
             {
                 "id": "trading",
@@ -106,24 +106,24 @@ NAVIGATION_REFERENCE_JSON = {
                 "category": "main",
                 "subItems": [
                     {
-                    "id": "buy-sell",
-                    "label": "Buy/Sell",
-                    "path": "/trading/order",
-                    "description": "Place buy and sell orders"
+                        "id": "buy-sell",
+                        "label": "Buy/Sell",
+                        "path": "/trading/order",
+                        "description": "Place buy and sell orders",
                     },
                     {
-                    "id": "orders",
-                    "label": "Order History",
-                    "path": "/trading/orders",
-                    "description": "View and manage your trading orders"
+                        "id": "orders",
+                        "label": "Order History",
+                        "path": "/trading/orders",
+                        "description": "View and manage your trading orders",
                     },
                     {
-                    "id": "tax-documents",
-                    "label": "Tax Documents",
-                    "path": "/trading/tax-documents",
-                    "description": "Download tax forms and documents"
-                    }
-                ]
+                        "id": "tax-documents",
+                        "label": "Tax Documents",
+                        "path": "/trading/tax-documents",
+                        "description": "Download tax forms and documents",
+                    },
+                ],
             },
             {
                 "id": "research",
@@ -137,24 +137,24 @@ NAVIGATION_REFERENCE_JSON = {
                 "category": "main",
                 "subItems": [
                     {
-                    "id": "analyst-reports",
-                    "label": "Analyst Reports",
-                    "path": "/research/reports",
-                    "description": "Professional investment research and recommendations"
+                        "id": "analyst-reports",
+                        "label": "Analyst Reports",
+                        "path": "/research/reports",
+                        "description": "Professional investment research and recommendations",
                     },
                     {
-                    "id": "company-profiles",
-                    "label": "Company Profiles",
-                    "path": "/research/companies",
-                    "description": "Detailed company information and financials"
+                        "id": "company-profiles",
+                        "label": "Company Profiles",
+                        "path": "/research/companies",
+                        "description": "Detailed company information and financials",
                     },
                     {
-                    "id": "economic-data",
-                    "label": "Economic Data",
-                    "path": "/research/economic",
-                    "description": "Economic indicators and market trends"
-                    }
-                ]
+                        "id": "economic-data",
+                        "label": "Economic Data",
+                        "path": "/research/economic",
+                        "description": "Economic indicators and market trends",
+                    },
+                ],
             },
             {
                 "id": "goals",
@@ -165,7 +165,7 @@ NAVIGATION_REFERENCE_JSON = {
                 "badge": "3",
                 "description": "Set and track your financial goals",
                 "accessLevel": "all",
-                "category": "planning"
+                "category": "planning",
             },
             {
                 "id": "education",
@@ -179,24 +179,24 @@ NAVIGATION_REFERENCE_JSON = {
                 "category": "support",
                 "subItems": [
                     {
-                    "id": "courses",
-                    "label": "Courses",
-                    "path": "/education/courses",
-                    "description": "Structured learning courses"
+                        "id": "courses",
+                        "label": "Courses",
+                        "path": "/education/courses",
+                        "description": "Structured learning courses",
                     },
                     {
-                    "id": "articles",
-                    "label": "Articles",
-                    "path": "/education/articles",
-                    "description": "Educational articles and guides"
+                        "id": "articles",
+                        "label": "Articles",
+                        "path": "/education/articles",
+                        "description": "Educational articles and guides",
                     },
                     {
-                    "id": "webinars",
-                    "label": "Webinars",
-                    "path": "/education/webinars",
-                    "description": "Live and recorded educational sessions"
-                    }
-                ]
+                        "id": "webinars",
+                        "label": "Webinars",
+                        "path": "/education/webinars",
+                        "description": "Live and recorded educational sessions",
+                    },
+                ],
             },
             {
                 "id": "settings",
@@ -207,8 +207,8 @@ NAVIGATION_REFERENCE_JSON = {
                 "badge": None,
                 "description": "Account and application settings",
                 "accessLevel": "all",
-                "category": "account"
-            }
+                "category": "account",
+            },
         ],
         "userMenu": {
             "trigger": "avatar",
@@ -223,40 +223,38 @@ NAVIGATION_REFERENCE_JSON = {
                     "icon": "User",
                     "action": "navigate",
                     "path": "/account/overview",
-                    "description": "View account details and verification status"
+                    "description": "View account details and verification status",
                 },
                 {
                     "label": "Security Settings",
                     "icon": "Shield",
                     "action": "navigate",
                     "path": "/account/security",
-                    "description": "Manage passwords and two-factor authentication"
+                    "description": "Manage passwords and two-factor authentication",
                 },
                 {
                     "label": "Notification Preferences",
                     "icon": "Bell",
                     "action": "navigate",
                     "path": "/account/notifications",
-                    "description": "Customize email and push notifications"
+                    "description": "Customize email and push notifications",
                 },
                 {
                     "label": "Help & Support",
                     "icon": "HelpCircle",
                     "action": "navigate",
                     "path": "/support",
-                    "description": "Get help and contact support"
+                    "description": "Get help and contact support",
                 },
-                {
-                    "type": "divider"
-                },
+                {"type": "divider"},
                 {
                     "label": "Sign Out",
                     "icon": "LogOut",
                     "action": "logout",
                     "path": None,
-                    "description": "Securely sign out of your account"
-                }
-            ]
+                    "description": "Securely sign out of your account",
+                },
+            ],
         },
         "behavior": {
             "active_state_indication": True,
@@ -264,49 +262,49 @@ NAVIGATION_REFERENCE_JSON = {
             "persist_state": True,
             "keyboard_shortcuts": {
                 "toggle_sidebar": "cmd+b",
-                "search": "cmd+k"
-            }
+                "search": "cmd+k",
+            },
         },
         "search": {
             "enabled": True,
             "placeholder": "Search pages...",
             "shortcut": "cmd+k",
-            "scope": "global"
+            "scope": "global",
         },
         "breadcrumbs": {
             "enabled": True,
             "separator": "/",
             "showHome": True,
             "maxItems": 4,
-            "collapseStrategy": "middle"
+            "collapseStrategy": "middle",
         },
         "quickActions": {
             "enabled": True,
             "position": "floating",
             "trigger": "Plus",
             "actions": [
-            {
-                "label": "Buy Stock",
-                "icon": "TrendingUp",
-                "action": "navigate",
-                "path": "/trading/buy",
-                "hotkey": "Cmd+B"
-            },
-            {
-                "label": "Add to Watchlist",
-                "icon": "Eye",
-                "action": "modal",
-                "component": "AddToWatchlistModal",
-                "hotkey": "Cmd+W"
-            },
-            {
-                "label": "Transfer Funds",
-                "icon": "ArrowRightLeft",
-                "action": "navigate",
-                "path": "/account/transfer",
-                "hotkey": "Cmd+T"
-            }
-            ]
-        }
+                {
+                    "label": "Buy Stock",
+                    "icon": "TrendingUp",
+                    "action": "navigate",
+                    "path": "/trading/buy",
+                    "hotkey": "Cmd+B",
+                },
+                {
+                    "label": "Add to Watchlist",
+                    "icon": "Eye",
+                    "action": "modal",
+                    "component": "AddToWatchlistModal",
+                    "hotkey": "Cmd+W",
+                },
+                {
+                    "label": "Transfer Funds",
+                    "icon": "ArrowRightLeft",
+                    "action": "navigate",
+                    "path": "/account/transfer",
+                    "hotkey": "Cmd+T",
+                },
+            ],
+        },
     }
 }

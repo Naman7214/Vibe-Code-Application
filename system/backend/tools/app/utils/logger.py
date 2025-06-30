@@ -61,8 +61,12 @@ def setup_logger(
 loggers = {
     "pinecone": setup_logger("pinecone_service", "pinecone_service.log"),
     "voyageai": setup_logger("voyageai_service", "voyageai_service.log"),
-    "screen_generation": setup_logger("screen_generation", "screen_generation.log"),
+    "screen_generation": setup_logger(
+        "screen_generation", "screen_generation.log"
+    ),
     "anthropic": setup_logger("anthropic", "anthropic.log"),
     "design_theme": setup_logger("design_theme", "design_theme.log"),
-    "navigation_context": setup_logger("navigation_context", "navigation_context.log"),
+    "navigation_context": setup_logger(
+        "navigation_context", "navigation_context.log"
+    ),
 }

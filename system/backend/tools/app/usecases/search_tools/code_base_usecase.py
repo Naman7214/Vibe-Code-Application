@@ -15,7 +15,7 @@ from system.backend.tools.app.services.search_tools.pinecone_service import (
 )
 from system.backend.tools.app.services.search_tools.re_ranking_service import (
     RerankerService,
-)   
+)
 
 
 class CodeBaseSearchUsecase:

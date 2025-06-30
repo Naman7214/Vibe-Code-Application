@@ -1,12 +1,14 @@
 import json
 import os
-import sys
 import subprocess
+import sys
 from typing import Any, Dict
 
 from fastapi import Depends
 
-project_root = os.path.abspath(os.path.join(os.path.dirname(__file__), "../../../../.."))
+project_root = os.path.abspath(
+    os.path.join(os.path.dirname(__file__), "../../../../..")
+)
 sys.path.insert(0, project_root)
 
 from system.backend.tools.app.models.domain.error import Error
@@ -55,7 +57,9 @@ class GrepSearchUsecase:
             cmd.extend(["-g", f"!{exclude_pattern}"])
 
             # Add the query and directory (codebase directory by default)
-        cmd.extend([query, os.path.join(project_root, "codebase")])  # i have changed here
+        cmd.extend(
+            [query, os.path.join(project_root, "codebase")]
+        )  # i have changed here
 
         try:
             # Debug: Print the command being executed

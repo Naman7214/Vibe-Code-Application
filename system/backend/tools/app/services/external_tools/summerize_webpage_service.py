@@ -9,7 +9,9 @@ from system.backend.tools.app.config.settings import settings
 from system.backend.tools.app.prompts.webpage_summarizer_prompt import (
     WEB_PAGE_SUMMARIZER_PROMPT,
 )
-from system.backend.tools.app.repositories.llm_usage_repo import LLMUsageRepository
+from system.backend.tools.app.repositories.llm_usage_repo import (
+    LLMUsageRepository,
+)
 
 
 class SummarizeWebpageService:

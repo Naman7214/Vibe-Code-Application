@@ -1,18 +1,18 @@
 from fastapi import APIRouter, Depends
 
-from system.backend.tools.app.controllers.context_generation.screen_generation_controller import (
-    ScreenGenerationController,
-)
 from system.backend.tools.app.controllers.context_generation.design_theme_controller import (
     DesignThemeController,
 )
 from system.backend.tools.app.controllers.context_generation.navigation_context_controller import (
     NavigationContextController,
 )
+from system.backend.tools.app.controllers.context_generation.screen_generation_controller import (
+    ScreenGenerationController,
+)
 from system.backend.tools.app.models.schemas.context_generation_schema import (
-    ScreenGenerationRequest,
     DesignThemeGenerationRequest,
     NavigationContextGenerationRequest,
+    ScreenGenerationRequest,
 )
 from system.backend.tools.app.utils.error_handler import handle_exceptions
 
@@ -44,9 +44,3 @@ async def navigation_context_generation(
     navigation_context_controller: NavigationContextController = Depends(),
 ):
     return await navigation_context_controller.execute(request)
-
-
-            
-
-
-

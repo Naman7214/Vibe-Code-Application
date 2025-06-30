@@ -1,5 +1,3 @@
-import os
-from pathlib import Path
 from pydantic_settings import BaseSettings
 
 
@@ -10,10 +8,10 @@ class Settings(BaseSettings):
     MONGODB_DB_NAME: str = "velocity_tools"
     ERROR_COLLECTION_NAME: str = "error_logs"
     LLM_USAGE_COLLECTION_NAME: str = "llm_usage_logs"
-    
+
     VOYAGEAI_API_KEY: str = "dummy_key"
     VOYAGEAI_BASE_URL: str = "dummy_url"
-    
+
     OPENAI_API_KEY: str = "dummy_key"
     PINECONE_API_KEY: str = "dummy_key"
     TAVILY_API_KEY: str = "dummy_key"
@@ -41,5 +39,6 @@ class Settings(BaseSettings):
 
     class Config:
         env_file = ".env"
+
 
 settings = Settings()

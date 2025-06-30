@@ -4,7 +4,9 @@ import re
 import sys
 from typing import Any, Dict, List, Optional, Pattern, Set, Tuple
 
-project_root = os.path.abspath(os.path.join(os.path.dirname(__file__), "../../../../.."))
+project_root = os.path.abspath(
+    os.path.join(os.path.dirname(__file__), "../../../../..")
+)
 sys.path.insert(0, project_root)
 
 
@@ -91,60 +93,100 @@ class RunTerminalCmdUsecase:
 
         # Dangerous command names (for non-recursive checking)
         self.DANGEROUS_COMMAND_NAMES = {
-            'rm', 'rmdir', 'dd', 'mkfs', 'format', 'fdisk', 'parted',
-            'shutdown', 'poweroff', 'halt', 'reboot', 'kill', 'killall',
-            'chmod', 'chown', 'passwd', 'su', 'sudo', 'wget', 'curl',
-            'nc', 'netcat', 'telnet', 'ssh', 'scp', 'rsync'
+            "rm",
+            "rmdir",
+            "dd",
+            "mkfs",
+            "format",
+            "fdisk",
+            "parted",
+            "shutdown",
+            "poweroff",
+            "halt",
+            "reboot",
+            "kill",
+            "killall",
+            "chmod",
+            "chown",
+            "passwd",
+            "su",
+            "sudo",
+            "wget",
+            "curl",
+            "nc",
+            "netcat",
+            "telnet",
+            "ssh",
+            "scp",
+            "rsync",
         }
 
     def _modify_command_for_node_modules_exclusion(self, command: str) -> str:
         """
         Modify commands to exclude node_modules directory to prevent recursion issues.
-        
+
         Args:
             command: The original command
-            
+
         Returns:
             Modified command with node_modules exclusion where applicable
         """
         # Commands that commonly traverse directories and can benefit from node_modules exclusion
-        directory_traversal_commands = ['find', 'grep', 'ls', 'tree', 'du', 'wc']
-        
+        directory_traversal_commands = [
+            "find",
+            "grep",
+            "ls",
+            "tree",
+            "du",
+            "wc",
+        ]
+
         # Check if this is a command that traverses directories
         first_word = command.strip().split()[0] if command.strip() else ""
-        
+
         if first_word in directory_traversal_commands:
             # Add node_modules exclusion based on command type
-            if first_word == 'find':
+            if first_word == "find":
                 # Add -not -path "*/node_modules/*" to find commands
-                if 'node_modules' not in command and '-not -path' not in command:
+                if (
+                    "node_modules" not in command
+                    and "-not -path" not in command
+                ):
                     # Insert the exclusion after the path but before other conditions
                     parts = command.split()
                     if len(parts) >= 2:
                         # Find where to insert the exclusion (after path, before conditions)
                         insert_pos = 2  # After 'find' and path
-                        while insert_pos < len(parts) and not parts[insert_pos].startswith('-'):
+                        while insert_pos < len(parts) and not parts[
+                            insert_pos
+                        ].startswith("-"):
                             insert_pos += 1
-                        
-                        exclusion = ['-not', '-path', '*/node_modules/*']
-                        parts = parts[:insert_pos] + exclusion + parts[insert_pos:]
-                        command = ' '.join(parts)
-            
-            elif first_word in ['grep', 'wc']:
+
+                        exclusion = ["-not", "-path", "*/node_modules/*"]
+                        parts = (
+                            parts[:insert_pos] + exclusion + parts[insert_pos:]
+                        )
+                        command = " ".join(parts)
+
+            elif first_word in ["grep", "wc"]:
                 # Add --exclude-dir=node_modules to grep/wc commands with -r flag
-                if '-r' in command and '--exclude-dir' not in command and 'node_modules' not in command:
-                    command += ' --exclude-dir=node_modules'
-            
-            elif first_word == 'du':
+                if (
+                    "-r" in command
+                    and "--exclude-dir" not in command
+                    and "node_modules" not in command
+                ):
+                    command += " --exclude-dir=node_modules"
+
+            elif first_word == "du":
                 # Add --exclude=node_modules to du commands
-                if '--exclude' not in command and 'node_modules' not in command:
-                    command += ' --exclude=node_modules'
-            
-            elif first_word == 'tree':
+                if "--exclude" not in command and "node_modules" not in command:
+                    command += " --exclude=node_modules"
+
+            elif first_word == "tree":
                 # Add -I node_modules to tree commands
-                if '-I' not in command and 'node_modules' not in command:
-                    command += ' -I node_modules'
-        
+                if "-I" not in command and "node_modules" not in command:
+                    command += " -I node_modules"
+
         return command
 
     async def run_terminal_command(
@@ -170,7 +212,7 @@ class RunTerminalCmdUsecase:
             # Modify command to exclude node_modules if applicable
             original_command = command
             command = self._modify_command_for_node_modules_exclusion(command)
-            
+
             if command != original_command:
                 print(f"Modified command to exclude node_modules: {command}")
 
@@ -245,21 +287,23 @@ class RunTerminalCmdUsecase:
                 "status": "error",
             }
 
-    def _check_command_safety(self, command: str, _recursion_depth: int = 0) -> Dict[str, Any]:
+    def _check_command_safety(
+        self, command: str, _recursion_depth: int = 0
+    ) -> Dict[str, Any]:
         """
         Check if the command is potentially dangerous.
-        
+
         Args:
             command: The command to check
             _recursion_depth: Internal parameter to prevent infinite recursion
-            
+
         Returns:
             Dictionary with is_dangerous flag and reason if dangerous
         """
         # Prevent infinite recursion
         if _recursion_depth > 3:
             return {"is_dangerous": False, "reason": None}
-        
+
         # Normalize command for better matching (lowercase, remove extra spaces)
         normalized_cmd = re.sub(r"\s+", " ", command.strip().lower())
 
@@ -282,56 +326,63 @@ class RunTerminalCmdUsecase:
         # Look for sudo usages with dangerous commands (only check once to avoid recursion)
         if "sudo" in normalized_cmd and _recursion_depth == 0:
             cmd_without_sudo = re.sub(r"^sudo\s+", "", normalized_cmd)
-            sudo_check = self._check_command_safety(cmd_without_sudo, _recursion_depth + 1)
+            sudo_check = self._check_command_safety(
+                cmd_without_sudo, _recursion_depth + 1
+            )
             if sudo_check["is_dangerous"]:
                 return {
                     "is_dangerous": True,
                     "reason": f"Privileged dangerous operation detected: {sudo_check['reason']}",
                 }
-                
+
         # Check for chained commands that might be dangerous (only if not too deep in recursion)
         if _recursion_depth < 2 and self._has_command_chaining(normalized_cmd):
             command_parts = self._split_chained_commands(normalized_cmd)
-            
+
             for cmd_part in command_parts:
                 cmd_part = cmd_part.strip()
                 if cmd_part and len(cmd_part) > 2:
                     # Extract just the command name (first word) to check against known dangerous commands
                     first_word = cmd_part.split()[0] if cmd_part.split() else ""
-                    if first_word and self._is_potentially_dangerous_command_name(first_word):
+                    if (
+                        first_word
+                        and self._is_potentially_dangerous_command_name(
+                            first_word
+                        )
+                    ):
                         return {
                             "is_dangerous": True,
                             "reason": f"Dangerous command in chain: {first_word}",
                         }
 
         return {"is_dangerous": False, "reason": None}
-        
+
     def _has_command_chaining(self, command: str) -> bool:
         """Check if command has actual command chaining (not just content with special chars)"""
         chaining_patterns = [
-            r';\s*\w+',          # semicolon followed by word
-            r'\w+\s*&&\s*\w+',   # word && word
-            r'\w+\s*\|\|\s*\w+', # word || word
+            r";\s*\w+",  # semicolon followed by word
+            r"\w+\s*&&\s*\w+",  # word && word
+            r"\w+\s*\|\|\s*\w+",  # word || word
         ]
-        
+
         for pattern in chaining_patterns:
             if re.search(pattern, command):
                 return True
         return False
-    
+
     def _split_chained_commands(self, command: str) -> List[str]:
         """Split chained commands safely"""
         # Split by major command separators
         parts = []
-        
+
         # Split by semicolons first
-        for part in re.split(r';\s*', command):
+        for part in re.split(r";\s*", command):
             # Then split by && and ||
-            subparts = re.split(r'\s*(?:\|\||&&)\s*', part)
+            subparts = re.split(r"\s*(?:\|\||&&)\s*", part)
             parts.extend([p.strip() for p in subparts if p.strip()])
-        
+
         return parts
-    
+
     def _is_potentially_dangerous_command_name(self, command_name: str) -> bool:
         """Check if a command name is potentially dangerous (non-recursive check)"""
         return command_name.lower() in self.DANGEROUS_COMMAND_NAMES
