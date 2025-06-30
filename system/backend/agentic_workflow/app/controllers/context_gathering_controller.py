@@ -1,6 +1,6 @@
 from fastapi import Depends, status
 from fastapi.responses import JSONResponse
-from system.backend.agentic_workflow.app.usecases.context_gathering_usecase import ContextGatheringUsecase
+from system.backend.agentic_workflow.app.usecases.context_gathering_usecases import ContextGatheringUsecase
 from app.models.schemas.context_gathering_schema import ContextGatheringRequest
 
 class ContextGatheringController:
