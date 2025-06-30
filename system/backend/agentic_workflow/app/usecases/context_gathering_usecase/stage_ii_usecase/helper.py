@@ -15,40 +15,24 @@ class Helper:
         """
         Processes the input for Stage 2 to define screen requirements.
         """
-        project_context = {
-            "domain": "coffee-shop",
-            "industry_patterns": ["online-ordering", "loyalty-programs", "location-finder", "menu-browsing"],
-            "screens": ["homepage", "menu", "product-detail", "cart", "checkout", "profile", "store-locator", "about"],
-            "business_context": {
-                "business_type": "coffee-shop-chain",
-                "target_audience": "coffee-enthusiasts-professionals",
-                "key_features": ["online-ordering", "pickup-scheduling", "loyalty-rewards"]
-            }
-        }
                 
-        # with open(f"artifacts/{request.session_id}/project_context/stage_i.json", "r") as f:
-        #     project_context = json.load(f)
+        with open(f"artifacts/{request.session_id}/project_context/stage_i.json", "r") as f:
+            project_context = json.load(f)
         
-        with open(f"artifacts/{request.session_id}/project_context/stage_ii.json", "r") as f:
-            previous_output = json.load(f)
+        # with open(f"artifacts/{request.session_id}/project_context/stage_ii.json", "r") as f:
+        #     previous_output = json.load(f)
+        
+        previous_output = {}
         
         if request.is_follow_up:
             project_context["screens"] = dict_of_screens
             
-            user_prompt = USER_PROMPT.format(project_context=json.dumps(project_context, indent=2), previous_output=previous_output)
-            response = await self.anthropic_service.generate_text(system_prompt=SYSTEM_PROMPT, prompt=user_prompt)
-                        
-            parsed_response = parse_model_output(response)
-            
-            await self._save_output(request.session_id, parsed_response)
-        else:
-                            
-            user_prompt = USER_PROMPT.format(project_context=json.dumps(project_context, indent=2), previous_output=previous_output)
-            response = await self.anthropic_service.generate_text(system_prompt=SYSTEM_PROMPT, prompt=user_prompt)
-                        
-            parsed_response = parse_model_output(response)
-            
-            await self._save_output(request.session_id, parsed_response)
+        user_prompt = USER_PROMPT.format(first_stage_output=json.dumps(project_context, indent=2), previous_output=json.dumps(previous_output, indent=2))
+        response = await self.anthropic_service.generate_text(system_prompt=SYSTEM_PROMPT, prompt=user_prompt)
+                    
+        parsed_response = parse_model_output(response)
+        
+        await self._save_output(request.session_id, parsed_response)
             
     async def _save_output(self, session_id: str, output_data: Dict[str, Any]):
         """

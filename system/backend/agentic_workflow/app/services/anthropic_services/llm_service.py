@@ -108,9 +108,7 @@ class AnthropicService:
                 usage_data = response.json()["usage"]
                 
                 loggers["anthropic"].info(f"Anthropic usage: {usage_data}")
-                
-                print(collected_text)
-                            
+                                            
                 await self.llm_usage_repo.add_llm_usage(usage_data)
                 
                 return collected_text

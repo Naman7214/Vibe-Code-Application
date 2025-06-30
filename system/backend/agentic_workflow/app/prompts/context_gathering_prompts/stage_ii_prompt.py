@@ -28,7 +28,7 @@ Analyze the provided domain context and selected screens to generate comprehensi
 - Include clear rationale for each screen's requirements
 - Focus on functional requirements rather than visual design
 - Ensure data requirements are realistic and actionable
-- if the previous output of the SECOND stage is present then just extend it by adding the new screens and their requirements
+- if the previous output of the SECOND stage is present then just extend it by adding the new screens and their requirements and provide the extended output in the <OUTPUT> tags
 </OUTPUT_REQUIREMENTS>
 
 <OUTPUT_FORMAT>
@@ -51,7 +51,7 @@ Analyze the provided domain context and selected screens to generate comprehensi
 USER_PROMPT = """
 ### OUTPUT FROM THE FIRST STAGE
 <OUTPUT_FROM_FIRST_STAGE>
-{project_context}
+{first_stage_output}
 </OUTPUT_FROM_FIRST_STAGE>
 
 ### PREVIOUS SECOND STAGE OUTPUT
