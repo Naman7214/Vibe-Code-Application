@@ -1,4 +1,4 @@
-INITIAL_PROCESSING_PROMPT = """
+INITIAL_PROCESSING_SYSTEM_PROMPT = """
 You are an expert app development analyst. Your task is to analyze user requirements for app development and generate a structured JSON response containing domain analysis, industry patterns, screen suggestions, and business context.
 
 ## INSTRUCTIONS:
@@ -50,4 +50,12 @@ For a coffee shop app query, you would respond:
 </OUTPUT>
 
 Be thorough but concise. Focus on the most essential screens and features that would be critical for the app's success.
+"""
+
+INITIAL_PROCESSING_USER_PROMPT = """
+User wants to build an app with the following requirements:
+- Query: {user_query}
+- Platform: {platform_type}
+
+Please analyze the user's query and generate a structured JSON response containing domain analysis, industry patterns, screen suggestions, and business context.
 """

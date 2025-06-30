@@ -3,7 +3,6 @@ from contextlib import asynccontextmanager
 
 import uvicorn
 from fastapi import FastAPI, Request
-from fastapi.middleware.cors import CORSMiddleware
 
 from system.backend.agentic_workflow.app.apis.context_gathering_route import (
     router as context_gathering_router,
@@ -24,7 +23,7 @@ async def db_lifespan(app: FastAPI):
     mongodb_database.disconnect()
 
 
-app = FastAPI(title="Agentic Workflow")
+app = FastAPI(title="Agentic Workflow", lifespan=db_lifespan)
 
 # Include API routers
 app.include_router(
@@ -34,16 +33,16 @@ app.include_router(
     context_gathering_router, prefix="/api", tags=["context-gathering"]
 )
 
-app.add_middleware(
-    CORSMiddleware,
-    allow_origins=[
-        "http://localhost:3001",
-        "http://localhost:3000",
-    ],  # Specify the exact origin of your frontend
-    allow_credentials=True,
-    allow_methods=["POST", "GET"],  # Allow all methods (GET, POST, etc.)
-    allow_headers=["*"],  # Allow all headers
-)
+# app.add_middleware(
+#     CORSMiddleware,
+#     allow_origins=[
+#         "http://localhost:3001",
+#         "http://localhost:3000",
+#     ],  # Specify the exact origin of your frontend
+#     allow_credentials=True,
+#     allow_methods=["POST", "GET"],  # Allow all methods (GET, POST, etc.)
+#     allow_headers=["*"],  # Allow all headers
+# )
 
 
 @app.middleware("http")

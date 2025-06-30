@@ -2,8 +2,12 @@ from typing import Any, Dict, Optional
 
 import httpx
 from anthropic import Anthropic
+from fastapi import Depends
 
 from system.backend.agentic_workflow.app.config.settings import settings
+from system.backend.agentic_workflow.app.repositories.llm_usage_repo import (
+    LLMUsageRepository,
+)
 from system.backend.agentic_workflow.app.utils.logger import loggers
 
 
@@ -17,7 +21,7 @@ class JsonResponseError(Exception):
 
 
 class AnthropicService:
-    def __init__(self):
+    def __init__(self, llm_usage_repo: LLMUsageRepository = Depends()):
         """
         Initialize the Anthropic service
 
@@ -32,6 +36,7 @@ class AnthropicService:
         self.default_model = settings.ANTHROPIC_DEFAULT_MODEL
         self.default_max_tokens = 32768
         self.default_temperature = 0.2
+        self.llm_usage_repo = llm_usage_repo
 
         self.timeout = httpx.Timeout(
             connect=60.0,
@@ -52,7 +57,7 @@ class AnthropicService:
         self,
         prompt: str,
         system_prompt: Optional[str] = None,
-        web_search: bool = False,
+        web_search: bool = True,
     ) -> Dict[str, Any]:
         """
         Generate text response from Claude
@@ -82,7 +87,7 @@ class AnthropicService:
                 {
                     "type": "web_search_20250305",
                     "name": "web_search",
-                    "max_uses": 1,
+                    "max_uses": 2,
                 }
             ]
 
@@ -102,13 +107,16 @@ class AnthropicService:
                 )
                 response.raise_for_status()
 
-                collected_text = response.json()["content"][0]["text"]
+                collected_text = response.json()["content"][-1]["text"]
                 usage_data = response.json()["usage"]
 
-                return {
-                    "content": [{"text": collected_text}],
-                    "usage": usage_data or {},
-                }
+                loggers["anthropic"].info(f"Anthropic usage: {usage_data}")
+
+                print(collected_text)
+
+                await self.llm_usage_repo.add_llm_usage(usage_data)
+
+                return collected_text
 
         except httpx.RequestError as exc:
             error_msg = (
@@ -124,7 +132,7 @@ class AnthropicService:
             error_msg = f"Unexpected error: {str(exc)}"
             raise JsonResponseError(status_code=500, detail=error_msg)
 
-    def anthropic_client_request(self, prompt: str) -> Dict[str, Any]:
+    async def anthropic_client_request(self, prompt: str) -> Dict[str, Any]:
         """
         Make a request to the Anthropic API using the client
         """
@@ -152,5 +160,7 @@ class AnthropicService:
             final_message = stream.get_final_message()
 
             loggers["anthropic"].info(f"Anthropic usage: {final_message.usage}")
+
+            await self.llm_usage_repo.add_llm_usage(final_message.usage)
 
         return collected_text

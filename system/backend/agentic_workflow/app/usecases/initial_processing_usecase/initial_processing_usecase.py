@@ -7,7 +7,8 @@ from system.backend.agentic_workflow.app.models.schemas.initial_processing_schem
     InitialProcessingRequest,
 )
 from system.backend.agentic_workflow.app.prompts.initial_processing_prompts.initial_processing_prompt import (
-    INITIAL_PROCESSING_PROMPT,
+    INITIAL_PROCESSING_SYSTEM_PROMPT,
+    INITIAL_PROCESSING_USER_PROMPT,
 )
 from system.backend.agentic_workflow.app.services.anthropic_service.llm_service import (
     AnthropicService,
@@ -36,24 +37,17 @@ class InitialProcessingUsecase:
             raise ValueError("No session_id available in context")
 
         # Create user prompt
-        user_prompt = f"""
-        User wants to build an app with the following requirements:
-        - Query: {request.user_query}
-        - Platform: {request.platform_type}
-        
-        Please analyze this and provide the structured response as requested.
-        """
+        user_prompt = INITIAL_PROCESSING_USER_PROMPT.format(
+            user_query=request.user_query, platform_type=request.platform_type
+        )
 
         # Call LLM service
         llm_response = await self.anthropic_service.generate_text(
-            prompt=user_prompt, system_prompt=INITIAL_PROCESSING_PROMPT
+            prompt=user_prompt, system_prompt=INITIAL_PROCESSING_SYSTEM_PROMPT
         )
 
-        # Extract text from response
-        response_text = llm_response["content"][0]["text"]
-
         # Parse the JSON output from <OUTPUT> tags
-        parsed_data = parse_model_output(response_text)
+        parsed_data = parse_model_output(llm_response)
 
         # Create artifacts directory structure
         artifacts_dir = f"artifacts/{session_id}/context"
