@@ -1,0 +1,11 @@
+fastapi
+pydantic
+uvicorn
+python-dotenv
+pydantic-settings
+anthropic
+motor
+vulture
+autoflake
+isort
+black
