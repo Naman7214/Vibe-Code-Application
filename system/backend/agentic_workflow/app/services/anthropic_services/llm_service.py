@@ -132,23 +132,45 @@ class AnthropicService:
             error_msg = f"Unexpected error: {str(exc)}"
             raise JsonResponseError(status_code=500, detail=error_msg)
 
-    async def anthropic_client_request(self, prompt: str) -> Dict[str, Any]:
+    async def anthropic_client_request(
+        self, 
+        prompt: str, 
+        system_prompt: Optional[str] = None
+    ) -> Dict[str, Any]:
         """
-        Make a request to the Anthropic API using the client
+        Make a request to the Anthropic API using the client with optional system prompt caching
+        
+        :param prompt: The user message
+        :param system_prompt: Optional system prompt (will be cached if provided)
+        :return: The response text
         """
         collected_text = ""
 
         client = Anthropic(api_key=self.api_key)
-        with client.messages.stream(
-            model=self.default_model,
-            max_tokens=self.default_max_tokens,
-            temperature=self.default_temperature,
-            messages=[{"role": "user", "content": prompt}],
-            thinking = {
+        
+        # Prepare the stream parameters
+        stream_params = {
+            "model": self.default_model,
+            "max_tokens": self.default_max_tokens,
+            "temperature": self.default_temperature,
+            "messages": [{"role": "user", "content": prompt}],
+            "thinking": {
                 "type": "enabled",
                 "budget_tokens": 2048
             },
-        ) as stream:
+        }
+        
+        # Add system prompt with caching if provided
+        if system_prompt:
+            stream_params["system"] = [
+                {
+                    "type": "text",
+                    "text": system_prompt,
+                    "cache_control": {"type": "ephemeral"}
+                }
+            ]
+
+        with client.messages.stream(**stream_params) as stream:
 
             for text in stream.text_stream:
                 collected_text += text
