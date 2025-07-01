@@ -4,6 +4,7 @@ import os
 from typing import Any, Dict
 
 from system.backend.agentic_workflow.app.utils.xml_parser import parse_xml_to_dict
+from system.backend.agentic_workflow.app.utils.file_structure import _generate_directory_structure
 
 
 class StageIHelper:
@@ -112,8 +113,9 @@ class StageIHelper:
         scratchpads_dir = f"artifacts/{session_id}/scratchpads"
         os.makedirs(scratchpads_dir, exist_ok=True)
 
-        # Generate and write file structure
-        file_structure = self._generate_directory_structure(codebase_path)
+        # Generate and write file structure with full absolute path
+        absolute_codebase_path = os.path.abspath(codebase_path)
+        file_structure = _generate_directory_structure(absolute_codebase_path)
         file_structure_path = os.path.join(scratchpads_dir, "file_structure.txt")
         
         with open(file_structure_path, "w", encoding="utf-8") as f:
@@ -162,56 +164,12 @@ class StageIHelper:
 """
 
         # Append to global scratchpad
-        global_scratchpad_path = os.path.join(scratchpads_dir, "global_scratch_pad.txt")
+        global_scratchpad_path = os.path.join(scratchpads_dir, "global_scratchpad.txt")
         
         with open(global_scratchpad_path, "a", encoding="utf-8") as f:
             f.write(formatted_output)
         
-        self.logger.info(f"Updated global_scratch_pad.txt at {global_scratchpad_path}")
-
-    def _generate_directory_structure(self, directory_path: str, prefix: str = "", max_depth: int = 5, current_depth: int = 0) -> str:
-        """
-        Generate directory structure as a string with absolute path at root
-        
-        Args:
-            directory_path: Path to the directory to analyze
-            prefix: Prefix for tree structure display
-            max_depth: Maximum depth to traverse
-            current_depth: Current depth level
-            
-        Returns:
-            String representation of directory structure with absolute root path
-        """
-        if current_depth >= max_depth or not os.path.exists(directory_path):
-            return ""
-        
-        # For the root level, show the absolute path
-        if current_depth == 0:
-            structure = f"{directory_path}/\n"
-        else:
-            structure = ""
-            
-        try:
-            items = sorted(os.listdir(directory_path))
-            for i, item in enumerate(items):
-                if item.startswith('.'):
-                    continue
-                
-                item_path = os.path.join(directory_path, item)
-                is_last = i == len(items) - 1
-                
-                current_prefix = "└── " if is_last else "├── "
-                structure += f"{prefix}{current_prefix}{item}\n"
-                
-                if os.path.isdir(item_path) and not item.startswith('.'):
-                    next_prefix = prefix + ("    " if is_last else "│   ")
-                    structure += self._generate_directory_structure(
-                        item_path, next_prefix, max_depth, current_depth + 1
-                    )
-        except PermissionError:
-            pass
-        
-        return structure
+        self.logger.info(f"Updated global_scratchpad.txt at {global_scratchpad_path}")
 
     def _get_timestamp(self) -> str:
         """Get current timestamp as string"""
