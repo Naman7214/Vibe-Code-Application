@@ -5,7 +5,6 @@ def parse_xml_to_dict(xml_str):
     Parse LLM response using regex to extract file data
     Much more robust than XML parsing for our specific format
     """
-    print(xml_str)
     
     file_data = []
     

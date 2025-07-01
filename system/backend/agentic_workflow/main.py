@@ -36,7 +36,7 @@ app.include_router(
     context_gathering_router, prefix="/api/v1", tags=["context-gathering"]
 )
 app.include_router(
-    code_generation_router, prefix="/api/v1/code-generation", tags=["code-generation"]
+    code_generation_router, prefix="/api/v1", tags=["code-generation"]
 )
 
 # app.add_middleware(
