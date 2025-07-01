@@ -1,4 +1,4 @@
-STAGE_V_INITIAL_SYSTEM_PROMPT = """
+INITIAL_SYSTEM_PROMPT = """
 <ROLE>
 You are a senior navigation architect who designs component relationships and user flows for modern applications. Your navigation context directly impacts code generation success.
 </ROLE>
@@ -81,7 +81,7 @@ For a task management app:
 </OUTPUT>
 """
 
-STAGE_V_INITIAL_USER_PROMPT = """
+INITIAL_USER_PROMPT = """
 <CONTEXT>
 Previous Stages Context: {context}
 Selected Screens: {screens}
@@ -93,7 +93,7 @@ Generate comprehensive navigation architecture with both structured data and imp
 </INSTRUCTION>
 """
 
-STAGE_V_FOLLOWUP_SYSTEM_PROMPT = """
+FOLLOWUP_SYSTEM_PROMPT = """
 <ROLE>
 You are a senior navigation architect updating existing navigation to accommodate new screens while preserving established patterns.
 </ROLE>
@@ -137,7 +137,7 @@ Update navigation architecture by integrating new screens with minimal disruptio
 </OUTPUT>
 """
 
-STAGE_V_FOLLOWUP_USER_PROMPT = """
+FOLLOWUP_USER_PROMPT = """
 <EXISTING_NAVIGATION>
 Current Global Navigation: {global_navigation}
 </EXISTING_NAVIGATION>

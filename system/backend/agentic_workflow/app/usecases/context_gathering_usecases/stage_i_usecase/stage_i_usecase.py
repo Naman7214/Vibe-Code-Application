@@ -1,6 +1,3 @@
-import json
-import os
-
 from fastapi import Depends, HTTPException
 
 from system.backend.agentic_workflow.app.models.domain.error import Error
@@ -12,6 +9,13 @@ from system.backend.agentic_workflow.app.repositories.error_repo import (
 )
 from system.backend.agentic_workflow.app.utils.session_context import (
     session_state,
+)
+
+from .helper import (
+    get_stage_file_path,
+    read_stage_data,
+    update_screens_data,
+    write_stage_data,
 )
 
 
@@ -32,34 +36,19 @@ class StageIUsecase:
             if not session_id:
                 raise ValueError("No session_id available in context")
 
-            # Path to stage_i.json file
-            stage_file_path = (
-                f"artifacts/{session_id}/project_context/stage_i.json"
-            )
-
-            # Check if stage_i.json exists
-            if not os.path.exists(stage_file_path):
-                raise FileNotFoundError(
-                    f"Stage I file not found: {stage_file_path}"
-                )
+            # Get the file path for stage_i.json
+            stage_file_path = get_stage_file_path(session_id)
 
             # Read existing stage_i.json data
-            with open(stage_file_path, "r") as f:
-                stage_data = json.load(f)
+            stage_data = read_stage_data(stage_file_path)
 
             # Update screens based on is_follow_up flag
-            if not request.is_follow_up:
-                # Replace screens field with dict_of_screens
-                stage_data["screens"] = request.dict_of_screens
-            else:
-                # Append dict_of_screens to existing screens field
-                if "screens" not in stage_data:
-                    stage_data["screens"] = {}
-                stage_data["screens"].update(request.dict_of_screens)
+            updated_stage_data = update_screens_data(
+                stage_data, request.dict_of_screens, request.is_follow_up
+            )
 
             # Save updated data back to file
-            with open(stage_file_path, "w") as f:
-                json.dump(stage_data, f, indent=2)
+            write_stage_data(stage_file_path, updated_stage_data)
 
             # Return result with metadata
             return {
@@ -68,7 +57,7 @@ class StageIUsecase:
                 "error": None,
             }
         except HTTPException as e:
-            self.error_repo.insert_error(
+            await self.error_repo.insert_error(
                 Error(
                     phase="stage_i",
                     error_message="Error in the stage i of context gathering usecase: "
@@ -82,4 +71,20 @@ class StageIUsecase:
                 "message": "Error in the stage i of context gathering usecase: "
                 + str(e.detail),
                 "error": e.detail,
+            }
+        except Exception as e:
+            await self.error_repo.insert_error(
+                Error(
+                    phase="stage_i",
+                    error_message="Error in the stage i of context gathering usecase: "
+                    + str(e),
+                    stack_trace=str(e),
+                )
+            )
+
+            return {
+                "success": False,
+                "message": "Error in the stage i of context gathering usecase: "
+                + str(e),
+                "error": str(e),
             }

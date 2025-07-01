@@ -1,4 +1,4 @@
-INITIAL_PROCESSING_SYSTEM_PROMPT = """
+SYSTEM_PROMPT = """
 <ROLE>
 You are a senior product architect with 10+ years of experience building successful applications. Think like a seasoned developer who prioritizes user experience, technical feasibility, and business impact.
 </ROLE>
@@ -87,7 +87,7 @@ Input: "Build a food delivery app for mobile"
 </EXAMPLE>
 """
 
-INITIAL_PROCESSING_USER_PROMPT = """
+USER_PROMPT = """
 <REQUEST>
 User Query: {user_query}
 Platform Type: {platform_type}
