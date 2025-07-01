@@ -10,7 +10,7 @@ from system.backend.agentic_workflow.app.prompts.initial_processing_prompts.init
     INITIAL_PROCESSING_SYSTEM_PROMPT,
     INITIAL_PROCESSING_USER_PROMPT,
 )
-from system.backend.agentic_workflow.app.services.anthropic_service.llm_service import (
+from system.backend.agentic_workflow.app.services.anthropic_services.llm_service import (
     AnthropicService,
 )
 from system.backend.agentic_workflow.app.utils.parser import parse_model_output

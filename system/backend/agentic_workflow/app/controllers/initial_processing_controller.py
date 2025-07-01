@@ -4,7 +4,7 @@ from fastapi.responses import JSONResponse
 from system.backend.agentic_workflow.app.models.schemas.initial_processing_schema import (
     InitialProcessingRequest,
 )
-from system.backend.agentic_workflow.app.usecases.initial_processing_usecase.initial_processing_usecase import (
+from system.backend.agentic_workflow.app.usecases.initial_processing_usecases.initial_processing_usecase import (
     InitialProcessingUsecase,
 )
 

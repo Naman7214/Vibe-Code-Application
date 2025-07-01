@@ -1,8 +1,9 @@
 import json
 import os
 
-from fastapi import Depends
+from fastapi import Depends, HTTPException
 
+from system.backend.agentic_workflow.app.models.domain.error import Error
 from system.backend.agentic_workflow.app.models.schemas.context_gathering_schema import (
     ContextGatheringRequest,
 )
@@ -12,7 +13,10 @@ from system.backend.agentic_workflow.app.prompts.context_gathering_prompts.stage
     STAGE_V_INITIAL_SYSTEM_PROMPT,
     STAGE_V_INITIAL_USER_PROMPT,
 )
-from system.backend.agentic_workflow.app.services.anthropic_service.llm_service import (
+from system.backend.agentic_workflow.app.repositories.error_repo import (
+    ErrorRepo,
+)
+from system.backend.agentic_workflow.app.services.anthropic_services.llm_service import (
     AnthropicService,
 )
 from system.backend.agentic_workflow.app.utils.parser import parse_model_output
@@ -22,8 +26,13 @@ from system.backend.agentic_workflow.app.utils.session_context import (
 
 
 class StageVUsecase:
-    def __init__(self, anthropic_service: AnthropicService = Depends()):
+    def __init__(
+        self,
+        anthropic_service: AnthropicService = Depends(),
+        error_repo: ErrorRepo = Depends(),
+    ):
         self.anthropic_service = anthropic_service
+        self.error_repo = error_repo
 
     async def execute(self, request: ContextGatheringRequest) -> dict:
         """
@@ -32,26 +41,47 @@ class StageVUsecase:
         :param request: ContextGatheringRequest containing screen selections
         :return: Dict with navigation context data and metadata
         """
-        # Get session_id from context (set by middleware)
-        session_id = session_state.get()
-        if not session_id:
-            raise ValueError("No session_id available in context")
+        try:
+            # Get session_id from context (set by middleware)
+            session_id = session_state.get()
+            if not session_id:
+                raise ValueError("No session_id available in context")
 
-        # Define file paths
-        context_dir = f"artifacts/{session_id}/context"
-        stage_iv_path = os.path.join(context_dir, "stage_iv.json")
-        stage_v_path = os.path.join(context_dir, "stage_v.json")
+            # Define file paths
+            context_dir = f"artifacts/{session_id}/context"
+            stage_iv_path = os.path.join(context_dir, "stage_iv.json")
+            stage_v_path = os.path.join(context_dir, "stage_v.json")
 
-        if not request.is_follow_up:
-            # Scenario 1: Initial navigation generation
-            return await self._handle_initial_generation(
-                request, context_dir, stage_iv_path, stage_v_path, session_id
+            if not request.is_follow_up:
+                # Scenario 1: Initial navigation generation
+                return await self._handle_initial_generation(
+                    request,
+                    context_dir,
+                    stage_iv_path,
+                    stage_v_path,
+                    session_id,
+                )
+            else:
+                # Scenario 2: Follow-up navigation updates
+                return await self._handle_followup_generation(
+                    request, context_dir, stage_v_path, session_id
+                )
+        except HTTPException as e:
+            self.error_repo.insert_error(
+                Error(
+                    phase="stage_v",
+                    error_message="Error in the stage v of context gathering usecase: "
+                    + str(e.detail),
+                    stack_trace=e.with_traceback(),
+                )
             )
-        else:
-            # Scenario 2: Follow-up navigation updates
-            return await self._handle_followup_generation(
-                request, context_dir, stage_v_path, session_id
-            )
+
+            return {
+                "success": False,
+                "message": "Error in the stage v of context gathering usecase: "
+                + str(e.detail),
+                "error": e.detail,
+            }
 
     async def _handle_initial_generation(
         self, request, context_dir, stage_iv_path, stage_v_path, session_id
@@ -85,11 +115,9 @@ class StageVUsecase:
             json.dump(navigation_data, f, indent=2)
 
         return {
-            "data": navigation_data,
-            "session_id": session_id,
-            "saved_to": stage_v_path,
-            "is_follow_up": False,
-            "scenario": "initial_generation",
+            "success": True,
+            "message": "Stage V completed successfully",
+            "error": None,
         }
 
     async def _handle_followup_generation(
@@ -147,10 +175,7 @@ class StageVUsecase:
             json.dump(existing_stage_v, f, indent=2)
 
         return {
-            "data": existing_stage_v,
-            "session_id": session_id,
-            "updated_file": stage_v_path,
-            "is_follow_up": True,
-            "scenario": "followup_generation",
-            "new_screens_added": len(request.dict_of_screens),
+            "success": True,
+            "message": "Stage V completed successfully",
+            "error": None,
         }

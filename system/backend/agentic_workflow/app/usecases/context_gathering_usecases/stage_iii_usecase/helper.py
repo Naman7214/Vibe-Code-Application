@@ -24,15 +24,13 @@ class Helper:
     def __init__(self, anthropic_service: AnthropicService = Depends()):
         self.anthropic_service = anthropic_service
 
-    async def run_stage_3_pipeline(
-        self, request: ContextGatheringRequest, dict_of_screens: Dict[str, Any]
-    ):
+    async def run_stage_3_pipeline(self, request: ContextGatheringRequest):
         """
         Processes the input for Stage 3 to define screen requirements.
         """
         if request.is_follow_up:
             result = await self._generate_global_and_screen_components_details(
-                request, dict_of_screens
+                request
             )
 
             if not result.get("success"):
@@ -41,9 +39,7 @@ class Helper:
         else:
             global_theme_task = self._global_theme_generation(request)
             components_task = (
-                self._generate_global_and_screen_components_details(
-                    request, dict_of_screens
-                )
+                self._generate_global_and_screen_components_details(request)
             )
 
             results = await asyncio.gather(global_theme_task, components_task)
@@ -94,7 +90,7 @@ class Helper:
         }
 
     async def _generate_global_and_screen_components_details(
-        self, request: ContextGatheringRequest, dict_of_screens: Dict[str, Any]
+        self, request: ContextGatheringRequest
     ):
         """
         Generates the global and screen components details.
@@ -110,7 +106,8 @@ class Helper:
             filtered_output = {
                 key: value
                 for key, value in second_stage_output.items()
-                if key in dict_of_screens or key == "global_data_requirements"
+                if key in request.dict_of_screens
+                or key == "global_data_requirements"
             }
             second_stage_output = filtered_output
 

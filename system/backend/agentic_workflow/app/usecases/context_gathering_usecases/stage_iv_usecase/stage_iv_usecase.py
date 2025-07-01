@@ -2,12 +2,16 @@ import asyncio
 import json
 from typing import Any, Dict
 
-from fastapi import Depends
+from fastapi import Depends, HTTPException
 
+from system.backend.agentic_workflow.app.models.domain.error import Error
 from system.backend.agentic_workflow.app.prompts.context_gathering_prompts.stage_iv_prompt import (
     SYSTEM_PROMPT,
 )
-from system.backend.agentic_workflow.app.services.anthropic_service.llm_service import (
+from system.backend.agentic_workflow.app.repositories.error_repo import (
+    ErrorRepo,
+)
+from system.backend.agentic_workflow.app.services.anthropic_services.llm_service import (
     AnthropicService,
 )
 from system.backend.agentic_workflow.app.utils.parser import parse_model_OUTPUT
@@ -19,8 +23,13 @@ from .helper import StageIVHelper
 
 
 class StageIVUsecase:
-    def __init__(self, anthropic_service: AnthropicService = Depends()):
+    def __init__(
+        self,
+        anthropic_service: AnthropicService = Depends(),
+        error_repo: ErrorRepo = Depends(),
+    ):
         self.anthropic_service = anthropic_service
+        self.error_repo = error_repo
         self.helper = StageIVHelper()
 
     async def execute(self, input_data: Dict[str, str]) -> Dict[str, str]:
@@ -106,10 +115,27 @@ class StageIVUsecase:
             await self.helper.merge_and_save_json_file(output_path, all_results)
 
             # Return original input
-            return input_data
+            return {
+                "success": True,
+                "message": "Stage IV completed successfully",
+                "error": None,
+            }
 
-        except Exception as e:
-            raise
+        except HTTPException as e:
+            self.error_repo.insert_error(
+                Error(
+                    phase="stage_iv",
+                    error_message="Error in the stage iv of context gathering usecase: "
+                    + str(e.detail),
+                    stack_trace=e.with_traceback(),
+                )
+            )
+            return {
+                "success": False,
+                "message": "Error in the stage iv of context gathering usecase: "
+                + str(e.detail),
+                "error": e.detail,
+            }
 
     async def _process_single_screen(
         self,

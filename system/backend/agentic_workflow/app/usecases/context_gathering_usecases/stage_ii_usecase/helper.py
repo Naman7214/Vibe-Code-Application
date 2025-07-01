@@ -21,9 +21,7 @@ class Helper:
     def __init__(self, anthropic_service: AnthropicService = Depends()):
         self.anthropic_service = anthropic_service
 
-    async def run_stage_2_pipeline(
-        self, request: ContextGatheringRequest, dict_of_screens: Dict[str, Any]
-    ):
+    async def run_stage_2_pipeline(self, request: ContextGatheringRequest):
         """
         Processes the input for Stage 2 to define screen requirements.
         """
@@ -33,13 +31,20 @@ class Helper:
         ) as f:
             project_context = json.load(f)
 
-        # with open(f"artifacts/{request.session_id}/project_context/stage_ii.json", "r") as f:
-        #     previous_output = json.load(f)
-
         previous_output = {}
+        if not os.path.exists(
+            f"artifacts/{request.session_id}/project_context/stage_ii.json"
+        ):
+            previous_output = {}
+        else:
+            with open(
+                f"artifacts/{request.session_id}/project_context/stage_ii.json",
+                "r",
+            ) as f:
+                previous_output = json.load(f)
 
         if request.is_follow_up:
-            project_context["screens"] = dict_of_screens
+            project_context["screens"] = request.dict_of_screens
 
         user_prompt = USER_PROMPT.format(
             first_stage_output=json.dumps(project_context, indent=2),

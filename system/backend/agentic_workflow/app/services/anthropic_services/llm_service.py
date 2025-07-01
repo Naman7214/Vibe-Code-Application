@@ -51,13 +51,14 @@ class AnthropicService:
             "x-api-key": self.api_key,
             "anthropic-version": "2023-06-01",
             "content-type": "application/json",
+            "anthropic-beta": "extended-cache-ttl-2025-04-11",
         }
 
     async def generate_text(
         self,
         prompt: str,
         system_prompt: Optional[str] = None,
-        web_search: bool = True,
+        web_search: bool = False,
     ) -> Dict[str, Any]:
         """
         Generate text response from Claude
@@ -66,24 +67,21 @@ class AnthropicService:
         :param system_prompt: Optional system prompt
         :return: Full API response including usage data
         """
-        system_prompt_payload = []
-
-        if system_prompt:
-            system_prompt_payload = [
-                {
-                    "type": "text",
-                    "text": system_prompt,
-                    "cache_control": {"type": "ephemeral"},
-                }
-            ]
-
         payload = {
             "model": self.default_model,
             "max_tokens": self.default_max_tokens,
             "temperature": self.default_temperature,
-            "system": system_prompt_payload,
             "messages": [{"role": "user", "content": prompt}],
         }
+
+        if system_prompt:
+            payload["system"] = [
+                {
+                    "type": "text",
+                    "text": system_prompt,
+                    "cache_control": {"type": "ephemeral", "ttl": "5m"},
+                }
+            ]
 
         if web_search:
             payload["tools"] = [
@@ -114,6 +112,7 @@ class AnthropicService:
                 usage_data = response.json()["usage"]
 
                 loggers["anthropic"].info(f"Anthropic usage: {usage_data}")
+                print(collected_text)
 
                 await self.llm_usage_repo.add_llm_usage(usage_data)
 
