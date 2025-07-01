@@ -1,6 +1,23 @@
 import os
 from pathlib import Path
 
+# Common directories to ignore in directory structure generation
+IGNORED_DIRS = {
+    "node_modules",
+    "dist",
+    "build",
+    "__pycache__",
+    ".git",
+    ".next",
+    "out",
+    "coverage",
+    "tmp",
+    "temp",
+    ".venv",
+    "venv",
+    "env",
+}
+
 
 def generate_directory_structure(
     directory_path: str,
@@ -9,7 +26,8 @@ def generate_directory_structure(
     current_depth: int = 0,
 ) -> str:
     """
-    Generate directory structure as a string with absolute path at root
+    Generate directory structure as a string with absolute path at root,
+    ignoring common build and dependency directories.
 
     Args:
         directory_path: Path to the directory to analyze
@@ -32,16 +50,27 @@ def generate_directory_structure(
     try:
         items = sorted(os.listdir(directory_path))
         for i, item in enumerate(items):
-            if item.startswith("."):
+            # Skip hidden files/directories and ignored directories
+            if item.startswith(".") or item in IGNORED_DIRS:
                 continue
 
             item_path = os.path.join(directory_path, item)
-            is_last = i == len(items) - 1
+            is_last = (
+                i
+                == len(
+                    [
+                        x
+                        for x in items
+                        if not x.startswith(".") and x not in IGNORED_DIRS
+                    ]
+                )
+                - 1
+            )
 
             current_prefix = "└── " if is_last else "├── "
             structure += f"{prefix}{current_prefix}{item}\n"
 
-            if os.path.isdir(item_path) and not item.startswith("."):
+            if os.path.isdir(item_path):
                 next_prefix = prefix + ("    " if is_last else "│   ")
                 structure += generate_directory_structure(
                     item_path, next_prefix, max_depth, current_depth + 1
