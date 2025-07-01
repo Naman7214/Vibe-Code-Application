@@ -1,14 +1,23 @@
 import json
+import logging
 import os
 from typing import Any, Dict
 
-from system.backend.agentic_workflow.app.utils.logger import loggers
 from system.backend.agentic_workflow.app.utils.xml_parser import parse_xml_to_dict
 
 
 class StageIHelper:
     def __init__(self):
-        self.logger = loggers.get("code_generation_stage_i", loggers["default"])
+        # Set up a simple logger for code generation
+        self.logger = logging.getLogger("code_generation_stage_i")
+        if not self.logger.handlers:
+            handler = logging.StreamHandler()
+            formatter = logging.Formatter(
+                '%(asctime)s - %(name)s - %(levelname)s - %(message)s'
+            )
+            handler.setFormatter(formatter)
+            self.logger.addHandler(handler)
+            self.logger.setLevel(logging.INFO)
 
     async def prepare_input_context(self, session_id: str) -> Dict[str, Any]:
         """
@@ -22,7 +31,7 @@ class StageIHelper:
         """
         # Define file paths
         stage_iii_a_path = f"artifacts/{session_id}/project_context/stage_iii_a.json"
-        stage_iv_a_path = f"artifacts/{session_id}/project_context/stage_iv_a.json"
+        stage_iv_path = f"artifacts/{session_id}/project_context/stage_iv.json"
         postcss_config_path = f"artifacts/{session_id}/codebase/postcss.config.js"
         package_json_path = f"artifacts/{session_id}/codebase/package.json"
         codebase_path = f"artifacts/{session_id}/codebase"
@@ -43,9 +52,9 @@ class StageIHelper:
             self.logger.error(f"Invalid JSON in stage_iii_a.json: {e}")
             context_data["stage_iii_a"] = {}
 
-        # Read stage_iv_a.json and extract specific keys
+        # Read stage_iv.json and extract specific keys
         try:
-            with open(stage_iv_a_path, "r", encoding="utf-8") as f:
+            with open(stage_iv_path, "r", encoding="utf-8") as f:
                 stage_iv_data = json.load(f)
             
             # Extract specific keys for each page
@@ -60,12 +69,12 @@ class StageIHelper:
                         filtered_stage_iv[page_name] = filtered_page_data
             
             context_data["stage_iv_a"] = filtered_stage_iv
-            self.logger.info(f"Successfully read and filtered stage_iv_a.json")
+            self.logger.info(f"Successfully read and filtered stage_iv.json")
         except FileNotFoundError:
-            self.logger.error(f"stage_iv_a.json not found at {stage_iv_a_path}")
+            self.logger.error(f"stage_iv.json not found at {stage_iv_path}")
             context_data["stage_iv_a"] = {}
         except json.JSONDecodeError as e:
-            self.logger.error(f"Invalid JSON in stage_iv_a.json: {e}")
+            self.logger.error(f"Invalid JSON in stage_iv.json: {e}")
             context_data["stage_iv_a"] = {}
 
         # Read postcss.config.js
@@ -162,7 +171,7 @@ class StageIHelper:
 
     def _generate_directory_structure(self, directory_path: str, prefix: str = "", max_depth: int = 5, current_depth: int = 0) -> str:
         """
-        Generate directory structure as a string
+        Generate directory structure as a string with absolute path at root
         
         Args:
             directory_path: Path to the directory to analyze
@@ -171,12 +180,17 @@ class StageIHelper:
             current_depth: Current depth level
             
         Returns:
-            String representation of directory structure
+            String representation of directory structure with absolute root path
         """
         if current_depth >= max_depth or not os.path.exists(directory_path):
             return ""
         
-        structure = ""
+        # For the root level, show the absolute path
+        if current_depth == 0:
+            structure = f"{directory_path}/\n"
+        else:
+            structure = ""
+            
         try:
             items = sorted(os.listdir(directory_path))
             for i, item in enumerate(items):

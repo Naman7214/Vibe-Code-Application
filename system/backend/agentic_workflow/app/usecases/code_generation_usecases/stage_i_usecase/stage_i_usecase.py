@@ -85,7 +85,7 @@ class StageIUsecase:
             }
 
         except HTTPException as e:
-            self.error_repo.insert_error(
+            await self.error_repo.insert_error(
                 Error(
                     phase="code_generation_stage_i",
                     error_message="Error in Stage I code generation usecase: " + str(e.detail),
@@ -98,7 +98,7 @@ class StageIUsecase:
                 "error": e.detail,
             }
         except Exception as e:
-            self.error_repo.insert_error(
+            await self.error_repo.insert_error(
                 Error(
                     phase="code_generation_stage_i",
                     error_message="Unexpected error in Stage I code generation usecase: " + str(e),

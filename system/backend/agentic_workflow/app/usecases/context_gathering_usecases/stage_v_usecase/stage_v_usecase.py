@@ -67,7 +67,7 @@ class StageVUsecase:
                     request, context_dir, stage_v_path, session_id
                 )
         except HTTPException as e:
-            self.error_repo.insert_error(
+            await self.error_repo.insert_error(
                 Error(
                     phase="stage_v",
                     error_message="Error in the stage v of context gathering usecase: "

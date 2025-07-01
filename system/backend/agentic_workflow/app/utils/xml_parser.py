@@ -4,9 +4,9 @@ def parse_xml_to_dict(xml_str):
     root = ET.fromstring(xml_str)
     file_data = []
 
-    for file_elem in root.findall('file'):
-        file_path = file_elem.find('file_path').text
-        code_snippet = file_elem.find('code_snippet').text
+    for file_elem in root.findall('FILE'):
+        file_path = file_elem.find('FILE_PATH').text
+        code_snippet = file_elem.find('CODE_SNIPPET').text
         file_data.append({
             'file_path': file_path,
             'code_snippet': code_snippet

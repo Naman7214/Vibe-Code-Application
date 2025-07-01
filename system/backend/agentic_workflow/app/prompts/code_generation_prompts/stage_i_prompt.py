@@ -65,10 +65,10 @@ You will receive:
 <OUTPUT_FORMAT>
 Generate your response in the following XML format ONLY. Do not include any explanations or additional text outside the XML:
 
-<files>
-  <file>
-    <file_path>tailwind.config.js</file_path>
-    <code_snippet>const defaultTheme = require('tailwindcss/defaultTheme')
+<FILES>
+  <FILE>
+    <FILE_PATH>tailwind.config.js</FILE_PATH>
+    <CODE_SNIPPET>const defaultTheme = require('tailwindcss/defaultTheme')
 
 module.exports = {
   content: [
@@ -90,11 +90,11 @@ module.exports = {
     require('tailwindcss-animate'),
     require('@tailwindcss/typography'),
   ],
-}</code_snippet>
-  </file>
-  <file>
-    <file_path>src/styles/tailwind.css</file_path>
-    <code_snippet>@tailwind base;
+}</CODE_SNIPPET>
+  </FILE>
+  <FILE>
+    <FILE_PATH>src/styles/tailwind.css</FILE_PATH>
+    <CODE_SNIPPET>@tailwind base;
 @tailwind components;
 @tailwind utilities;
 
@@ -106,9 +106,9 @@ module.exports = {
 
 @layer components {
   /* Your component classes here */
-}</code_snippet>
-  </file>
-</files>
+}</CODE_SNIPPET>
+  </FILE>
+</FILES>
 
 IMPORTANT NOTES:
 - File paths should be relative to the codebase directory provided in context
@@ -120,6 +120,7 @@ IMPORTANT NOTES:
 - Make the theme cohesive and professional based on the design system provided
 - Include all typography utility classes as shown in the example
 - Map colors from the design system to appropriate semantic meanings
+- MUST use uppercase XML tags: FILES, FILE, FILE_PATH, CODE_SNIPPET
 </REQUIREMENTS>
 """
 
