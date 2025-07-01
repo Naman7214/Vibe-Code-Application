@@ -1,7 +1,7 @@
 from typing import Any, Dict, Optional
 
 import httpx
-from anthropic import Anthropic
+from anthropic import AsyncAnthropic
 from fastapi import Depends
 
 from system.backend.agentic_workflow.app.config.settings import settings
@@ -44,6 +44,8 @@ class AnthropicService:
             write=150.0,
             pool=60.0,
         )
+
+        self.http_client = httpx.AsyncClient(verify=False)
 
     def _get_headers(self) -> Dict[str, str]:
         """Get default headers for API requests"""
@@ -102,7 +104,9 @@ class AnthropicService:
         :return: API response in the same format as non-streaming
         """
         try:
-            async with httpx.AsyncClient(timeout=self.timeout) as client:
+            async with httpx.AsyncClient(
+                timeout=self.timeout, verify=False
+            ) as client:
                 response = await client.post(
                     self.base_url, headers=self._get_headers(), json=payload
                 )
@@ -132,32 +136,47 @@ class AnthropicService:
             error_msg = f"Unexpected error: {str(exc)}"
             raise JsonResponseError(status_code=500, detail=error_msg)
 
-    async def anthropic_client_request(self, prompt: str) -> Dict[str, Any]:
+    async def anthropic_client_request(
+        self, prompt: str, system_prompt: Optional[str] = None
+    ) -> Dict[str, Any]:
         """
-        Make a request to the Anthropic API using the client
+        Make a request to the Anthropic API using the client with optional system prompt caching
+
+        :param prompt: The user message
+        :param system_prompt: Optional system prompt (will be cached if provided)
+        :return: The response text
         """
         collected_text = ""
 
-        client = Anthropic(api_key=self.api_key)
-        with client.messages.stream(
-            model=self.default_model,
-            max_tokens=self.default_max_tokens,
-            temperature=self.default_temperature,
-            messages=[{"role": "user", "content": prompt}],
-            tools=[
+        client = AsyncAnthropic(
+            api_key=self.api_key, http_client=self.http_client
+        )
+
+        # Prepare the stream parameters
+        stream_params = {
+            "model": self.default_model,
+            "max_tokens": self.default_max_tokens,
+            "messages": [{"role": "user", "content": prompt}],
+            "thinking": {"type": "enabled", "budget_tokens": 2048},
+        }
+
+        # Add system prompt with caching if provided
+        if system_prompt:
+            stream_params["system"] = [
                 {
-                    "type": "web_search_20250305",
-                    "name": "web_search",
-                    "max_uses": 2,
+                    "type": "text",
+                    "text": system_prompt,
+                    "cache_control": {"type": "ephemeral"},
                 }
-            ],
-        ) as stream:
+            ]
 
-            for text in stream.text_stream:
+        async with client.messages.stream(**stream_params) as stream:
+
+            async for text in stream.text_stream:
                 collected_text += text
-                print(text, end="", flush=True)
+                # print(text, end="", flush=True)
 
-            final_message = stream.get_final_message()
+            final_message = await stream.get_final_message()
 
             loggers["anthropic"].info(f"Anthropic usage: {final_message.usage}")
 

@@ -4,6 +4,9 @@ from contextlib import asynccontextmanager
 import uvicorn
 from fastapi import FastAPI, Request
 
+from system.backend.agentic_workflow.app.apis.code_generation_route import (
+    router as code_generation_router,
+)
 from system.backend.agentic_workflow.app.apis.context_gathering_route import (
     router as context_gathering_router,
 )
@@ -31,6 +34,9 @@ app.include_router(
 )
 app.include_router(
     context_gathering_router, prefix="/api/v1", tags=["context-gathering"]
+)
+app.include_router(
+    code_generation_router, prefix="/api/v1", tags=["code-generation"]
 )
 
 # app.add_middleware(
@@ -70,4 +76,5 @@ if __name__ == "__main__":
         host="0.0.0.0",
         port=8000,
         reload=True,
+        reload_exclude=["artifacts/*", "artifacts/**/*"],
     )
