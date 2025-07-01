@@ -55,7 +55,7 @@ You have access to these dependencies that you can import and use in your compon
 </DEPENDENCIES>
 
 <COMPONENT_GUIDELINES>
-1. **File Structure**: Create one component per file in codebase/src/ui directory
+1. **File Structure**: Create one component per file in codebase/src/components/ ui directory   
 2. **Naming**: Use PascalCase for component names and filenames (e.g., Button.jsx, Input.jsx)
 3. **Imports**: Import utility components from parent directory (e.g., import AppIcon from '../AppIcon')
 4. **Props**: Use destructuring with default values and comprehensive prop handling
@@ -81,13 +81,13 @@ Generate each component in the following XML format don't include any other text
 
 <FILES>
 <FILE>
-<FILE_PATH>codebase/src/ui/ComponentName.jsx</FILE_PATH>
+<FILE_PATH>codebase/src/components/ui/ComponentName.jsx</FILE_PATH>
 <CODE_SNIPPET>
 // Complete React component code here
 </CODE_SNIPPET>
 </FILE>
 <FILE>
-<FILE_PATH>codebase/src/ui/ComponentName.jsx</FILE_PATH>
+<FILE_PATH>codebase/src/components/ui/ComponentName.jsx</FILE_PATH>
 <CODE_SNIPPET>
 // Complete React component code here
 </CODE_SNIPPET>
@@ -100,7 +100,7 @@ Generate each component in the following XML format don't include any other text
   "timestamp": "current_timestamp",
   "globalComponents": {{
     "ComponentName": {{
-      "path": "codebase/src/ui/ComponentName",
+      "path": "codebase/src/components/ui/ComponentName",
       "props": ["prop1", "prop2", "prop3"],
       "required": true/false,
       "usedByAll": true/false,
@@ -109,7 +109,7 @@ Generate each component in the following XML format don't include any other text
   }},
   "uiComponents": {{
     "ComponentName": {{
-      "path": "codebase/src/ui/ComponentName", 
+      "path": "codebase/src/components/ui/ComponentName", 
       "props": ["prop1", "prop2"],
       "features": ["feature1", "feature2"],
       "description": "Brief description of component"
@@ -181,7 +181,7 @@ Based on the provided specifications, generate React UI components for the globa
 5. **Utility Components**: Error boundaries, scroll handlers, theme providers
 
 Each component should:
-- Be placed in codebase/src/ui directory
+- Be placed in codebase/src/components/ui directory
 - Use the available boilerplate components (AppIcon, AppImage, ErrorBoundary, ScrollToTop)
 - Follow the established patterns and styling approach
 - Be production-ready with proper error handling
