@@ -22,6 +22,8 @@ var/
 wheels/
 context/
 codebase/
+artifacts/
+struct_logs/
 share/python-wheels/
 *.egg-info/
 .installed.cfg
@@ -52,6 +54,8 @@ coverage.xml
 .hypothesis/
 .pytest_cache/
 cover/
+
+.cursor/
 
 # Translations
 *.mo
