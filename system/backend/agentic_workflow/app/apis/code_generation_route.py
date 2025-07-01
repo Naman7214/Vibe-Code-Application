@@ -7,7 +7,7 @@ from system.backend.agentic_workflow.app.models.schemas.code_generation_schema i
     CodeGenerationRequest,
 )
 
-router = APIRouter(prefix="/code-generation", tags=["code-generation"])
+router = APIRouter()
 
 
 @router.post("/generate-code")

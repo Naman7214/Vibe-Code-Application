@@ -175,8 +175,6 @@ class Helper:
         )
 
         system_prompt = SYSTEM_PROMPT.format(
-            global_scratchpad=global_scratchpad,
-            file_structure=file_structure,
             base_path=f"{get_project_root()}/artifacts/{session_state.get()}",
         )
 
@@ -186,6 +184,8 @@ class Helper:
         user_prompt = USER_PROMPT.format(
             screen=json.dumps(single_screen_data),
             screen_navigation_data=json.dumps(single_navigation_data),
+            global_scratchpad=global_scratchpad,
+            file_structure=file_structure,
         )
 
         response = await self.anthropic_service.anthropic_client_request(

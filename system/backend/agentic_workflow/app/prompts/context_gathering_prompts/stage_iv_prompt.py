@@ -80,10 +80,23 @@ Your output MUST be consistent and ALWAYS include these 6 required keys for each
 <CONTENT_QUALITY_REQUIREMENTS>
 - Provide realistic, production-ready component specifications
 - Include comprehensive mock data that represents actual screen content
+- Each user-accessible component must include realistic sample data that will be displayed
 - Define clear interaction patterns and state requirements
 - Specify detailed responsive behavior for all screen sizes
 - Focus on screen-specific functionality and design requirements
+- Go beyond the basics to provide a fully-featured context for the screens. Don't hold back. Give it your all.
 </CONTENT_QUALITY_REQUIREMENTS>
+
+<INTERACTION_AND_FUNCTIONALITY_REQUIREMENTS>
+- All forms must have complete validation and submission logic with specific error messages and success states
+- All buttons must have defined actions that work within the current screen or navigate to existing screens
+- All interactive elements must have clear, implementable functionality with specific state changes
+- Modal/drawer components should be used for secondary actions instead of separate pages
+- Each screen should be as self-contained as possible with minimal external dependencies
+- Use modals, dropdowns, and in-page interactions instead of navigation to incomplete features
+- Define loading states, error handling, and success feedback for all user actions
+- Specify exact user flows and interaction sequences within each screen
+</INTERACTION_AND_FUNCTIONALITY_REQUIREMENTS>
 
 Wrap your entire JSON response inside `<OUTPUT> … </OUTPUT>` XML tags.
 
@@ -128,6 +141,41 @@ REFERENCE SCHEMA:
         "itemsPerRow": {"desktop": 3, "tablet": 2, "mobile": 1},
         "showCTA": true,
         "animation": "fade-in-up"
+      },
+      "SignupModal": {
+        "trigger": "hero CTA button",
+        "steps": ["email", "profile", "preferences"],
+        "validation": {
+          "email": "required, valid email format, uniqueness check",
+          "password": "min 8 chars, special char, number, uppercase",
+          "confirmPassword": "must match password field"
+        },
+        "submission": {
+          "endpoint": "/api/signup",
+          "loadingState": "button shows spinner, form disabled",
+          "successAction": "close modal, show welcome toast, redirect to dashboard",
+          "errorHandling": "display field-specific or general error messages"
+        },
+        "interactions": {
+          "closeActions": ["X button", "ESC key", "backdrop click"],
+          "navigation": "next/back buttons between steps",
+          "realTimeValidation": "validate on blur and keystroke"
+        }
+      },
+      "ContactForm": {
+        "fields": ["name", "email", "subject", "message"],
+        "validation": {
+          "name": "required, min 2 characters",
+          "email": "required, valid format",
+          "subject": "required, max 100 characters",
+          "message": "required, min 10 characters, max 500"
+        },
+        "submission": {
+          "action": "send email via /api/contact",
+          "loadingState": "submit button shows 'Sending...' with spinner",
+          "successState": "form clears, success message appears",
+          "errorState": "preserve form data, show error message"
+        }
       }
     },
     "content_data": {
@@ -174,11 +222,28 @@ REFERENCE SCHEMA:
         "primary": "navigate to signup with analytics tracking",
         "secondary": "open video modal with play tracking"
       },
+      "form_interactions": {
+        "validation": "real-time validation with specific error messages",
+        "submission": "loading state → success/error feedback → appropriate action",
+        "error_handling": "field-specific error display with helpful suggestions"
+      },
+      "modal_behaviors": {
+        "video_modal": "overlay with close button, ESC key, backdrop click",
+        "signup_modal": "multi-step form with progress indicator and validation"
+      },
       "animations": "intersection observer for fade-in effects",
       "state_management": {
         "video_modal": "boolean",
+        "signup_modal": "boolean",
+        "form_data": "object with validation states",
+        "loading_states": "object tracking async operations",
         "scroll_position": "number", 
         "cta_clicks": "tracking object"
+      },
+      "user_feedback": {
+        "success_messages": "toast notifications for completed actions",
+        "error_handling": "inline errors for forms, modal alerts for system errors",
+        "loading_indicators": "spinners for buttons, skeleton loaders for content"
       }
     },
     "responsive_design": {
@@ -214,5 +279,10 @@ REFERENCE SCHEMA:
 - Only use "other_details" if absolutely necessary for additional information
 - Ensure consistency across all screen outputs
 - Focus on production-ready, realistic specifications
+- Make each screen self-contained with complete functionality
+- Include detailed form validation, button actions, and interactive element behaviors
+- Use modals and in-page interactions instead of navigation to incomplete features
+- Provide realistic sample data for all user-accessible components
+- Define complete user flows and interaction sequences within each screen
 </REMEMBER>
 """
