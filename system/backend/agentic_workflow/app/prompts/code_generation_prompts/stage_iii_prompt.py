@@ -107,7 +107,7 @@ NOTE: The code must be implemented using the version of the dependencies specifi
     
 here's the content of the wrapper components:
 AppIcon.jsx:
-```jsx
+
 import React from 'react';
 import * as LucideIcons from 'lucide-react';
 import {{ HelpCircle }} from 'lucide-react';
@@ -136,9 +136,9 @@ function Icon({{
 }}
 export default Icon;
 
-```
+
 AppImage.jsx:
-```jsx
+
 import React from 'react';
 
 function Image({{
@@ -163,10 +163,9 @@ function Image({{
 
 export default Image;
 
-```
 
 ErrorBoundary.jsx:
-```jsx
+
 import React from "react";
 import Icon from "./AppIcon";
 
@@ -223,10 +222,10 @@ class ErrorBoundary extends React.Component {{
 
 export default ErrorBoundary;
 
-```
+
 
 ScrollToTop.jsx:
-```jsx
+
 import {{ useEffect }} from "react";
 import {{ useLocation }} from "react-router-dom";
 
@@ -241,8 +240,6 @@ const ScrollToTop = () => {{
 }};
 
 export default ScrollToTop;
-
-```
 
 </WRAPPER_COMPONENTS>
 
@@ -269,11 +266,9 @@ pages/screen_name/
 
 <CODE_QUALITY>
 - Write production-ready, clean, and maintainable React code
-- Follow React best practices and modern ES6+ syntax
 - Implement responsive design using Tailwind's responsive utilities
 - Add proper error handling and fallback states
 - Include accessibility attributes (aria-labels, alt texts, etc.)
-- Optimize for performance with efficient rendering patterns
 </CODE_QUALITY>
 
 </IMPLEMENTATION_REQUIREMENTS>

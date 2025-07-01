@@ -51,7 +51,6 @@ STAGE IV - ROUTES GENERATION SUMMARY
 </FILES>
 
 **Reference Structure:**
-```jsx
 import React from "react";
 import { BrowserRouter, Routes as RouterRoutes, Route } from "react-router-dom";
 import ScrollToTop from "./components/ScrollToTop";
@@ -76,7 +75,7 @@ const Routes = () => {
 };
 
 export default Routes;
-```"""
+"""
 
 USER_PROMPT = """Generate Routes.jsx and context registry based on the provided context.
 

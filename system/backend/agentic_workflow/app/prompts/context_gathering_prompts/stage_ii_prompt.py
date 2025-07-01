@@ -47,7 +47,6 @@ Analyze the provided domain context and selected screens to generate comprehensi
     "global_data_requirements": ["shared_data1", "shared_data2"]
 }
 </OUTPUT>
-
 """
 
 USER_PROMPT = """

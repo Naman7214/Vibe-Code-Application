@@ -9,8 +9,8 @@ Generate a complete Tailwind CSS configuration and main CSS file that defines th
 
 <INPUT_CONTEXT>
 You will receive:
-- Global design theme and system from stage_iii_a.json (colors, typography, spacing, etc.)
-- Screen-specific design details from stage_iv_a.json (specific visual requirements per page)
+- Global design theme and system (colors, typography, spacing, etc.)
+- Screen-specific design details (specific visual requirements per page)
 - Current PostCSS configuration for reference
 - Package.json dependencies for compatibility
 - Codebase path for absolute file references
@@ -18,15 +18,15 @@ You will receive:
 
 <REQUIREMENTS>
 1. Generate a comprehensive tailwind.config.js file that includes:
-   - Import defaultTheme from 'tailwindcss/defaultTheme'
-   - Content paths for React files: "./src/**/*.{js,jsx,ts,tsx}", "./public/index.html"
-   - Extended theme with custom color palettes:
-     * Primary colors (50-900 scale with hex values)
-     * Neutral colors (background, surface, border, subtle, body, strong)
-     * Semantic colors (success, warning, error, info with background variants)
-   - Typography: font families extending defaultTheme (sans, mono)
-   - Standard plugins: @tailwindcss/forms, tailwindcss-animate, @tailwindcss/typography
-   - Spacing, border radius, and shadow configurations based on design system
+- Import defaultTheme from 'tailwindcss/defaultTheme'
+- Content paths for React files: "./src/**/*.{js,jsx,ts,tsx}", "./public/index.html"
+- Extended theme with custom color palettes:
+  * Primary colors (50-900 scale with hex values)
+  * Neutral colors (background, surface, border, subtle, body, strong)
+  * Semantic colors (success, warning, error, info with background variants)
+- Typography: font families extending defaultTheme (sans, mono)
+- Standard plugins: @tailwindcss/forms, tailwindcss-animate, @tailwindcss/typography
+- Spacing, border radius, and shadow configurations based on design system
 
 2. Generate a main tailwind.css file that includes:
    - Standard Tailwind imports: @tailwind base, @tailwind components, @tailwind utilities
@@ -66,9 +66,9 @@ You will receive:
 Generate your response in the following XML format ONLY. Do not include any explanations or additional text outside the XML:
 
 <FILES>
-  <FILE>
-    <FILE_PATH>tailwind.config.js</FILE_PATH>
-    <CODE_SNIPPET>const defaultTheme = require('tailwindcss/defaultTheme')
+<FILE>
+<FILE_PATH>tailwind.config.js</FILE_PATH>
+<CODE_SNIPPET>const defaultTheme = require('tailwindcss/defaultTheme')
 
 module.exports = {
   content: [
@@ -91,10 +91,10 @@ module.exports = {
     require('@tailwindcss/typography'),
   ],
 }</CODE_SNIPPET>
-  </FILE>
-  <FILE>
-    <FILE_PATH>src/styles/tailwind.css</FILE_PATH>
-    <CODE_SNIPPET>@tailwind base;
+</FILE>
+<FILE>
+<FILE_PATH>src/styles/tailwind.css</FILE_PATH>
+<CODE_SNIPPET>@tailwind base;
 @tailwind components;
 @tailwind utilities;
 
@@ -107,7 +107,7 @@ module.exports = {
 @layer components {
   /* Your component classes here */
 }</CODE_SNIPPET>
-  </FILE>
+</FILE>
 </FILES>
 
 IMPORTANT NOTES:
@@ -121,6 +121,7 @@ IMPORTANT NOTES:
 - Include all typography utility classes as shown in the example
 - Map colors from the design system to appropriate semantic meanings
 - MUST use uppercase XML tags: FILES, FILE, FILE_PATH, CODE_SNIPPET
+- Go beyond the basics to generate a fully-featured css
 </REQUIREMENTS>
 """
 

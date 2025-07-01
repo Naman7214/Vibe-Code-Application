@@ -79,6 +79,8 @@ For a task management app:
     }
 }
 </OUTPUT>
+Go beyond the basics to provide a fully-featured context for the navigation context.
+
 """
 
 STAGE_V_INITIAL_USER_PROMPT = """
@@ -135,6 +137,7 @@ Update navigation architecture by integrating new screens with minimal disruptio
     }
 }
 </OUTPUT>
+Go beyond the basics to provide a fully-featured context for the navigation context.
 """
 
 STAGE_V_FOLLOWUP_USER_PROMPT = """

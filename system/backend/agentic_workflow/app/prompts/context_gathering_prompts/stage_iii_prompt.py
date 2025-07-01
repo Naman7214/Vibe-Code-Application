@@ -76,6 +76,7 @@ Create a global design theme strategy that will serve as the foundation referenc
     }
 }
 </OUTPUT>
+Go beyond the basics to provide a fully-featured context for the design system.
 """
 
 USER_PROMPT_A = """
