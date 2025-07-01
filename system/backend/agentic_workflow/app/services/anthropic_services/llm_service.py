@@ -51,14 +51,14 @@ class AnthropicService:
             "x-api-key": self.api_key,
             "anthropic-version": "2023-06-01",
             "content-type": "application/json",
-            "anthropic-beta": "extended-cache-ttl-2025-04-11",
+            "anthropic-beta": "extended-cache-ttl-2025-04-11"
         }
 
     async def generate_text(
         self,
         prompt: str,
         system_prompt: Optional[str] = None,
-        web_search: bool = False,
+        web_search: bool = False
     ) -> Dict[str, Any]:
         """
         Generate text response from Claude
@@ -144,13 +144,10 @@ class AnthropicService:
             max_tokens=self.default_max_tokens,
             temperature=self.default_temperature,
             messages=[{"role": "user", "content": prompt}],
-            tools=[
-                {
-                    "type": "web_search_20250305",
-                    "name": "web_search",
-                    "max_uses": 2,
-                }
-            ],
+            thinking = {
+                "type": "enabled",
+                "budget_tokens": 2048
+            },
         ) as stream:
 
             for text in stream.text_stream:
