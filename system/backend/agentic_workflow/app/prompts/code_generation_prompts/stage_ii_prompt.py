@@ -159,7 +159,6 @@ For each component, include:
 """
 
 USER_PROMPT = """
-this is just the testing stage so do not generate more then 3 components and write the very very minimum code.
 <CONTEXT>
 Global Components Specifications:
 {global_components}

@@ -1,20 +1,20 @@
-from fastapi import Depends
+from fastapi import Depends, status
 from fastapi.responses import JSONResponse
 
 from system.backend.agentic_workflow.app.models.schemas.code_generation_schema import (
     CodeGenerationRequest,
 )
-from system.backend.agentic_workflow.app.usecases.code_generation_usecases.stage_ii_usecase.stage_ii_usecase import (
-    StageIIUsecase,
+from system.backend.agentic_workflow.app.usecases.code_generation_usecases.code_generation_usecase import (
+    CodeGenerationUsecase,
 )
 
 
 class CodeGenerationController:
     def __init__(
         self,
-        stage_ii_usecase: StageIIUsecase = Depends(),
+        code_generation_usecase: CodeGenerationUsecase = Depends(),
     ):
-        self.stage_ii_usecase = stage_ii_usecase
+        self.code_generation_usecase = code_generation_usecase
 
     async def execute(self, request: CodeGenerationRequest) -> JSONResponse:
         """
@@ -23,4 +23,16 @@ class CodeGenerationController:
         :param request: CodeGenerationRequest containing user query and options
         :return: JSONResponse with generated code data and individual file paths
         """
-        return await self.stage_ii_usecase.execute(request)
+
+        code_generation_result = await self.code_generation_usecase.execute(
+            request
+        )
+
+        return JSONResponse(
+            content={
+                "data": code_generation_result,
+                "message": "Code generation completed successfully",
+                "error": None,
+            },
+            status_code=status.HTTP_200_OK,
+        )

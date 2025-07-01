@@ -1,10 +1,13 @@
-import json
 import logging
 import os
 from typing import Any, Dict
 
-from system.backend.agentic_workflow.app.utils.xml_parser import parse_xml_to_dict
-from system.backend.agentic_workflow.app.utils.file_structure import _generate_directory_structure
+from system.backend.agentic_workflow.app.utils.file_structure import (
+    generate_directory_structure,
+)
+from system.backend.agentic_workflow.app.utils.xml_parser import (
+    parse_xml_to_dict,
+)
 
 
 class StageIVHelper:
@@ -14,28 +17,36 @@ class StageIVHelper:
         if not self.logger.handlers:
             handler = logging.StreamHandler()
             formatter = logging.Formatter(
-                '%(asctime)s - %(name)s - %(levelname)s - %(message)s'
+                "%(asctime)s - %(name)s - %(levelname)s - %(message)s"
             )
             handler.setFormatter(formatter)
             self.logger.addHandler(handler)
             self.logger.setLevel(logging.INFO)
 
-    async def prepare_input_context(self, session_id: str, screen_dict: Dict[str, str], is_follow_up: bool) -> Dict[str, Any]:
+    async def prepare_input_context(
+        self, session_id: str, screen_dict: Dict[str, str], is_follow_up: bool
+    ) -> Dict[str, Any]:
         """
         Prepare input context by reading screen scratchpads and global scratchpad
-        
+
         Args:
             session_id: The session ID for file paths
             screen_dict: Dictionary with screen names as keys and descriptions as values
             is_follow_up: Flag indicating if this is a follow-up request
-            
+
         Returns:
             Dict containing all required context data
         """
         # Define paths
-        screen_scratchpads_dir = f"artifacts/{session_id}/scratchpads/screen_scratchpads"
-        global_scratchpad_path = f"artifacts/{session_id}/scratchpads/global_scratchpad.txt"
-        file_structure_path = f"artifacts/{session_id}/scratchpads/file_structure.txt"
+        screen_scratchpads_dir = (
+            f"artifacts/{session_id}/scratchpads/screen_scratchpads"
+        )
+        global_scratchpad_path = (
+            f"artifacts/{session_id}/scratchpads/global_scratchpad.txt"
+        )
+        file_structure_path = (
+            f"artifacts/{session_id}/scratchpads/file_structure.txt"
+        )
         routes_file_path = f"artifacts/{session_id}/codebase/src/Routes.jsx"
         codebase_path = f"artifacts/{session_id}/codebase"
 
@@ -44,33 +55,51 @@ class StageIVHelper:
             "screen_scratchpads": {},
             "global_scratchpad": "",
             "file_structure": "",
-            "existing_routes": ""
+            "existing_routes": "",
         }
 
         # Read screen scratchpads based on is_follow_up flag
         if is_follow_up:
             # Read only screens specified in the input dict
             screen_names = list(screen_dict.keys())
-            self.logger.info(f"Follow-up mode: Reading scratchpads for screens: {screen_names}")
+            self.logger.info(
+                f"Follow-up mode: Reading scratchpads for screens: {screen_names}"
+            )
         else:
             # Read all available screen scratchpads
-            screen_names = await self._get_all_screen_names(screen_scratchpads_dir)
-            self.logger.info(f"Initial mode: Reading all available screen scratchpads: {screen_names}")
+            screen_names = await self._get_all_screen_names(
+                screen_scratchpads_dir
+            )
+            self.logger.info(
+                f"Initial mode: Reading all available screen scratchpads: {screen_names}"
+            )
 
         # Read screen scratchpad files
         for screen_name in screen_names:
-            scratchpad_file = os.path.join(screen_scratchpads_dir, f"{screen_name}.txt")
+            scratchpad_file = os.path.join(
+                screen_scratchpads_dir, f"{screen_name}.txt"
+            )
             try:
                 with open(scratchpad_file, "r", encoding="utf-8") as f:
                     content = f.read()
                     context_data["screen_scratchpads"][screen_name] = content
-                self.logger.info(f"Successfully read scratchpad for {screen_name}")
+                self.logger.info(
+                    f"Successfully read scratchpad for {screen_name}"
+                )
             except FileNotFoundError:
-                self.logger.warning(f"Scratchpad not found for {screen_name} at {scratchpad_file}")
-                context_data["screen_scratchpads"][screen_name] = f"No scratchpad available for {screen_name}"
+                self.logger.warning(
+                    f"Scratchpad not found for {screen_name} at {scratchpad_file}"
+                )
+                context_data["screen_scratchpads"][
+                    screen_name
+                ] = f"No scratchpad available for {screen_name}"
             except Exception as e:
-                self.logger.error(f"Error reading scratchpad for {screen_name}: {e}")
-                context_data["screen_scratchpads"][screen_name] = f"Error reading scratchpad for {screen_name}"
+                self.logger.error(
+                    f"Error reading scratchpad for {screen_name}: {e}"
+                )
+                context_data["screen_scratchpads"][
+                    screen_name
+                ] = f"Error reading scratchpad for {screen_name}"
 
         # Read global scratchpad
         try:
@@ -78,11 +107,15 @@ class StageIVHelper:
                 context_data["global_scratchpad"] = f.read()
             self.logger.info("Successfully read global_scratchpad.txt")
         except FileNotFoundError:
-            self.logger.warning(f"global_scratchpad.txt not found at {global_scratchpad_path}")
+            self.logger.warning(
+                f"global_scratchpad.txt not found at {global_scratchpad_path}"
+            )
             context_data["global_scratchpad"] = "No global scratchpad available"
         except Exception as e:
             self.logger.error(f"Error reading global_scratchpad.txt: {e}")
-            context_data["global_scratchpad"] = "Error reading global scratchpad"
+            context_data["global_scratchpad"] = (
+                "Error reading global scratchpad"
+            )
 
         # Read file structure
         try:
@@ -90,7 +123,9 @@ class StageIVHelper:
                 context_data["file_structure"] = f.read()
             self.logger.info("Successfully read file_structure.txt")
         except FileNotFoundError:
-            self.logger.warning(f"file_structure.txt not found at {file_structure_path}")
+            self.logger.warning(
+                f"file_structure.txt not found at {file_structure_path}"
+            )
             context_data["file_structure"] = "No file structure available"
         except Exception as e:
             self.logger.error(f"Error reading file_structure.txt: {e}")
@@ -103,21 +138,25 @@ class StageIVHelper:
                     context_data["existing_routes"] = f.read()
                 self.logger.info("Successfully read existing Routes.jsx")
             except FileNotFoundError:
-                self.logger.warning(f"Routes.jsx not found at {routes_file_path}")
+                self.logger.warning(
+                    f"Routes.jsx not found at {routes_file_path}"
+                )
                 context_data["existing_routes"] = "No existing Routes.jsx file"
             except Exception as e:
                 self.logger.error(f"Error reading Routes.jsx: {e}")
-                context_data["existing_routes"] = "Error reading existing Routes.jsx"
+                context_data["existing_routes"] = (
+                    "Error reading existing Routes.jsx"
+                )
 
         return context_data
 
     async def _get_all_screen_names(self, screen_scratchpads_dir: str) -> list:
         """
         Get all available screen names from the screen_scratchpads directory
-        
+
         Args:
             screen_scratchpads_dir: Path to the screen scratchpads directory
-            
+
         Returns:
             List of screen names (without .txt extension)
         """
@@ -125,21 +164,27 @@ class StageIVHelper:
         try:
             if os.path.exists(screen_scratchpads_dir):
                 for filename in os.listdir(screen_scratchpads_dir):
-                    if filename.endswith('.txt'):
+                    if filename.endswith(".txt"):
                         screen_name = filename[:-4]  # Remove .txt extension
                         screen_names.append(screen_name)
-                self.logger.info(f"Found {len(screen_names)} screen scratchpads")
+                self.logger.info(
+                    f"Found {len(screen_names)} screen scratchpads"
+                )
             else:
-                self.logger.warning(f"Screen scratchpads directory not found: {screen_scratchpads_dir}")
+                self.logger.warning(
+                    f"Screen scratchpads directory not found: {screen_scratchpads_dir}"
+                )
         except Exception as e:
-            self.logger.error(f"Error reading screen scratchpads directory: {e}")
-        
+            self.logger.error(
+                f"Error reading screen scratchpads directory: {e}"
+            )
+
         return screen_names
 
     async def update_file_structure(self, session_id: str, codebase_path: str):
         """
         Update file_structure.txt with current codebase directory structure
-        
+
         Args:
             session_id: The session ID for file paths
             codebase_path: Path to the codebase directory
@@ -149,18 +194,24 @@ class StageIVHelper:
 
         # Generate and write updated file structure with full absolute path
         absolute_codebase_path = os.path.abspath(codebase_path)
-        file_structure = _generate_directory_structure(absolute_codebase_path)
-        file_structure_path = os.path.join(scratchpads_dir, "file_structure.txt")
-        
+        file_structure = generate_directory_structure(absolute_codebase_path)
+        file_structure_path = os.path.join(
+            scratchpads_dir, "file_structure.txt"
+        )
+
         with open(file_structure_path, "w", encoding="utf-8") as f:
             f.write(file_structure)
-        
-        self.logger.info(f"Updated file_structure.txt with current codebase state at {file_structure_path}")
 
-    async def update_scratchpads(self, session_id: str, llm_output: str, codebase_path: str):
+        self.logger.info(
+            f"Updated file_structure.txt with current codebase state at {file_structure_path}"
+        )
+
+    async def update_scratchpads(
+        self, session_id: str, llm_output: str, codebase_path: str
+    ):
         """
         Update scratchpad files with directory structure and parsed LLM output
-        
+
         Args:
             session_id: The session ID for file paths
             llm_output: The raw LLM output containing XML
@@ -172,17 +223,17 @@ class StageIVHelper:
         # Parse XML response to get structured output
         try:
             file_data = parse_xml_to_dict(llm_output)
-            
+
             # Separate CONTEXT_REGISTRY from regular files
             context_registry_content = ""
             actual_files = []
-            
+
             for file_info in file_data:
-                if file_info['file_path'] == 'CONTEXT_REGISTRY':
-                    context_registry_content = file_info['code_snippet']
+                if file_info["file_path"] == "CONTEXT_REGISTRY":
+                    context_registry_content = file_info["code_snippet"]
                 else:
                     actual_files.append(file_info)
-            
+
             # Format parsed output for scratchpad (only CONTEXT_REGISTRY, no actual code files)
             formatted_output = f"""
 <STAGE_IV_CODE_GENERATION>
@@ -193,7 +244,7 @@ class StageIVHelper:
 </STAGE_IV_CODE_GENERATION>
 
 """
-            
+
         except Exception as e:
             # Fallback to raw output if parsing fails
             self.logger.warning(f"Failed to parse XML output: {e}")
@@ -208,16 +259,19 @@ class StageIVHelper:
 """
 
         # Append to global scratchpad
-        global_scratchpad_path = os.path.join(scratchpads_dir, "global_scratchpad.txt")
-        
+        global_scratchpad_path = os.path.join(
+            scratchpads_dir, "global_scratchpad.txt"
+        )
+
         with open(global_scratchpad_path, "a", encoding="utf-8") as f:
             f.write(formatted_output)
-        
-        self.logger.info(f"Updated global_scratchpad.txt at {global_scratchpad_path}")
 
-
+        self.logger.info(
+            f"Updated global_scratchpad.txt at {global_scratchpad_path}"
+        )
 
     def _get_timestamp(self) -> str:
         """Get current timestamp as string"""
         from datetime import datetime
+
         return datetime.now().strftime("%Y-%m-%d %H:%M:%S")

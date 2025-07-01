@@ -3,8 +3,12 @@ import logging
 import os
 from typing import Any, Dict
 
-from system.backend.agentic_workflow.app.utils.xml_parser import parse_xml_to_dict
-from system.backend.agentic_workflow.app.utils.file_structure import _generate_directory_structure
+from system.backend.agentic_workflow.app.utils.file_structure import (
+    generate_directory_structure,
+)
+from system.backend.agentic_workflow.app.utils.xml_parser import (
+    parse_xml_to_dict,
+)
 
 
 class StageIHelper:
@@ -14,7 +18,7 @@ class StageIHelper:
         if not self.logger.handlers:
             handler = logging.StreamHandler()
             formatter = logging.Formatter(
-                '%(asctime)s - %(name)s - %(levelname)s - %(message)s'
+                "%(asctime)s - %(name)s - %(levelname)s - %(message)s"
             )
             handler.setFormatter(formatter)
             self.logger.addHandler(handler)
@@ -23,23 +27,25 @@ class StageIHelper:
     async def prepare_input_context(self, session_id: str) -> Dict[str, Any]:
         """
         Prepare input context by reading required files
-        
+
         Args:
             session_id: The session ID for file paths
-            
+
         Returns:
             Dict containing all required context data
         """
         # Define file paths
-        stage_iii_a_path = f"artifacts/{session_id}/project_context/stage_iii_a.json"
+        stage_iii_a_path = (
+            f"artifacts/{session_id}/project_context/stage_iii_a.json"
+        )
         stage_iv_path = f"artifacts/{session_id}/project_context/stage_iv.json"
-        postcss_config_path = f"artifacts/{session_id}/codebase/postcss.config.js"
+        postcss_config_path = (
+            f"artifacts/{session_id}/codebase/postcss.config.js"
+        )
         package_json_path = f"artifacts/{session_id}/codebase/package.json"
         codebase_path = f"artifacts/{session_id}/codebase"
 
-        context_data = {
-            "codebase_path": codebase_path
-        }
+        context_data = {"codebase_path": codebase_path}
 
         # Read stage_iii_a.json (entire file)
         try:
@@ -47,7 +53,9 @@ class StageIHelper:
                 context_data["stage_iii_a"] = json.load(f)
             self.logger.info(f"Successfully read stage_iii_a.json")
         except FileNotFoundError:
-            self.logger.error(f"stage_iii_a.json not found at {stage_iii_a_path}")
+            self.logger.error(
+                f"stage_iii_a.json not found at {stage_iii_a_path}"
+            )
             context_data["stage_iii_a"] = {}
         except json.JSONDecodeError as e:
             self.logger.error(f"Invalid JSON in stage_iii_a.json: {e}")
@@ -57,18 +65,23 @@ class StageIHelper:
         try:
             with open(stage_iv_path, "r", encoding="utf-8") as f:
                 stage_iv_data = json.load(f)
-            
+
             # Extract specific keys for each page
             filtered_stage_iv = {}
             for page_name, page_data in stage_iv_data.items():
                 if isinstance(page_data, dict):
                     filtered_page_data = {}
-                    for key in ["screen_design", "component_details", "interactions", "responsive_design"]:
+                    for key in [
+                        "screen_design",
+                        "component_details",
+                        "interactions",
+                        "responsive_design",
+                    ]:
                         if key in page_data:
                             filtered_page_data[key] = page_data[key]
                     if filtered_page_data:
                         filtered_stage_iv[page_name] = filtered_page_data
-            
+
             context_data["stage_iv_a"] = filtered_stage_iv
             self.logger.info(f"Successfully read and filtered stage_iv.json")
         except FileNotFoundError:
@@ -84,7 +97,9 @@ class StageIHelper:
                 context_data["postcss_config"] = f.read()
             self.logger.info(f"Successfully read postcss.config.js")
         except FileNotFoundError:
-            self.logger.error(f"postcss.config.js not found at {postcss_config_path}")
+            self.logger.error(
+                f"postcss.config.js not found at {postcss_config_path}"
+            )
             context_data["postcss_config"] = ""
 
         # Read package.json
@@ -101,10 +116,12 @@ class StageIHelper:
 
         return context_data
 
-    async def update_scratchpads(self, session_id: str, llm_output: str, codebase_path: str):
+    async def update_scratchpads(
+        self, session_id: str, llm_output: str, codebase_path: str
+    ):
         """
         Update scratchpad files with directory structure and parsed LLM output
-        
+
         Args:
             session_id: The session ID for file paths
             llm_output: The raw LLM output containing XML
@@ -115,25 +132,27 @@ class StageIHelper:
 
         # Generate and write file structure with full absolute path
         absolute_codebase_path = os.path.abspath(codebase_path)
-        file_structure = _generate_directory_structure(absolute_codebase_path)
-        file_structure_path = os.path.join(scratchpads_dir, "file_structure.txt")
-        
+        file_structure = generate_directory_structure(absolute_codebase_path)
+        file_structure_path = os.path.join(
+            scratchpads_dir, "file_structure.txt"
+        )
+
         with open(file_structure_path, "w", encoding="utf-8") as f:
             f.write(file_structure)
-        
+
         self.logger.info(f"Updated file_structure.txt at {file_structure_path}")
 
         # Parse XML response to get structured output
         try:
             file_data = parse_xml_to_dict(llm_output)
-            
+
             # Format parsed output for scratchpad
             formatted_output = f"""
 <STAGE_I_CODE_GENERATION>
 <TIMESTAMP>{self._get_timestamp()}</TIMESTAMP>
 <GENERATED_FILES>
 """
-            
+
             for file_info in file_data:
                 formatted_output += f"""
 <FILE>
@@ -143,13 +162,13 @@ class StageIHelper:
 </CODE_CONTENT>
 </FILE>
 """
-            
+
             formatted_output += """
 </GENERATED_FILES>
 </STAGE_I_CODE_GENERATION>
 
 """
-            
+
         except Exception as e:
             # Fallback to raw output if parsing fails
             self.logger.warning(f"Failed to parse XML output: {e}")
@@ -164,14 +183,19 @@ class StageIHelper:
 """
 
         # Append to global scratchpad
-        global_scratchpad_path = os.path.join(scratchpads_dir, "global_scratchpad.txt")
-        
+        global_scratchpad_path = os.path.join(
+            scratchpads_dir, "global_scratchpad.txt"
+        )
+
         with open(global_scratchpad_path, "a", encoding="utf-8") as f:
             f.write(formatted_output)
-        
-        self.logger.info(f"Updated global_scratchpad.txt at {global_scratchpad_path}")
+
+        self.logger.info(
+            f"Updated global_scratchpad.txt at {global_scratchpad_path}"
+        )
 
     def _get_timestamp(self) -> str:
         """Get current timestamp as string"""
         from datetime import datetime
+
         return datetime.now().strftime("%Y-%m-%d %H:%M:%S")

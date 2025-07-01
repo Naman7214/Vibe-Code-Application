@@ -1,6 +1,5 @@
 import json
-import os
-from typing import Dict, Any
+from typing import Any, Dict
 
 from fastapi import Depends, HTTPException
 
@@ -18,8 +17,12 @@ from system.backend.agentic_workflow.app.services.anthropic_services.llm_service
 from system.backend.agentic_workflow.app.utils.session_context import (
     session_state,
 )
-from system.backend.agentic_workflow.app.utils.xml_parser import parse_xml_to_dict
-from system.backend.agentic_workflow.app.utils.write_file import write_code_files
+from system.backend.agentic_workflow.app.utils.write_file import (
+    write_code_files,
+)
+from system.backend.agentic_workflow.app.utils.xml_parser import (
+    parse_xml_to_dict,
+)
 
 from .helper import StageIVHelper
 
@@ -34,7 +37,9 @@ class StageIVUsecase:
         self.error_repo = error_repo
         self.helper = StageIVHelper()
 
-    async def execute(self, screen_dict: Dict[str, str], is_follow_up: bool = False) -> Dict[str, Any]:
+    async def execute(
+        self, screen_dict: Dict[str, str], is_follow_up: bool = False
+    ) -> Dict[str, Any]:
         """
         Execute Stage IV processing for code generation
         Generates Routes.jsx file based on screen scratchpads
@@ -56,7 +61,7 @@ class StageIVUsecase:
             context_data = await self.helper.prepare_input_context(
                 session_id, screen_dict, is_follow_up
             )
-            
+
             # Format user prompt with context
             user_prompt = USER_PROMPT.format(
                 screen_scratchpads=context_data["screen_scratchpads"],
@@ -65,13 +70,12 @@ class StageIVUsecase:
                 existing_routes=context_data.get("existing_routes", ""),
                 screen_descriptions=json.dumps(screen_dict, indent=2),
                 is_follow_up=str(is_follow_up).lower(),
-                codebase_path=context_data["codebase_path"]
+                codebase_path=context_data["codebase_path"],
             )
 
             # Make LLM call
             response = await self.anthropic_service.anthropic_client_request(
-                prompt=user_prompt, 
-                system_prompt=SYSTEM_PROMPT
+                prompt=user_prompt, system_prompt=SYSTEM_PROMPT
             )
 
             # Parse XML response to get file data
@@ -79,8 +83,9 @@ class StageIVUsecase:
 
             # Filter out CONTEXT_REGISTRY from files to be written to codebase
             actual_files = [
-                file_info for file_info in file_data 
-                if file_info['file_path'] != 'CONTEXT_REGISTRY'
+                file_info
+                for file_info in file_data
+                if file_info["file_path"] != "CONTEXT_REGISTRY"
             ]
 
             # Write generated files to codebase (excluding CONTEXT_REGISTRY)
@@ -91,38 +96,44 @@ class StageIVUsecase:
             await self.helper.update_file_structure(session_id, codebase_path)
 
             # Update scratchpad files
-            await self.helper.update_scratchpads(session_id, response, codebase_path)
+            await self.helper.update_scratchpads(
+                session_id, response, codebase_path
+            )
 
             return {
                 "success": True,
                 "message": "Stage IV code generation completed successfully",
                 "error": None,
-                "generated_files": [item["file_path"] for item in actual_files]
+                "generated_files": [item["file_path"] for item in actual_files],
             }
 
         except HTTPException as e:
             await self.error_repo.insert_error(
                 Error(
                     phase="code_generation_stage_iv",
-                    error_message="Error in Stage IV code generation usecase: " + str(e.detail),
+                    error_message="Error in Stage IV code generation usecase: "
+                    + str(e.detail),
                     stack_trace=e.with_traceback(),
                 )
             )
             return {
                 "success": False,
-                "message": "Error in Stage IV code generation usecase: " + str(e.detail),
+                "message": "Error in Stage IV code generation usecase: "
+                + str(e.detail),
                 "error": e.detail,
             }
         except Exception as e:
             await self.error_repo.insert_error(
                 Error(
                     phase="code_generation_stage_iv",
-                    error_message="Unexpected error in Stage IV code generation usecase: " + str(e),
+                    error_message="Unexpected error in Stage IV code generation usecase: "
+                    + str(e),
                     stack_trace=str(e),
                 )
             )
             return {
                 "success": False,
-                "message": "Unexpected error in Stage IV code generation usecase: " + str(e),
+                "message": "Unexpected error in Stage IV code generation usecase: "
+                + str(e),
                 "error": str(e),
             }

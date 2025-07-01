@@ -354,5 +354,4 @@ USER_PROMPT = """
 {screen_navigation_data}
 
 MUST follow the instructions and output format strictly.
-Write very minimal code and very few files as this is just for testing. no means no dont write too much code give me very minimal tokens
 """

@@ -43,23 +43,13 @@ class Helper:
         base_path = f"artifacts/{session_state.get()}/project_context"
 
         with open(f"{base_path}/stage_iv.json", "r") as f:
-            full_stage_iv_data = json.load(f)
-            # Get only first two screens
-            screen_names = list(full_stage_iv_data.keys())[:2]
-            stage_iv_data = {
-                screen: full_stage_iv_data[screen] for screen in screen_names
-            }
+            stage_iv_data = json.load(f)
 
         with open(f"{base_path}/stage_v.json", "r") as f:
             stage_v_data = json.load(f)
-            full_screen_navigation = stage_v_data.get(
+            screen_navigation = stage_v_data.get(
                 "navigation_structure", {}
             ).get("screen_navigation", {})
-            # Get navigation data for only first two screens
-            screen_navigation = {
-                screen: full_screen_navigation.get(screen, {})
-                for screen in screen_names
-            }
 
         scratchpad_path = f"artifacts/{session_state.get()}/scratchpads"
         with open(f"{scratchpad_path}/global_scratchpad.txt", "r") as f:

@@ -1,5 +1,4 @@
 import json
-import os
 from typing import Dict
 
 from fastapi import Depends, HTTPException
@@ -15,12 +14,15 @@ from system.backend.agentic_workflow.app.repositories.error_repo import (
 from system.backend.agentic_workflow.app.services.anthropic_services.llm_service import (
     AnthropicService,
 )
-from system.backend.agentic_workflow.app.utils.parser import parse_model_output
 from system.backend.agentic_workflow.app.utils.session_context import (
     session_state,
 )
-from system.backend.agentic_workflow.app.utils.xml_parser import parse_xml_to_dict
-from system.backend.agentic_workflow.app.utils.write_file import write_code_files
+from system.backend.agentic_workflow.app.utils.write_file import (
+    write_code_files,
+)
+from system.backend.agentic_workflow.app.utils.xml_parser import (
+    parse_xml_to_dict,
+)
 
 from .helper import StageIHelper
 
@@ -51,20 +53,23 @@ class StageIUsecase:
 
             # Prepare input context
             context_data = await self.helper.prepare_input_context(session_id)
-            
+
             # Format user prompt with context
             user_prompt = USER_PROMPT.format(
-                stage_iii_a_context=json.dumps(context_data["stage_iii_a"], indent=2),
-                stage_iv_a_context=json.dumps(context_data["stage_iv_a"], indent=2),
+                stage_iii_a_context=json.dumps(
+                    context_data["stage_iii_a"], indent=2
+                ),
+                stage_iv_a_context=json.dumps(
+                    context_data["stage_iv_a"], indent=2
+                ),
                 postcss_config=context_data["postcss_config"],
                 package_json=json.dumps(context_data["package_json"], indent=2),
-                codebase_path=context_data["codebase_path"]
+                codebase_path=context_data["codebase_path"],
             )
 
             # Make LLM call
             response = await self.anthropic_service.anthropic_client_request(
-                prompt=user_prompt, 
-                system_prompt=SYSTEM_PROMPT
+                prompt=user_prompt, system_prompt=SYSTEM_PROMPT
             )
 
             # Parse XML response to get file data
@@ -75,38 +80,43 @@ class StageIUsecase:
             write_code_files(file_data, codebase_path)
 
             # Update scratchpad files
-            await self.helper.update_scratchpads(session_id, response, codebase_path)
+            await self.helper.update_scratchpads(
+                session_id, response, codebase_path
+            )
 
             return {
                 "success": True,
                 "message": "Stage I code generation completed successfully",
                 "error": None,
-                "generated_files": [item["file_path"] for item in file_data]
             }
 
         except HTTPException as e:
             await self.error_repo.insert_error(
                 Error(
                     phase="code_generation_stage_i",
-                    error_message="Error in Stage I code generation usecase: " + str(e.detail),
+                    error_message="Error in Stage I code generation usecase: "
+                    + str(e.detail),
                     stack_trace=e.with_traceback(),
                 )
             )
             return {
                 "success": False,
-                "message": "Error in Stage I code generation usecase: " + str(e.detail),
+                "message": "Error in Stage I code generation usecase: "
+                + str(e.detail),
                 "error": e.detail,
             }
         except Exception as e:
             await self.error_repo.insert_error(
                 Error(
                     phase="code_generation_stage_i",
-                    error_message="Unexpected error in Stage I code generation usecase: " + str(e),
+                    error_message="Unexpected error in Stage I code generation usecase: "
+                    + str(e),
                     stack_trace=str(e),
                 )
             )
             return {
                 "success": False,
-                "message": "Unexpected error in Stage I code generation usecase: " + str(e),
+                "message": "Unexpected error in Stage I code generation usecase: "
+                + str(e),
                 "error": str(e),
             }
