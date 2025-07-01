@@ -42,18 +42,34 @@ You will receive a comprehensive JSON context object that typically includes:
 }
 ```
 
-
 TASK:
-Generate a comprehensive blueprint for each screen that provides all the information needed to build a complete React page:
+Generate a comprehensive blueprint for each screen that provides all the information needed to build a complete React page.
+
+**CRITICAL OUTPUT STRUCTURE REQUIREMENTS:**
+Your output MUST be consistent and ALWAYS include these 6 required keys for each screen:
 
 1. **layout_structure**: Ordered list of main components with their positioning
-2. **screen_design**: Visual layout specifications, spacing, and styling details
+2. **screen_design**: Visual layout specifications, spacing, and styling details  
 3. **component_details**: Detailed component specifications with realistic props and behavior
 4. **content_data**: Comprehensive mock data representing real screen content
 5. **interactions**: User interactions, state management, and page behavior
 6. **responsive_design**: Detailed mobile/tablet/desktop layout variations
 
-**Requirements:**
+**OPTIONAL:**
+7. **other_details**: Use this key ONLY if you need to include additional information that doesn't fit in the above 6 categories. This is optional.
+
+**IMPORTANT IMAGE REQUIREMENTS:**
+- For all image references in content_data, component_details, or other sections:
+- Use REAL, WORKING image URLs from sources like:
+  - Unsplash: `https://images.unsplash.com/photo-[id]?w=[width]&h=[height]&fit=crop`
+  - Pexels: `https://images.pexels.com/photos/[id]/[filename]?w=[width]&h=[height]&fit=crop`
+  - Other reliable image CDNs with actual working URLs
+- NO placeholder URLs like `/images/...` or `placeholder.jpg`
+- NO dummy paths like `/assets/...` or `/static/...`
+- Images must be relevant to the content and actually accessible
+- Include appropriate dimensions (e.g., ?w=800&h=600) for optimization
+
+**Content Quality Requirements:**
 - Provide realistic, production-ready component specifications
 - Include comprehensive mock data that represents actual screen content
 - Define clear interaction patterns and state requirements
@@ -111,7 +127,7 @@ REFERENCE SCHEMA:
         "subheadline": "Powerful tools to grow your business faster than ever before",
         "primaryCTA": {"label": "Get Started Free", "action": "/signup"},
         "secondaryCTA": {"label": "Watch Demo", "action": "open-video-modal"},
-        "backgroundImage": "/images/hero-business.jpg"
+        "backgroundImage": "https://images.unsplash.com/photo-1557804506-669a67965ba0?w=1200&h=800&fit=crop"
       },
       "featured_items": [
         {
@@ -119,21 +135,16 @@ REFERENCE SCHEMA:
           "title": "Advanced Analytics",
           "description": "Get deep insights into your business performance with real-time dashboards",
           "icon": "chart-line",
+          "image": "https://images.unsplash.com/photo-1551288049-bebda4e38f71?w=400&h=300&fit=crop",
           "link": "/features/analytics"
         },
         {
           "id": 2,
-          "title": "Team Collaboration",
+          "title": "Team Collaboration", 
           "description": "Work seamlessly with your team using our collaboration tools",
           "icon": "users",
+          "image": "https://images.unsplash.com/photo-1522071820081-009f0129c71c?w=400&h=300&fit=crop",
           "link": "/features/collaboration"
-        },
-        {
-          "id": 3,
-          "title": "Secure & Reliable",
-          "description": "Enterprise-grade security with 99.9% uptime guarantee",
-          "icon": "shield-check",
-          "link": "/features/security"
         }
       ],
       "testimonials": [
@@ -143,7 +154,7 @@ REFERENCE SCHEMA:
           "role": "CEO, TechStart",
           "company": "TechStart Inc.",
           "content": "This platform transformed how we operate. Our productivity increased by 40%.",
-          "avatar": "/images/testimonials/sarah.jpg",
+          "avatar": "https://images.unsplash.com/photo-1494790108755-2616b612b786?w=150&h=150&fit=crop&crop=face",
           "rating": 5
         }
       ]
@@ -157,7 +168,7 @@ REFERENCE SCHEMA:
       "animations": "intersection observer for fade-in effects",
       "state_management": {
         "video_modal": "boolean",
-        "scroll_position": "number",
+        "scroll_position": "number", 
         "cta_clicks": "tracking object"
       }
     },
@@ -171,7 +182,7 @@ REFERENCE SCHEMA:
       },
       "tablet": {
         "layout": "2-column grid for features",
-        "hero_height": "60vh",
+        "hero_height": "60vh", 
         "text_scaling": "medium headlines",
         "cta_layout": "side-by-side buttons",
         "spacing": "standard 3rem section gaps"
@@ -187,5 +198,12 @@ REFERENCE SCHEMA:
   }
 }
 </OUTPUT>
+
+**REMEMBER:**
+- Always include ALL 6 required keys for each screen
+- Use real, working image URLs from Unsplash, Pexels, or similar services
+- Only use "other_details" if absolutely necessary for additional information
+- Ensure consistency across all screen outputs
+- Focus on production-ready, realistic specifications
 
 """
