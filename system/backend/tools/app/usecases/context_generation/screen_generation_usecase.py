@@ -78,7 +78,7 @@ class ScreenGenerationUsecase:
                     f"📊 Generated {len(parsed_json) if isinstance(parsed_json, list) else 'N/A'} screens"
                 )
             except json.JSONDecodeError as e:
-                self.error_repo.insert_error(
+                await self.error_repo.insert_error(
                     Error(
                         tool_name="screen_generation",
                         error_message=f"Generated content may not be valid JSON: {e}",
@@ -114,7 +114,7 @@ class ScreenGenerationUsecase:
                         )
 
                 except Exception as e:
-                    self.error_repo.insert_error(
+                    await self.error_repo.insert_error(
                         Error(
                             tool_name="screen_generation",
                             error_message=f"Failed to save screens: {str(e)}",
@@ -132,7 +132,7 @@ class ScreenGenerationUsecase:
             }
 
         except HTTPException as e:
-            self.error_repo.insert_error(
+            await self.error_repo.insert_error(
                 Error(
                     tool_name="screen_generation",
                     error_message=f"Error generating screens: {str(e.detail)}",

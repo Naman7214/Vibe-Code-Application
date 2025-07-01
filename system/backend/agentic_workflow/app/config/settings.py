@@ -1,5 +1,5 @@
 from pydantic_settings import BaseSettings
-
+from pathlib import Path
 
 class Settings(BaseSettings):
     # MongoDB settings
@@ -11,7 +11,8 @@ class Settings(BaseSettings):
     ANTHROPIC_DEFAULT_MODEL: str = "claude-sonnet-4-20250514"
 
     class Config:
-        env_file = ".env"
+        backend_dir = Path(__file__).parent.parent.parent
+        env_file = backend_dir / ".env"
 
 
 settings = Settings()

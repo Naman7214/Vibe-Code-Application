@@ -122,7 +122,7 @@ class StageIVUsecase:
             }
 
         except HTTPException as e:
-            self.error_repo.insert_error(
+            await self.error_repo.insert_error(
                 Error(
                     phase="stage_iv",
                     error_message="Error in the stage iv of context gathering usecase: "
