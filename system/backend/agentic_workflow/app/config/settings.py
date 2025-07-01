@@ -1,5 +1,3 @@
-import os
-
 from pydantic_settings import BaseSettings
 
 
@@ -11,8 +9,9 @@ class Settings(BaseSettings):
     LLM_USAGE_COLLECTION_NAME: str = "llm_usage_logs"
 
     # Anthropic settings
-    ANTHROPIC_API_KEY: str 
-    ANTHROPIC_DEFAULT_MODEL: str 
+    ANTHROPIC_API_KEY: str
+    ANTHROPIC_DEFAULT_MODEL: str
+
     class Config:
         env_file = ".env"
 

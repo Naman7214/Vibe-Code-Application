@@ -151,4 +151,4 @@ REFERENCE SCHEMA:
 - Focus on practical, implementable guidance rather than abstract concepts
 </REMEMBER>
 
-""" 
+"""

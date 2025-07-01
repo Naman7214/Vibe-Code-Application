@@ -262,4 +262,4 @@ REFERENCE SCHEMA:
 - Focus on practical specifications that developers can easily implement
 - Include both the "what" (technical specs) and "why" (design reasoning) for decisions
 </REMEMBER>
-""" 
+"""

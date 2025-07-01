@@ -51,7 +51,7 @@ class AnthropicService:
             "x-api-key": self.api_key,
             "anthropic-version": "2023-06-01",
             "content-type": "application/json",
-            "anthropic-beta":"extended-cache-ttl-2025-04-11"
+            "anthropic-beta": "extended-cache-ttl-2025-04-11",
         }
 
     async def generate_text(
@@ -79,7 +79,7 @@ class AnthropicService:
                 {
                     "type": "text",
                     "text": system_prompt,
-                    "cache_control": {"type": "ephemeral", "ttl": "1h"},
+                    "cache_control": {"type": "ephemeral", "ttl": "5m"},
                 }
             ]
 

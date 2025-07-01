@@ -87,16 +87,18 @@ class StageIVHelper:
             existing_data = {}
             if os.path.exists(file_path):
                 existing_data = await self.read_json_file(file_path)
-            
+
             # Merge new data with existing data
             # New data will overwrite existing keys, preserve others
             merged_data = {**existing_data, **new_data}
-            
+
             # Save merged data
             await self.save_json_file(file_path, merged_data)
-            
-            self.logger.info(f"Successfully merged and saved data to {file_path}")
-            
+
+            self.logger.info(
+                f"Successfully merged and saved data to {file_path}"
+            )
+
         except Exception as e:
             self.logger.error(f"Failed to merge and save file {file_path}: {e}")
             raise
