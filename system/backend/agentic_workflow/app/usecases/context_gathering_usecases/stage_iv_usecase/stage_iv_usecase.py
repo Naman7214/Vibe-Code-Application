@@ -99,9 +99,9 @@ class StageIVUsecase:
                     else:
                         all_results[screen_name] = result
 
-            # Save results to stage_iv.json
+            # Merge and save results to stage_iv.json (preserve existing screens)
             output_path = f"{base_path}/stage_iv.json"
-            await self.helper.save_json_file(output_path, all_results)
+            await self.helper.merge_and_save_json_file(output_path, all_results)
 
             # Return original input
             return input_data

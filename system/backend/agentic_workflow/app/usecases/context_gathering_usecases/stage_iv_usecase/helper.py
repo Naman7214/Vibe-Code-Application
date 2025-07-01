@@ -72,3 +72,31 @@ class StageIVHelper:
         except Exception as e:
             self.logger.error(f"Failed to save file {file_path}: {e}")
             raise
+
+    async def merge_and_save_json_file(
+        self, file_path: str, new_data: Dict[str, Any]
+    ) -> None:
+        """
+        Merge new data with existing JSON file and save
+        - If screen doesn't exist: append it
+        - If screen exists: replace it
+        - Preserve other existing screens
+        """
+        try:
+            # Read existing data if file exists
+            existing_data = {}
+            if os.path.exists(file_path):
+                existing_data = await self.read_json_file(file_path)
+            
+            # Merge new data with existing data
+            # New data will overwrite existing keys, preserve others
+            merged_data = {**existing_data, **new_data}
+            
+            # Save merged data
+            await self.save_json_file(file_path, merged_data)
+            
+            self.logger.info(f"Successfully merged and saved data to {file_path}")
+            
+        except Exception as e:
+            self.logger.error(f"Failed to merge and save file {file_path}: {e}")
+            raise
