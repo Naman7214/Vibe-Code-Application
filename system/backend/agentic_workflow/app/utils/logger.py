@@ -61,5 +61,7 @@ def setup_logger(
 loggers = {
     "anthropic": setup_logger("anthropic", "anthropic.log"),
     "stage_iv": setup_logger("stage_iv", "stage_iv.log"),
-    "screen_generation": setup_logger("screen_generation", "screen_generation.log")
+    "screen_generation": setup_logger(
+        "screen_generation", "screen_generation.log"
+    ),
 }

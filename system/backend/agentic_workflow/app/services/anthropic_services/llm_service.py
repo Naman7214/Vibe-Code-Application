@@ -18,11 +18,12 @@ class JsonResponseError(Exception):
         self.status_code = status_code
         self.detail = detail
         super().__init__(self.detail)
-        
 
 
 class AnthropicService:
-    def __init__(self, llm_usage_repo: LLMUsageRepository = Depends(LLMUsageRepository)):
+    def __init__(
+        self, llm_usage_repo: LLMUsageRepository = Depends(LLMUsageRepository)
+    ):
         """
         Initialize the Anthropic service
 
@@ -45,7 +46,7 @@ class AnthropicService:
             write=150.0,
             pool=60.0,
         )
-        
+
         self.http_client = httpx.AsyncClient(verify=False)
 
     def _get_headers(self) -> Dict[str, str]:
@@ -54,14 +55,14 @@ class AnthropicService:
             "x-api-key": self.api_key,
             "anthropic-version": "2023-06-01",
             "content-type": "application/json",
-            "anthropic-beta": "extended-cache-ttl-2025-04-11"
+            "anthropic-beta": "extended-cache-ttl-2025-04-11",
         }
 
     async def generate_text(
         self,
         prompt: str,
         system_prompt: Optional[str] = None,
-        web_search: bool = False
+        web_search: bool = False,
     ) -> Dict[str, Any]:
         """
         Generate text response from Claude
@@ -105,7 +106,9 @@ class AnthropicService:
         :return: API response in the same format as non-streaming
         """
         try:
-            async with httpx.AsyncClient(timeout=self.timeout, verify=False) as client:
+            async with httpx.AsyncClient(
+                timeout=self.timeout, verify=False
+            ) as client:
                 response = await client.post(
                     self.base_url, headers=self._get_headers(), json=payload
                 )
@@ -135,37 +138,34 @@ class AnthropicService:
             raise JsonResponseError(status_code=500, detail=error_msg)
 
     async def anthropic_client_request(
-        self, 
-        prompt: str, 
-        system_prompt: Optional[str] = None
+        self, prompt: str, system_prompt: Optional[str] = None
     ) -> Dict[str, Any]:
         """
         Make a request to the Anthropic API using the client with optional system prompt caching
-        
+
         :param prompt: The user message
         :param system_prompt: Optional system prompt (will be cached if provided)
         :return: The response text
         """
         collected_text = ""
 
-        client = AsyncAnthropic(api_key=self.api_key, http_client=self.http_client)
-        
+        client = AsyncAnthropic(
+            api_key=self.api_key, http_client=self.http_client
+        )
+
         stream_params = {
             "model": self.default_model,
             "max_tokens": self.default_max_tokens,
             "messages": [{"role": "user", "content": prompt}],
-            "thinking": {
-                "type": "enabled",
-                "budget_tokens": 2048
-            },
+            "thinking": {"type": "enabled", "budget_tokens": 2048},
         }
-        
+
         if system_prompt:
             stream_params["system"] = [
                 {
                     "type": "text",
                     "text": system_prompt,
-                    "cache_control": {"type": "ephemeral"}
+                    "cache_control": {"type": "ephemeral"},
                 }
             ]
 

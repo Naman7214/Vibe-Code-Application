@@ -12,12 +12,13 @@ from system.backend.agentic_workflow.app.usecases.code_generation_usecases.stage
     Helper,
 )
 
+
 class StageIIIUsecase:
     def __init__(
         self, helper: Helper = Depends(), error_repo: ErrorRepo = Depends()
     ):
         self.helper = helper
-        self.error_repo = error_repo    
+        self.error_repo = error_repo
 
     async def execute(self, request: CodeGenerationRequest) -> JSONResponse:
         try:
@@ -45,4 +46,3 @@ class StageIIIUsecase:
                 + str(e.detail),
                 "error": e.detail,
             }
-    

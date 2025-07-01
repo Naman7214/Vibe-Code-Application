@@ -1,5 +1,7 @@
 from typing import Any, Dict
+
 from pydantic import BaseModel, Field
+
 
 class CodeGenerationRequest(BaseModel):
     is_follow_up: bool = Field(

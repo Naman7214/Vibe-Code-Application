@@ -3,20 +3,21 @@ from pathlib import Path
 
 # Common directories to ignore in directory structure generation
 IGNORED_DIRS = {
-    'node_modules',
-    'dist',
-    'build',
-    '__pycache__',
-    '.git',
-    '.next',
-    'out',
-    'coverage',
-    'tmp',
-    'temp',
-    '.venv',
-    'venv',
-    'env'
+    "node_modules",
+    "dist",
+    "build",
+    "__pycache__",
+    ".git",
+    ".next",
+    "out",
+    "coverage",
+    "tmp",
+    "temp",
+    ".venv",
+    "venv",
+    "env",
 }
+
 
 def generate_directory_structure(
     directory_path: str,
@@ -54,7 +55,17 @@ def generate_directory_structure(
                 continue
 
             item_path = os.path.join(directory_path, item)
-            is_last = i == len([x for x in items if not x.startswith(".") and x not in IGNORED_DIRS]) - 1
+            is_last = (
+                i
+                == len(
+                    [
+                        x
+                        for x in items
+                        if not x.startswith(".") and x not in IGNORED_DIRS
+                    ]
+                )
+                - 1
+            )
 
             current_prefix = "└── " if is_last else "├── "
             structure += f"{prefix}{current_prefix}{item}\n"
