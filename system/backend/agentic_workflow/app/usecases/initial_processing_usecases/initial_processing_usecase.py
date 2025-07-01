@@ -6,9 +6,9 @@ from fastapi import Depends
 from system.backend.agentic_workflow.app.models.schemas.initial_processing_schema import (
     InitialProcessingRequest,
 )
-from system.backend.agentic_workflow.app.prompts.initial_processing_prompts.initial_processing_prompt import (
-    INITIAL_PROCESSING_SYSTEM_PROMPT,
-    INITIAL_PROCESSING_USER_PROMPT,
+from system.backend.agentic_workflow.app.prompts.context_gathering_prompts.stage_i_prompt import (
+    SYSTEM_PROMPT,
+    USER_PROMPT,
 )
 from system.backend.agentic_workflow.app.services.anthropic_services.llm_service import (
     AnthropicService,
@@ -37,13 +37,13 @@ class InitialProcessingUsecase:
             raise ValueError("No session_id available in context")
 
         # Create user prompt
-        user_prompt = INITIAL_PROCESSING_USER_PROMPT.format(
+        user_prompt = USER_PROMPT.format(
             user_query=request.user_query, platform_type=request.platform_type
         )
 
         # Call LLM service
         llm_response = await self.anthropic_service.generate_text(
-            prompt=user_prompt, system_prompt=INITIAL_PROCESSING_SYSTEM_PROMPT
+            prompt=user_prompt, system_prompt=SYSTEM_PROMPT
         )
 
         # Parse the JSON output from <OUTPUT> tags

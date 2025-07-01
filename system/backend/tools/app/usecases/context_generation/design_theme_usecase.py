@@ -90,7 +90,7 @@ class DesignThemeUsecase:
                     loggers["design_theme"].info(f"🎨 Theme Name: {theme_name}")
 
             except json.JSONDecodeError as e:
-                self.error_repo.insert_error(
+                await self.error_repo.insert_error(
                     Error(
                         tool_name="design_theme_generation",
                         error_message=f"Generated content may not be valid JSON: {e}",

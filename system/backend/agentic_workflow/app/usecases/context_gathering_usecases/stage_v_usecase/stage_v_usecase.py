@@ -8,10 +8,10 @@ from system.backend.agentic_workflow.app.models.schemas.context_gathering_schema
     ContextGatheringRequest,
 )
 from system.backend.agentic_workflow.app.prompts.context_gathering_prompts.stage_v_prompt import (
-    STAGE_V_FOLLOWUP_SYSTEM_PROMPT,
-    STAGE_V_FOLLOWUP_USER_PROMPT,
-    STAGE_V_INITIAL_SYSTEM_PROMPT,
-    STAGE_V_INITIAL_USER_PROMPT,
+    FOLLOWUP_SYSTEM_PROMPT,
+    FOLLOWUP_USER_PROMPT,
+    INITIAL_SYSTEM_PROMPT,
+    INITIAL_USER_PROMPT,
 )
 from system.backend.agentic_workflow.app.repositories.error_repo import (
     ErrorRepo,
@@ -67,7 +67,7 @@ class StageVUsecase:
                     request, context_dir, stage_v_path, session_id
                 )
         except HTTPException as e:
-            self.error_repo.insert_error(
+            await self.error_repo.insert_error(
                 Error(
                     phase="stage_v",
                     error_message="Error in the stage v of context gathering usecase: "
@@ -97,7 +97,7 @@ class StageVUsecase:
             stage_iv_data = json.load(f)
 
         # Create user prompt with context and screens
-        user_prompt = STAGE_V_INITIAL_USER_PROMPT.format(
+        user_prompt = INITIAL_USER_PROMPT.format(
             context=json.dumps(stage_iv_data, indent=1),
             screens=json.dumps(request.dict_of_screens, indent=1),
             platform_type=request.platform_type,
@@ -105,7 +105,7 @@ class StageVUsecase:
 
         # Call LLM service
         llm_response = await self.anthropic_service.generate_text(
-            prompt=user_prompt, system_prompt=STAGE_V_INITIAL_SYSTEM_PROMPT
+            prompt=user_prompt, system_prompt=INITIAL_SYSTEM_PROMPT
         )
 
         # Parse the JSON output
@@ -142,7 +142,7 @@ class StageVUsecase:
         )
 
         # Create user prompt for follow-up
-        user_prompt = STAGE_V_FOLLOWUP_USER_PROMPT.format(
+        user_prompt = FOLLOWUP_USER_PROMPT.format(
             global_navigation=json.dumps(existing_global_nav, indent=1),
             new_screens=json.dumps(request.dict_of_screens, indent=1),
             platform_type=request.platform_type,
@@ -150,7 +150,7 @@ class StageVUsecase:
 
         # Call LLM service
         llm_response = await self.anthropic_service.generate_text(
-            prompt=user_prompt, system_prompt=STAGE_V_FOLLOWUP_SYSTEM_PROMPT
+            prompt=user_prompt, system_prompt=FOLLOWUP_SYSTEM_PROMPT
         )
 
         # Parse the JSON output
