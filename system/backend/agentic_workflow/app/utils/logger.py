@@ -3,6 +3,7 @@ import logging
 import os
 from datetime import datetime
 
+
 class JSONFormatter(logging.Formatter):
 
     def format(self, record):
@@ -57,6 +58,4 @@ def setup_logger(
     return logger
 
 
-loggers = {
-    "anthropic": setup_logger("anthropic", "anthropic.log")
-}
+loggers = {"anthropic": setup_logger("anthropic", "anthropic.log")}

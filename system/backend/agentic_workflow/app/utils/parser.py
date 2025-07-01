@@ -1,5 +1,6 @@
-import re
 import json
+import re
+
 
 def parse_model_output(text: str) -> dict:
     """
@@ -22,4 +23,4 @@ def parse_model_output(text: str) -> dict:
     try:
         return json.loads(json_str)
     except json.JSONDecodeError as e:
-        raise ValueError(f"Invalid JSON inside <OUTPUT> tags: {e}") 
+        raise ValueError(f"Invalid JSON inside <OUTPUT> tags: {e}")
