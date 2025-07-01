@@ -9,3 +9,7 @@ vulture
 autoflake
 isort
 black
+openai
+pinecone
+tiktoken
+crawl4ai
