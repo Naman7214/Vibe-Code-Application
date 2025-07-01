@@ -58,4 +58,7 @@ def setup_logger(
     return logger
 
 
-loggers = {"anthropic": setup_logger("anthropic", "anthropic.log")}
+loggers = {
+    "anthropic": setup_logger("anthropic", "anthropic.log"),
+    "stage_iv": setup_logger("stage_iv", "stage_iv.log"),
+}

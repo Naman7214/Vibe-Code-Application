@@ -48,7 +48,7 @@ class StageVUsecase:
                 raise ValueError("No session_id available in context")
 
             # Define file paths
-            context_dir = f"artifacts/{session_id}/context"
+            context_dir = f"artifacts/{session_id}/project_context"
             stage_iv_path = os.path.join(context_dir, "stage_iv.json")
             stage_v_path = os.path.join(context_dir, "stage_v.json")
 

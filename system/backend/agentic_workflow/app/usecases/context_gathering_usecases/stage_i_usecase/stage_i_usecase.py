@@ -33,7 +33,9 @@ class StageIUsecase:
                 raise ValueError("No session_id available in context")
 
             # Path to stage_i.json file
-            stage_file_path = f"artifacts/{session_id}/context/stage_i.json"
+            stage_file_path = (
+                f"artifacts/{session_id}/project_context/stage_i.json"
+            )
 
             # Check if stage_i.json exists
             if not os.path.exists(stage_file_path):

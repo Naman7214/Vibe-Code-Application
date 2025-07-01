@@ -14,7 +14,7 @@ from system.backend.agentic_workflow.app.repositories.error_repo import (
 from system.backend.agentic_workflow.app.services.anthropic_services.llm_service import (
     AnthropicService,
 )
-from system.backend.agentic_workflow.app.utils.parser import parse_model_OUTPUT
+from system.backend.agentic_workflow.app.utils.parser import parse_model_output
 from system.backend.agentic_workflow.app.utils.session_context import (
     session_state,
 )
@@ -172,7 +172,7 @@ class StageIVUsecase:
 
             # Parse the response to extract JSON from <o> tags
             try:
-                parsed_content = parse_model_OUTPUT(content)
+                parsed_content = parse_model_output(content)
             except ValueError as e:
                 parsed_content = {"raw_content": content, "parse_error": str(e)}
 

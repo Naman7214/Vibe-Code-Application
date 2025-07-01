@@ -50,7 +50,7 @@ class InitialProcessingUsecase:
         parsed_data = parse_model_output(llm_response)
 
         # Create artifacts directory structure
-        artifacts_dir = f"artifacts/{session_id}/context"
+        artifacts_dir = f"artifacts/{session_id}/project_context"
         os.makedirs(artifacts_dir, exist_ok=True)
 
         # Save to stage_i.json file

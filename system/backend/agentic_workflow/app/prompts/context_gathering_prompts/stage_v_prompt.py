@@ -17,7 +17,7 @@ This navigation context is essential for code generation. Focus on:
 
 <OUTPUT_STRUCTURE>
 Generate a JSON object with navigation data AND detailed descriptive context:
-
+STRICTLY FOLLOW THE OUTPUT STRUCTURE AND DO NOT ADD ANYTHING ELSE. Your output must be wrapped in <OUTPUT> tags.
 <OUTPUT>
 {
     "navigation_structure": {
