@@ -545,3 +545,6 @@ Disallow:
             )
 
         print("✅ Dependencies installed successfully")
+
+
+setup_boilerplate = AIReactBoilerplateSetup()
