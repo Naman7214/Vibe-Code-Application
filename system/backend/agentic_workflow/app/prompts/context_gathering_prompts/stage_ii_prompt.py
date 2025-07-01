@@ -24,15 +24,16 @@ Analyze the provided domain context and selected screens to generate comprehensi
 </INSTRUCTIONS>
 
 <OUTPUT_REQUIREMENTS>
-- Provide structured JSON output wrapped in <OUTPUT> tags, only the request JSON is required, no other text or comments
+- Provide structured JSON output wrapped in <OUTPUT> tags, only the requested JSON is required, no other text or comments
 - Include clear rationale for each screen's requirements
 - Focus on functional requirements rather than visual design
 - Ensure data requirements are realistic and actionable
 - if the previous output of the SECOND stage is present then just extend it by adding the new screens and their requirements and provide the extended output in the <OUTPUT> tags
 </OUTPUT_REQUIREMENTS>
 
-<OUTPUT_FORMAT>
-    {
+
+<OUTPUT>
+{
     "screen_name": {
         "primary_purpose": "clear purpose statement",
         "data_needs": {
@@ -45,16 +46,15 @@ Analyze the provided domain context and selected screens to generate comprehensi
     },
     "global_data_requirements": ["shared_data1", "shared_data2"]
 }
-</OUTPUT_FORMAT>
+</OUTPUT>
+
 """
 
 USER_PROMPT = """
-### OUTPUT FROM THE FIRST STAGE
 <OUTPUT_FROM_FIRST_STAGE>
 {first_stage_output}
 </OUTPUT_FROM_FIRST_STAGE>
 
-### PREVIOUS SECOND STAGE OUTPUT
 <PREVIOUS_OUTPUT_OF_SECOND_STAGE>
 {previous_output}
 </PREVIOUS_OUTPUT_OF_SECOND_STAGE>

@@ -7,7 +7,7 @@ motor
 pydantic
 httpx
 pydantic-settings
-uvicorn
+uvicorn[standard]
 pinecone
 tiktoken
 pymongo

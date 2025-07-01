@@ -30,7 +30,7 @@ Create a global design theme strategy that will serve as the foundation referenc
 - Balance brand expression with functional clarity
 </OUTPUT_REQUIREMENTS>
 
-<OUTPUT_FORMAT>
+<OUTPUT>
 {
     "design_philosophy": "brief statement of overall design approach",
     "color_palette": {
@@ -75,16 +75,14 @@ Create a global design theme strategy that will serve as the foundation referenc
         "iconography_style": "description"
     }
 }
-</OUTPUT_FORMAT>
+</OUTPUT>
 """
 
 USER_PROMPT_A = """
-### OUTPUT FROM THE FIRST STAGE
 <OUTPUT_FROM_FIRST_STAGE>
 {first_stage_output}
 </OUTPUT_FROM_FIRST_STAGE>
 
-### OUTPUT FROM THE SECOND STAGE
 <OUTPUT_FROM_SECOND_STAGE>
 {second_stage_output}
 </OUTPUT_FROM_SECOND_STAGE>
@@ -110,6 +108,7 @@ Analyze the screen requirements to identify and categorize components into globa
 
 <INSTRUCTIONS>
 1. Identify components that will be used across multiple screens (global components)
+2. For the global components make sure to give the comprehensive details.
 2. Determine screen-specific components that serve unique purposes
 3. Analyze reusability potential and establish component variants
 4. Define component relationships
@@ -128,7 +127,7 @@ Analyze the screen requirements to identify and categorize components into globa
 - if the previous output of the THIRD stage is present then just extend it by adding the new screens and their requirements and provide the extended output in the <OUTPUT> tags
 </OUTPUT_REQUIREMENTS>
 
-<OUTPUT_FORMAT>
+<OUTPUT>
 {
     "global_components": {
         "component_name": {
@@ -152,16 +151,14 @@ Analyze the screen requirements to identify and categorize components into globa
         "composition_patterns": ["pattern1", "pattern2"]
     }
 }
-</OUTPUT_FORMAT>
+</OUTPUT>
 """
 
 USER_PROMPT_B = """
-### OUTPUT FROM THE SECOND STAGE
 <OUTPUT_FROM_SECOND_STAGE>
 {second_stage_output}
 </OUTPUT_FROM_SECOND_STAGE>
 
-### PREVIOUS THIRD STAGE OUTPUT
 <OUTPUT_FROM_THIRD_STAGE>
 {previous_output}
 </OUTPUT_FROM_THIRD_STAGE>

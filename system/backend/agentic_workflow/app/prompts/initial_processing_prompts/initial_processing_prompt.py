@@ -92,8 +92,4 @@ INITIAL_PROCESSING_USER_PROMPT = """
 User Query: {user_query}
 Platform Type: {platform_type}
 </REQUEST>
-
-<INSTRUCTION>
-Apply your senior developer expertise to analyze this query and create a strategic app architecture foundation. Focus on practical, business-driven solutions with optimal screen consolidation.
-</INSTRUCTION>
 """

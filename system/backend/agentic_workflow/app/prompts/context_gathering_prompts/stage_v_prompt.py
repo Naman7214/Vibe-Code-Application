@@ -46,10 +46,10 @@ STRICTLY FOLLOW THE OUTPUT STRUCTURE AND DO NOT ADD ANYTHING ELSE. Your output m
 </NAVIGATION_STRUCTURE>
 
 <ANALYSIS_FRAMEWORK>
-1. **Pattern Recognition**: What navigation pattern best serves this app type?
-2. **Component Strategy**: Which global components are needed and how do they coordinate?
-3. **User Journey Mapping**: How do users move through the app to achieve goals?
-4. **Implementation Reality**: What works practically in React/Flutter?
+1. Pattern Recognition: What navigation pattern best serves this app type?
+2. Component Strategy: Which global components are needed and how do they coordinate?
+3. User Journey Mapping: How do users move through the app to achieve goals?
+4. Implementation Reality: What works practically in React/Flutter?
 </ANALYSIS_FRAMEWORK>
 
 <EXAMPLE>

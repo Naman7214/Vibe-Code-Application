@@ -1,6 +1,7 @@
 import asyncio
 import base64
 import json
+import os
 import shutil
 from pathlib import Path
 
@@ -13,12 +14,19 @@ class AIReactBoilerplateSetup:
     """Service to create React boilerplate matching AI-generated code structure"""
 
     def __init__(self):
-        # Get session_id from context
-        self.session_id = session_state.get()
-        self.base_path = Path(f"artifacts/{self.session_id}/codebase")
+        # Don't get session_id here - it's not available at import time
+        self.session_id = None
+        self.base_path = None
 
     async def create_react_boilerplate(self) -> str:
         """Create React project boilerplate for AI code generation"""
+        
+        # Get session_id from context when method is actually called
+        self.session_id = session_state.get()
+        if not self.session_id:
+            raise ValueError("Session ID not found in context")
+            
+        self.base_path = Path(f"artifacts/{self.session_id}/codebase")
 
         # Remove existing project if exists
         if self.base_path.exists():
@@ -70,14 +78,24 @@ class AIReactBoilerplateSetup:
 
         cmd = ["npm", "create", "vite@latest", ".", "--", "--template", "react"]
 
+        # Set environment variables for non-interactive mode
+        env = {
+            **os.environ,
+            "CI": "true",  # Tells npm to run in non-interactive mode
+            "NPM_CONFIG_YES": "true",  # Auto-confirm npm prompts
+        }
+
         process = await asyncio.create_subprocess_exec(
             *cmd,
             cwd=self.base_path,
             stdout=asyncio.subprocess.PIPE,
             stderr=asyncio.subprocess.PIPE,
+            stdin=asyncio.subprocess.PIPE,  # Add stdin pipe for input handling
+            env=env,  # Use the environment variables
         )
 
-        stdout, stderr = await process.communicate()
+        # Send 'y' to confirm any prompts and close stdin
+        stdout, stderr = await process.communicate(input=b'y\n')
 
         if process.returncode != 0:
             raise Exception(f"Failed to create Vite project: {stderr.decode()}")
@@ -187,7 +205,7 @@ export default defineConfig({
 """
 
         # postcss.config.js
-        postcss_config = """module.exports = {
+        postcss_config = """export default {
   plugins: {
     tailwindcss: {},
     autoprefixer: {},
