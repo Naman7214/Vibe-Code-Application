@@ -34,10 +34,10 @@ class AnthropicService:
         self.anthropic_api_key = settings.ANTHROPIC_API_KEY
         self.openai_api_key = settings.OPENAI_API_KEY
         self.anthropic_base_url = "https://api.anthropic.com/v1/messages"
-        self.openai_base_url = "https://api.openai.com/v1/responses"
+        self.openai_base_url = "https://api.openai.com/v1/chat/completions"
         self.default_model = settings.ANTHROPIC_DEFAULT_MODEL
         self.openai_model = settings.OPENAI_DEFAULT_MODEL
-        self.default_max_tokens = 32768
+        self.default_max_tokens = 31000
         self.default_temperature = 0.2
         self.llm_usage_repo = llm_usage_repo
 
@@ -127,15 +127,19 @@ class AnthropicService:
         system_prompt: Optional[str] = None
     ) -> Dict[str, Any]:
         """Make request to OpenAI API"""
+        messages = []
+        
+        if system_prompt:
+            messages.append({"role": "system", "content": system_prompt})
+        
+        messages.append({"role": "user", "content": prompt})
+        
         payload = {
             "model": self.openai_model,
-            "max_output_tokens": self.default_max_tokens,
-            "temperature": self.default_temperature,
-            "input": prompt,
+            "max_completion_tokens": self.default_max_tokens,
+            "reasoning_effort": "low",
+            "messages": messages,
         }
-
-        if system_prompt:
-            payload["instructions"] = system_prompt
 
         return await self._make_request(payload, "openai")
 
@@ -158,17 +162,20 @@ class AnthropicService:
             async with httpx.AsyncClient(
                 timeout=self.timeout, verify=False
             ) as client:
-                response = await client.post(
-                    base_url, headers=headers, json=payload
-                )
+                try:
+                    response = await client.post(
+                        base_url, headers=headers, json=payload
+                    )
+                except Exception as e:
+                    print(f"{str(e)}")
                 response.raise_for_status()
 
                 response_data = response.json()
 
                 collected_text = ""
                 if provider == "openai":
-                    # Extract text from OpenAI response format
-                    collected_text = response_data["output"][0]["content"][0]["text"]
+                    # Extract text from OpenAI Chat Completions response format
+                    collected_text = response_data["choices"][0]["message"]["content"]
                     usage_data = response_data["usage"]
                     loggers["openai"].info(f"OpenAI usage: {usage_data}")
                 else:
@@ -216,8 +223,7 @@ class AnthropicService:
         stream_params = {
             "model": self.default_model,
             "max_tokens": self.default_max_tokens,
-            "messages": [{"role": "user", "content": prompt}],
-            "thinking": {"type": "enabled", "budget_tokens": 2048},
+            "messages": [{"role": "user", "content": prompt}]
         }
 
         # Add system prompt with caching if provided

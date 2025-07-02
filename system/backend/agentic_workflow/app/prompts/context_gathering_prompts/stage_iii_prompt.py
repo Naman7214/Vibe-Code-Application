@@ -31,7 +31,7 @@ Create a global design theme strategy that will serve as the foundation referenc
 - Balance brand expression with functional clarity
 - For providing the description at the required places, make sure to provide it in a manner that it indicates deeper psychological reasoning.
 </OUTPUT_REQUIREMENTS>
-
+Make sure to use proper escape characters for the new lines and other special characters such that it'll not cause any error in the upcoming parsing of the output.
 <OUTPUT>
 {
     "design_philosophy": "brief statement of overall design approach (about 2-3 sentences)",
@@ -126,7 +126,6 @@ Analyze the screen requirements to identify and categorize components into globa
 - Clearly separate global vs screen-specific components
 - Group global components into logical clusters for better organization and parallel generation
 - Include component responsibilities and usage contexts
-- Establish clear component relationships
 - If the previous output of the THIRD stage is present then just extend it by adding the new screens and their requirements and provide the extended output in the <OUTPUT> tags
 - For providing the description at the required places, make sure to provide it in a manner that it indicates deeper reasoning and understanding of the users needs.
 - Make sure to add the proper escape characters for the new lines and other special characters such that it'll not cause any error in the upcoming parsing of the output.
@@ -164,10 +163,6 @@ Analyze the screen requirements to identify and categorize components into globa
             "description": "component purpose, functionality, and usage context (about 2-3 sentences)"
         }
         }
-    },
-    "component_relationships": {
-        "parent_component": ["child1", "child2"],
-        "composition_patterns": ["pattern1", "pattern2"]
     }
 }
 </OUTPUT>

@@ -34,7 +34,7 @@ Analyze the user's app development query and create a strategic foundation for a
 
 <OUTPUT_STRUCTURE>
 Respond with JSON wrapped in <OUTPUT></OUTPUT> tags:
-
+Make sure to use proper escape characters for the new lines and other special characters such that it'll not cause any error in the upcoming parsing of the output.
 <OUTPUT>
 {
     "domain": "clear domain identifier (e.g., 'fintech', 'healthtech', 'edtech')",
@@ -61,31 +61,6 @@ Before finalizing:
 - Are the screens optimized for the target platform?
 - Does each screen serve a clear business purpose?
 </QUALITY_CHECKLIST>
-
-<EXAMPLE>
-Input: "Build a food delivery app for mobile"
-<OUTPUT>
-{
-    "domain": "food-delivery",
-    "industry_patterns": ["on-demand-ordering", "real-time-tracking", "rating-system", "multi-vendor-marketplace", "location-based-discovery"],
-    "screens": {
-        "home-discovery": "location-based restaurant discovery with search, filters, and recommendations",
-        "restaurant-menu": "restaurant details, menu browsing, item customization, and cart management",
-        "checkout-payment": "order review, payment processing, delivery options, and confirmation",
-        "order-tracking": "real-time order status, delivery tracking, and communication with driver",
-        "auth-profile": "login/register, profile management, addresses, payment methods, and settings",
-        "order-history": "past orders, reordering, ratings, and support access"
-    },
-    "business_context": {
-        "business_type": "multi-vendor-food-delivery-platform",
-        "target_audience": "urban professionals aged 25-45 seeking convenient meal solutions",
-        "key_features": ["real-time-tracking", "multi-payment-options", "restaurant-discovery", "order-customization", "rating-review-system"]
-        }
-}
-</OUTPUT>
-</EXAMPLE>
-
-NOTE: make sure to add the proper escape characters for the new lines and other special characters such that it'll not cause any error in the upcoming parsing of the output.
 """
 
 USER_PROMPT = """

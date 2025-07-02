@@ -93,7 +93,7 @@ Update navigation architecture by integrating new screens with minimal disruptio
 - Maintain component relationship consistency
 - Update context descriptions to reflect changes
 </UPDATE_STRATEGY>
-
+Make sure to use proper escape characters for the new lines and other special characters such that it'll not cause any error in the upcoming parsing of the output.
 <OUTPUT>
 {
     "navigation_structure": {

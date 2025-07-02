@@ -20,11 +20,6 @@ You will receive:
 1. Generate a comprehensive tailwind.config.js file that includes:
 - Import defaultTheme from 'tailwindcss/defaultTheme'
 - Content paths for React files: "./src/**/*.{js,jsx,ts,tsx}", "./public/index.html"
-- Extended theme with custom color palettes:
-  * Primary colors (50-900 scale with hex values)
-  * Neutral colors (background, surface, border, subtle, body, strong)
-  * Semantic colors (success, warning, error, info with background variants)
-- Typography: font families extending defaultTheme (sans, mono)
 - Standard plugins: @tailwindcss/forms, tailwindcss-animate, @tailwindcss/typography
 - Spacing, border radius, and shadow configurations based on design system
 
@@ -32,15 +27,16 @@ You will receive:
    - Standard Tailwind imports: @tailwind base, @tailwind components, @tailwind utilities
    - CSS custom properties in :root for all colors as --color-* variables
    - Component layer with typography utility classes:
-     * .display (text-4xl font-bold)
-     * .heading-1 (text-3xl font-bold)
-     * .heading-2 (text-2xl font-semibold)
-     * .heading-3 (text-xl font-semibold)
-     * .body-large (text-lg)
-     * .body (text-base)
-     * .body-small (text-sm)
-     * .caption (text-xs)
-     * .code (font-mono text-sm)
+     * .display 
+     * .heading-1 
+     * .heading-2 
+     * .heading-3 
+     * .body-large 
+     * .body 
+     * .body-small 
+     * .caption 
+     * .code 
+     etc.
    - Additional component classes for common UI patterns
    - Focus states and accessibility enhancements
 
@@ -57,11 +53,19 @@ You will receive:
    - Include both solid colors and background variants for semantic states
 
 5. Typography requirements:
-   - Use professional font stacks (Inter for sans-serif, JetBrains Mono for monospace)
+   - Use professional font stacks 
    - Create consistent hierarchy with proper sizing and weights
    - Ensure readability across all screen sizes
 </REQUIREMENTS>
-
+<TAILWIND_CSS_INTEGRATION>
+PROPERLY manage the animations, border radius, spacing, shadows, breakpoints, layout, colors, typography and other design aspects by using the tailwindCSS classes.
+DESIGN GUIDELINES:
+* Improve accessibility, usability, or visual polish
+* Follow modern UI/UX best practices and design trends
+* Prioritize subtle, professional enhancements over dramatic changes
+* Always go for professional design theme instead of funky design theme or cookie cutter design theme.
+    
+</TAILWIND_CSS_INTEGRATION>
 <OUTPUT_FORMAT>
 Generate your response in the following XML format ONLY. Do not include any explanations or additional text outside the XML:
 
@@ -121,7 +125,7 @@ IMPORTANT NOTES:
 - Include all typography utility classes as shown in the example
 - Map colors from the design system to appropriate semantic meanings
 - MUST use uppercase XML tags: FILES, FILE, FILE_PATH, CODE_SNIPPET
-- Go beyond the basics to generate a fully-featured css
+- Go beyond the basics to generate a fully-featured and working css
 </REQUIREMENTS>
 """
 

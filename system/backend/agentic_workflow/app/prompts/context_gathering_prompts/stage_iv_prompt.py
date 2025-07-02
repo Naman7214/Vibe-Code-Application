@@ -91,7 +91,7 @@ Generate a JSON object where each screen name is a top-level key containing:
 The structure should be flexible and adapted to each screen's specific needs while maintaining consistency in quality.
 
 Wrap your entire JSON response inside `<OUTPUT> … </OUTPUT>` XML tags.
-
+Make sure to use proper escape characters for the new lines and other special characters such that it'll not cause any error in the upcoming parsing of the output.
 EXAMPLE OUTPUT STRUCTURE:
 <OUTPUT>
 {

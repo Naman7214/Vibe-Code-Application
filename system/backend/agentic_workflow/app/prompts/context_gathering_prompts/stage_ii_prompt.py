@@ -33,7 +33,7 @@ Analyze the provided domain context and selected screens to generate comprehensi
 - Add 3-4 user stories for each screen. Must think from the user's perspective and provide the user stories in a manner that it indicates deeper reasoning and understanding of the users needs.
 - Make sure to add the proper escape characters for the new lines and other special characters such that it'll not cause any error in the upcoming parsing of the output.
 </OUTPUT_REQUIREMENTS>
-
+Make sure to use proper escape characters for the new lines and other special characters such that it'll not cause any error in the upcoming parsing of the output.
 
 <OUTPUT>
 {

@@ -12,7 +12,7 @@ class Settings(BaseSettings):
     ANTHROPIC_API_KEY: str
     ANTHROPIC_DEFAULT_MODEL: str = "claude-sonnet-4-20250514"
     OPENAI_API_KEY: str
-    OPENAI_DEFAULT_MODEL: str = "gpt-4.1-2025-04-14"
+    OPENAI_DEFAULT_MODEL: str = "o3-2025-04-16"
 
     class Config:
         backend_dir = Path(__file__).parent.parent.parent
