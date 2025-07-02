@@ -1,7 +1,8 @@
+import asyncio
 import json
 import os
 from datetime import datetime
-from typing import Any, Dict
+from typing import Any, Dict, List
 
 from fastapi import Depends
 
@@ -98,6 +99,28 @@ class StageIIHelper:
         except FileNotFoundError:
             return {}
 
+    async def extract_component_clusters(
+        self, global_components: Dict[str, Any]
+    ) -> List[Dict[str, Any]]:
+        """
+        Extract component clusters from the global components structure
+
+        :param global_components: Global components data with clusters
+        :return: List of clusters for parallel processing
+        """
+        clusters = []
+        
+        for cluster_name, cluster_data in global_components.items():
+            if isinstance(cluster_data, dict) and "components" in cluster_data:
+                cluster_info = {
+                    "cluster_name": cluster_name,
+                    "description": cluster_data.get("description", ""),
+                    "components": cluster_data.get("components", {})
+                }
+                clusters.append(cluster_info)
+        
+        return clusters
+
     async def get_navigation_structure(self, session_id: str) -> Dict[str, Any]:
         """
         Read navigation structure from stage_v.json
@@ -165,11 +188,90 @@ class StageIIHelper:
             "file_structure": scratchpads.get("file_structure", ""),
         }
 
+    async def generate_cluster_components(
+        self, cluster_data: Dict[str, Any], context_data: Dict[str, Any]
+    ) -> str:
+        """
+        Generate components for a specific cluster using LLM
+
+        :param cluster_data: Cluster information with components
+        :param context_data: Prepared context data
+        :return: LLM response as string
+        """
+        # Format the system prompt with boilerplate files
+        system_prompt = SYSTEM_PROMPT.format(
+            boilerplate_files=context_data["boilerplate_files"]
+        )
+
+        # Prepare cluster-specific context
+        cluster_context = {
+            "cluster_name": cluster_data["cluster_name"],
+            "cluster_description": cluster_data["description"],
+            "components": cluster_data["components"]
+        }
+
+        # Format the user prompt with cluster-specific context data
+        user_prompt = USER_PROMPT.format(
+            global_components=json.dumps(cluster_context, indent=2),
+            navigation_structure=json.dumps(
+                context_data["navigation_structure"], indent=2
+            ),
+            scratchpads_content=json.dumps(
+                context_data["scratchpads_content"], indent=2
+            ),
+            file_structure=context_data["file_structure"],
+        )
+
+        # Make LLM call using anthropic_client_request
+        response = await self.anthropic_service.anthropic_client_request(
+            prompt=user_prompt, system_prompt=system_prompt
+        )
+
+        return response
+
+    async def generate_global_components_parallel(
+        self, context_data: Dict[str, Any]
+    ) -> List[str]:
+        """
+        Generate global components in parallel using clusters
+
+        :param context_data: Prepared context data
+        :return: List of LLM responses for each cluster
+        """
+        # Extract component clusters
+        clusters = await self.extract_component_clusters(
+            context_data["global_components"]
+        )
+
+        if not clusters:
+            # Fallback to original method if no clusters found
+            response = await self.generate_global_components(context_data)
+            return [response]
+
+        # Generate components for each cluster in parallel
+        tasks = [
+            self.generate_cluster_components(cluster, context_data)
+            for cluster in clusters
+        ]
+
+        # Execute all tasks in parallel using asyncio.gather
+        responses = await asyncio.gather(*tasks, return_exceptions=True)
+
+        # Filter out any exceptions and log them
+        valid_responses = []
+        for i, response in enumerate(responses):
+            if isinstance(response, Exception):
+                print(f"Error generating cluster {clusters[i]['cluster_name']}: {str(response)}")
+            else:
+                valid_responses.append(response)
+
+        return valid_responses
+
     async def generate_global_components(
         self, context_data: Dict[str, Any]
     ) -> str:
         """
-        Generate global components using LLM
+        Generate global components using LLM (legacy method for fallback)
 
         :param context_data: Prepared context data
         :return: LLM response as string
@@ -201,13 +303,14 @@ class StageIIHelper:
         return response
 
     async def append_to_global_scratchpad(
-        self, session_id: str, content: str
+        self, session_id: str, content: str, is_parallel: bool = False
     ) -> None:
         """
         Append content to the global_scratchpad.txt file
 
         :param session_id: Session identifier
         :param content: Content to append
+        :param is_parallel: Whether this is from parallel generation
         """
         try:
             scratchpad_path = (
@@ -228,6 +331,10 @@ class StageIIHelper:
                 f.write(
                     f"<TIMESTAMP>{datetime.now().strftime('%Y-%m-%d %H:%M:%S')}</TIMESTAMP>\n"
                 )
+                if is_parallel:
+                    f.write(f"<GENERATION_TYPE>PARALLEL_CLUSTERS</GENERATION_TYPE>\n")
+                else:
+                    f.write(f"<GENERATION_TYPE>SINGLE_BATCH</GENERATION_TYPE>\n")
                 f.write(f"<CONTEXT_REGISTRY>\n")
                 f.write(content)
                 f.write(f"\n</CONTEXT_REGISTRY>\n")
@@ -302,14 +409,60 @@ class StageIIHelper:
         # Append context registry to global_scratchpad.txt
         if context_registry_content:
             await self.append_to_global_scratchpad(
-                session_id, context_registry_content
+                session_id, context_registry_content, is_parallel=False
+            )
+
+    async def process_multiple_llm_responses_and_write_files(
+        self, llm_responses: List[str], session_id: str
+    ) -> None:
+        """
+        Parse multiple LLM responses and write generated files to the codebase
+        Handle special case for CONTEXT_REGISTRY files
+
+        :param llm_responses: List of raw LLM responses containing XML
+        :param session_id: Session identifier to determine base directory
+        """
+        # Set base directory to the session's codebase
+        base_dir = f"artifacts/{session_id}"
+
+        all_regular_files = []
+        all_context_registry_content = []
+
+        # Process each response
+        for i, llm_response in enumerate(llm_responses):
+            try:
+                # Parse XML response to get file data
+                file_data_list = parse_xml_to_dict(llm_response)
+
+                # Separate regular files from context registry
+                for file_data in file_data_list:
+                    if file_data["file_path"] == "CONTEXT_REGISTRY":
+                        all_context_registry_content.append(file_data["code_snippet"])
+                    else:
+                        all_regular_files.append(file_data)
+
+            except Exception as e:
+                print(f"Error processing response {i}: {str(e)}")
+                continue
+
+        # Write all regular files to the codebase
+        if all_regular_files:
+            write_code_files(all_regular_files, base_dir)
+
+        # Append all context registry content to global_scratchpad.txt
+        if all_context_registry_content:
+            # Add cluster generation timestamp and summary
+            cluster_summary = f"PARALLEL_CLUSTER_GENERATION - {len(all_context_registry_content)} clusters processed"
+            combined_content = f"{cluster_summary}\n\n" + "\n\n--- CLUSTER SEPARATOR ---\n\n".join(all_context_registry_content)
+            await self.append_to_global_scratchpad(
+                session_id, combined_content, is_parallel=True
             )
 
     async def execute_stage_ii_pipeline(
         self, session_id: str
     ) -> Dict[str, Any]:
         """
-        Execute the complete stage II pipeline for global components generation
+        Execute the complete stage II pipeline for global components generation with parallel processing
 
         :param session_id: Session identifier
         :return: Result dictionary with success status and message
@@ -318,20 +471,39 @@ class StageIIHelper:
             # Prepare context data
             context_data = await self.prepare_llm_context(session_id)
 
-            # Generate components using LLM
-            llm_response = await self.generate_global_components(context_data)
+            # Check if we have clustered components structure
+            global_components = context_data.get("global_components", {})
+            clusters = await self.extract_component_clusters(global_components)
 
-            # Process response and write files
-            await self.process_llm_response_and_write_files(
-                llm_response, session_id
-            )
+            if clusters and len(clusters) > 1:
+                # Use parallel generation for multiple clusters
+                print(f"Generating {len(clusters)} component clusters in parallel")
+                llm_responses = await self.generate_global_components_parallel(context_data)
+
+                # Process multiple responses and write files
+                await self.process_multiple_llm_responses_and_write_files(
+                    llm_responses, session_id
+                )
+                
+                success_message = f"Stage II global components generation completed successfully with {len(clusters)} clusters processed in parallel"
+            else:
+                # Fallback to original single generation approach
+                print("Using single generation approach (no clusters or only one cluster)")
+                llm_response = await self.generate_global_components(context_data)
+
+                # Process response and write files
+                await self.process_llm_response_and_write_files(
+                    llm_response, session_id
+                )
+                
+                success_message = "Stage II global components generation completed successfully"
 
             # Update file structure after all files are written
             await self.update_file_structure(session_id)
 
             return {
                 "success": True,
-                "message": "Stage II global components generation completed successfully",
+                "message": success_message,
                 "error": None,
             }
 

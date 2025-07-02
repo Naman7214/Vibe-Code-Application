@@ -95,7 +95,7 @@ You are working in the THIRD stage of the context gathering process.
 </ROLE>
 
 <TASK>
-Analyze the screen requirements to identify and categorize components into global reusable components and screen-specific components, establishing a clear component hierarchy and reusability strategy.
+Analyze the screen requirements to identify and categorize components into global reusable components and screen-specific components, establishing a clear component hierarchy and reusability strategy. Group the global components into logical clusters based on their functionality and domain.
 </TASK>
 
 <INPUT_CONTEXT>
@@ -107,18 +107,23 @@ Analyze the screen requirements to identify and categorize components into globa
 
 <INSTRUCTIONS>
 1. Identify components that will be used across multiple screens (global components)
-2. For the global components make sure to give the comprehensive details.
-2. Determine screen-specific components that serve unique purposes
-3. Analyze reusability potential and establish component variants
-4. Define component relationships
-5. Specify component responsibilities and data flow
-6. Consider component composition and modularity
-7. Focus on functional component architecture rather than visual details by considering the users UX and UI needs.
+2. Group global components into logical clusters based on their functionality (e.g., "navigation", "ui_elements", "data_display", "forms", "auth", "layout", etc.)
+3. Create a "miscellaneous" cluster for components that don't fit into specific groups
+4. For the global components make sure to give the comprehensive details.
+5. Determine screen-specific components that serve unique purposes
+6. Analyze reusability potential and establish component variants
+7. Define component relationships
+8. Specify component responsibilities and data flow
+9. Consider component composition and modularity
+10. Focus on functional component architecture rather than visual details by considering the users UX and UI needs.
+11. The identifying both screen specific and global components should be optimal not too much not too less.
+12. Screen specific components will be used to build the self contained screens.
 </INSTRUCTIONS>
 
 <OUTPUT_REQUIREMENTS>
 - Provide structured JSON output wrapped in <OUTPUT> tags
 - Clearly separate global vs screen-specific components
+- Group global components into logical clusters for better organization and parallel generation
 - Include component responsibilities and usage contexts
 - Establish clear component relationships
 - If the previous output of the THIRD stage is present then just extend it by adding the new screens and their requirements and provide the extended output in the <OUTPUT> tags
@@ -128,11 +133,27 @@ Analyze the screen requirements to identify and categorize components into globa
 <OUTPUT>
 {
     "global_components": {
-        "component_name": {
-        "used_by_screens": ["screen1", "screen2"],
-        "responsibilities": ["responsibility1", "responsibility2"],
-        "reusability_score": "high|medium|low",
-        "description": "component purpose, functionality, and usage context (about 2-3 sentences)"
+        "cluster_name": {
+            "description": "Brief description of what this cluster contains and its purpose (about 1-2 sentences)",
+            "components": {
+                "component_name": {
+                    "used_by_screens": ["screen1", "screen2"],
+                    "responsibilities": ["responsibility1", "responsibility2"],
+                    "reusability_score": "high|medium|low",
+                    "description": "component purpose, functionality, and usage context (about 2-3 sentences)"
+                }
+            }
+        },
+        "miscellaneous": {
+            "description": "Components that don't fit into specific functional clusters but are still globally reusable",
+            "components": {
+                "component_name": {
+                    "used_by_screens": ["screen1", "screen2"],
+                    "responsibilities": ["responsibility1", "responsibility2"],
+                    "reusability_score": "high|medium|low",
+                    "description": "component purpose, functionality, and usage context (about 2-3 sentences)"
+                }
+            }
         }
     },
     "screen_specific_components": {

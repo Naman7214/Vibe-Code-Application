@@ -13,4 +13,3 @@ openai
 pinecone
 tiktoken
 crawl4ai
-gunicorn

@@ -95,34 +95,28 @@ Generate each component in the following XML format don't include any other text
 {{
   "stage": "stage_ii_global_components",
   "timestamp": "current_timestamp",
-  "globalComponents": {{
+  "cluster_name": "current_cluster_name",
+  "generated_components": {{
     "ComponentName": {{
       "path": "codebase/src/components/ui/ComponentName",
       "props": ["prop1", "prop2", "prop3"],
-      "required": true/false,
-      "usedByAll": true/false,
+      "features": ["feature1", "feature2"],
       "description": "Brief description of component purpose"
     }}
   }},
-  "uiComponents": {{
-    "ComponentName": {{
-      "path": "codebase/src/components/ui/ComponentName", 
-      "props": ["prop1", "prop2"],
-      "features": ["feature1", "feature2"],
-      "description": "Brief description of component"
-    }}
-  }},
-  "summary": "Generated X global components and Y UI components for the application foundation"
+  "summary": "Generated X components for the [cluster_name] cluster"
 }}
 </CODE_SNIPPET>
 </FILE>
 </FILES>
 
 IMPORTANT: 
+- Generate ONLY the exact components specified in the input - NO additional components
 - Only generate complete, functional components
 - Each component in its own separate file
 - Use the exact XML format with <CODE_SNIPPET> tags
 - The LAST file must be the CONTEXT_REGISTRY with JSON data about all generated components
+- Do NOT create helper components, sub-components, or utility components not explicitly listed
 </OUTPUT_FORMAT>
 
 <CONTEXT_REGISTRY_REQUIREMENTS>

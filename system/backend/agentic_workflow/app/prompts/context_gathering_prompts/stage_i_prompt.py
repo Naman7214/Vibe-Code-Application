@@ -24,7 +24,8 @@ Analyze the user's app development query and create a strategic foundation for a
 </ANALYSIS_FRAMEWORK>
 
 <SCREEN_OPTIMIZATION_RULES>
-- Don't create screens for authentication unless mentioned in the user query
+- Never focus on authentication, role based access control, or any other security related to screens and backend integrations unless mentioned in the user query.
+- Each screen must be accessible to all of the users.
 - Merge listing and detail views when possible (e.g., search + results)
 - Consolidate user profile, settings, and account management
 - Avoid separate screens for simple actions (confirmations, success messages)
