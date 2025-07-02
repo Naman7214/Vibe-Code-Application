@@ -86,6 +86,8 @@ Input: "Build a food delivery app for mobile"
 }
 </OUTPUT>
 </EXAMPLE>
+
+NOTE: make sure to add the proper escape characters for the new lines and other special characters such that it'll not cause any error in the upcoming parsing of the output.
 """
 
 USER_PROMPT = """

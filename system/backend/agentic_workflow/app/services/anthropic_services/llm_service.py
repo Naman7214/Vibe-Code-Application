@@ -31,9 +31,12 @@ class AnthropicService:
         :param default_max_tokens: Default maximum tokens for responses
         :param default_temperature: Default temperature for responses
         """
-        self.api_key = settings.ANTHROPIC_API_KEY
-        self.base_url = "https://api.anthropic.com/v1/messages"
+        self.anthropic_api_key = settings.ANTHROPIC_API_KEY
+        self.openai_api_key = settings.OPENAI_API_KEY
+        self.anthropic_base_url = "https://api.anthropic.com/v1/messages"
+        self.openai_base_url = "https://api.openai.com/v1/responses"
         self.default_model = settings.ANTHROPIC_DEFAULT_MODEL
+        self.openai_model = settings.OPENAI_DEFAULT_MODEL
         self.default_max_tokens = 32768
         self.default_temperature = 0.2
         self.llm_usage_repo = llm_usage_repo
@@ -47,13 +50,20 @@ class AnthropicService:
 
         self.http_client = httpx.AsyncClient(verify=False)
 
-    def _get_headers(self) -> Dict[str, str]:
-        """Get default headers for API requests"""
+    def _get_anthropic_headers(self) -> Dict[str, str]:
+        """Get default headers for Anthropic API requests"""
         return {
-            "x-api-key": self.api_key,
+            "x-api-key": self.anthropic_api_key,
             "anthropic-version": "2023-06-01",
             "content-type": "application/json",
             "anthropic-beta": "extended-cache-ttl-2025-04-11",
+        }
+        
+    def _get_openai_headers(self) -> Dict[str, str]:
+        """Get default headers for OpenAI API requests"""
+        return {
+            "Authorization": f"Bearer {self.openai_api_key}",
+            "content-type": "application/json",
         }
 
     async def generate_text(
@@ -61,14 +71,29 @@ class AnthropicService:
         prompt: str,
         system_prompt: Optional[str] = None,
         web_search: bool = False,
+        provider: str = "anthropic",
     ) -> Dict[str, Any]:
         """
-        Generate text response from Claude
+        Generate text response from Claude or OpenAI
 
         :param prompt: The user prompt
         :param system_prompt: Optional system prompt
+        :param web_search: Whether to use web search (only for Anthropic)
+        :param provider: The provider to use ("anthropic" or "openai")
         :return: Full API response including usage data
         """
+        if provider.lower() == "openai":
+            return await self._make_openai_request(prompt, system_prompt)
+        else:
+            return await self._make_anthropic_request(prompt, system_prompt, web_search)
+
+    async def _make_anthropic_request(
+        self, 
+        prompt: str, 
+        system_prompt: Optional[str] = None, 
+        web_search: bool = False
+    ) -> Dict[str, Any]:
+        """Make request to Anthropic API"""
         payload = {
             "model": self.default_model,
             "max_tokens": self.default_max_tokens,
@@ -94,30 +119,65 @@ class AnthropicService:
                 }
             ]
 
-        return await self._make_request(payload)
+        return await self._make_request(payload, "anthropic")
 
-    async def _make_request(self, payload: Dict[str, Any]) -> Dict[str, Any]:
+    async def _make_openai_request(
+        self, 
+        prompt: str, 
+        system_prompt: Optional[str] = None
+    ) -> Dict[str, Any]:
+        """Make request to OpenAI API"""
+        payload = {
+            "model": self.openai_model,
+            "max_output_tokens": self.default_max_tokens,
+            "temperature": self.default_temperature,
+            "input": prompt,
+        }
+
+        if system_prompt:
+            payload["instructions"] = system_prompt
+
+        return await self._make_request(payload, "openai")
+
+    async def _make_request(self, payload: Dict[str, Any], provider: str) -> Dict[str, Any]:
         """
-        Make a streaming API request and parse Server-Sent Events
+        Make a API request to the specified provider
 
         :param payload: Request payload
-        :return: API response in the same format as non-streaming
+        :param provider: The provider ("anthropic" or "openai")
+        :return: API response text
         """
         try:
+            if provider == "openai":
+                base_url = self.openai_base_url
+                headers = self._get_openai_headers()
+            else:
+                base_url = self.anthropic_base_url
+                headers = self._get_anthropic_headers()
+
             async with httpx.AsyncClient(
                 timeout=self.timeout, verify=False
             ) as client:
                 response = await client.post(
-                    self.base_url, headers=self._get_headers(), json=payload
+                    base_url, headers=headers, json=payload
                 )
                 response.raise_for_status()
 
-                collected_text = response.json()["content"][-1]["text"]
-                usage_data = response.json()["usage"]
+                response_data = response.json()
 
-                loggers["anthropic"].info(f"Anthropic usage: {usage_data}")
+                collected_text = ""
+                if provider == "openai":
+                    # Extract text from OpenAI response format
+                    collected_text = response_data["output"][0]["content"][0]["text"]
+                    usage_data = response_data["usage"]
+                    loggers["openai"].info(f"OpenAI usage: {usage_data}")
+                else:
+                    # Extract text from Anthropic response format
+                    collected_text = response_data["content"][-1]["text"]
+                    usage_data = response_data["usage"]
+                    loggers["anthropic"].info(f"Anthropic usage: {usage_data}")
+
                 print(collected_text)
-
                 await self.llm_usage_repo.add_llm_usage(usage_data)
 
                 return collected_text
@@ -149,7 +209,7 @@ class AnthropicService:
         collected_text = ""
 
         client = AsyncAnthropic(
-            api_key=self.api_key, http_client=self.http_client
+            api_key=self.anthropic_api_key, http_client=self.http_client
         )
 
         # Prepare the stream parameters

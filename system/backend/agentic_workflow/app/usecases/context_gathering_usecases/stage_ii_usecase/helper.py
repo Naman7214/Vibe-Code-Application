@@ -51,7 +51,9 @@ class Helper:
             previous_output=json.dumps(previous_output, indent=2),
         )
         response = await self.anthropic_service.generate_text(
-            system_prompt=SYSTEM_PROMPT, prompt=user_prompt
+            system_prompt=SYSTEM_PROMPT,
+            prompt=user_prompt,
+            provider="openai",
         )
 
         parsed_response = parse_model_output(response)

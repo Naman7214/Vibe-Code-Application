@@ -163,7 +163,9 @@ class StageIVUsecase:
             print("GOING TO SEND MESSAGE")
             # Make LLM call
             response = await self.anthropic_service.generate_text(
-                prompt=user_message_str, system_prompt=SYSTEM_PROMPT
+                prompt=user_message_str,
+                system_prompt=SYSTEM_PROMPT,
+                provider="openai",
             )
             print("MESSAGE SENT")
             # Extract text content

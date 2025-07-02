@@ -75,7 +75,9 @@ class Helper:
             second_stage_output=json.dumps(second_stage_output, indent=2),
         )
         response = await self.anthropic_service.generate_text(
-            system_prompt=SYSTEM_PROMPT_A, prompt=user_prompt
+            system_prompt=SYSTEM_PROMPT_A,
+            prompt=user_prompt,
+            provider="openai",
         )
 
         parsed_response = parse_model_output(response)
@@ -122,7 +124,9 @@ class Helper:
             previous_output=previous_output,
         )
         response = await self.anthropic_service.generate_text(
-            system_prompt=SYSTEM_PROMPT_B, prompt=user_prompt
+            system_prompt=SYSTEM_PROMPT_B,
+            prompt=user_prompt,
+            provider="openai",
         )
 
         parsed_response = parse_model_output(response)

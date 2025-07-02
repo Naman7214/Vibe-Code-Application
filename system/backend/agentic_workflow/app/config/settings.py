@@ -11,6 +11,8 @@ class Settings(BaseSettings):
     LLM_USAGE_COLLECTION_NAME: str = "llm_usage_logs"
     ANTHROPIC_API_KEY: str
     ANTHROPIC_DEFAULT_MODEL: str = "claude-sonnet-4-20250514"
+    OPENAI_API_KEY: str
+    OPENAI_DEFAULT_MODEL: str = "gpt-4.1-2025-04-14"
 
     class Config:
         backend_dir = Path(__file__).parent.parent.parent

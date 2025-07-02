@@ -128,6 +128,7 @@ Analyze the screen requirements to identify and categorize components into globa
 - Establish clear component relationships
 - If the previous output of the THIRD stage is present then just extend it by adding the new screens and their requirements and provide the extended output in the <OUTPUT> tags
 - For providing the description at the required places, make sure to provide it in a manner that it indicates deeper reasoning and understanding of the users needs.
+- Make sure to add the proper escape characters for the new lines and other special characters such that it'll not cause any error in the upcoming parsing of the output.
 </OUTPUT_REQUIREMENTS>
 
 <OUTPUT>

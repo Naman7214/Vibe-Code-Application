@@ -64,4 +64,5 @@ loggers = {
     "screen_generation": setup_logger(
         "screen_generation", "screen_generation.log"
     ),
+    "openai": setup_logger("openai", "openai.log"),
 }

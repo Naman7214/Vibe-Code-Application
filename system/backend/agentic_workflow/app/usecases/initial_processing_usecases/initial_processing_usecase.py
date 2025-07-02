@@ -43,7 +43,9 @@ class InitialProcessingUsecase:
 
         # Call LLM service
         llm_response = await self.anthropic_service.generate_text(
-            prompt=user_prompt, system_prompt=SYSTEM_PROMPT
+            prompt=user_prompt,
+            system_prompt=SYSTEM_PROMPT,
+            provider="openai",
         )
 
         # Parse the JSON output from <OUTPUT> tags

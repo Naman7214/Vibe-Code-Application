@@ -261,5 +261,6 @@ REFERENCE SCHEMA:
 - Provide moderate technical detail enhanced with descriptive context
 - Focus on practical specifications that developers can easily implement
 - Include both the "what" (technical specs) and "why" (design reasoning) for decisions
+- Make sure to add the proper escape characters for the new lines and other special characters such that it'll not cause any error in the upcoming parsing of the output.
 </REMEMBER>
 """

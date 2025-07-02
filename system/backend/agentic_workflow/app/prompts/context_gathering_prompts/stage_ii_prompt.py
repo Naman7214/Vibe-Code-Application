@@ -30,6 +30,8 @@ Analyze the provided domain context and selected screens to generate comprehensi
 - Ensure data requirements are realistic and actionable
 - If the previous output of the SECOND stage is present then just extend it by adding the new screens and their requirements and provide the extended output in the <OUTPUT> tags
 - For providing the description at the required places, make sure to provide it in a manner that it indicates deeper reasoning and understanding of the users needs.
+- Add 3-4 user stories for each screen. Must think from the user's perspective and provide the user stories in a manner that it indicates deeper reasoning and understanding of the users needs.
+- Make sure to add the proper escape characters for the new lines and other special characters such that it'll not cause any error in the upcoming parsing of the output.
 </OUTPUT_REQUIREMENTS>
 
 

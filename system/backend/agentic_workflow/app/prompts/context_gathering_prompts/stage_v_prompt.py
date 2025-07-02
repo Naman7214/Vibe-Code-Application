@@ -24,6 +24,8 @@ Generate a JSON object with navigation data organized into clear sections:
 Your output must be wrapped in <OUTPUT> tags.
 make sure to add the proper escape characters for the new lines and other special characters.
 The structure uses fixed keys (navigation_structure, global_navigation, screen_navigation, screen_name) but values inside can be any relevant sections that fit the project context.
+Make sure to add the proper escape characters for the new lines and other special characters such that it'll not cause any error in the upcoming parsing of the output.
+
 
 <OUTPUT>
 {
