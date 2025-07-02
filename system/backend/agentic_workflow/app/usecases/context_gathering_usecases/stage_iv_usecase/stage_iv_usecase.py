@@ -5,7 +5,7 @@ from typing import Any, Dict
 from fastapi import Depends, HTTPException
 
 from system.backend.agentic_workflow.app.models.domain.error import Error
-from system.backend.agentic_workflow.app.prompts.context_gathering_prompts.stage_iv_prompt import (
+from system.backend.agentic_workflow.app.prompts.context_gathering_prompts.stage_iv_prompt_balanced import (
     SYSTEM_PROMPT,
 )
 from system.backend.agentic_workflow.app.repositories.error_repo import (

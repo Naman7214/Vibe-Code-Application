@@ -36,29 +36,29 @@ class CodeGenerationUsecase:
 
     async def execute(self, request: CodeGenerationRequest) -> JSONResponse:
         
-        await setup_boilerplate.create_react_boilerplate()
+        # await setup_boilerplate.create_react_boilerplate()
 
-        stage_i_result = await self.stage_i_usecase.execute()
-        if not stage_i_result["success"]:
-            return JSONResponse(
-                content={
-                    "success": False,
-                    "message": stage_i_result["message"],
-                    "error": stage_i_result["error"],
-                },
-                status_code=status.HTTP_400_BAD_REQUEST,
-            )
+        # stage_i_result = await self.stage_i_usecase.execute()
+        # if not stage_i_result["success"]:
+        #     return JSONResponse(
+        #         content={
+        #             "success": False,
+        #             "message": stage_i_result["message"],
+        #             "error": stage_i_result["error"],
+        #         },
+        #         status_code=status.HTTP_400_BAD_REQUEST,
+        #     )
 
-        stage_ii_result = await self.stage_ii_usecase.execute(request)
-        if not stage_ii_result["success"]:
-            return JSONResponse(
-                content={
-                    "success": False,
-                    "message": stage_ii_result["message"],
-                    "error": stage_ii_result["error"],
-                },
-                status_code=status.HTTP_400_BAD_REQUEST,
-            )
+        # stage_ii_result = await self.stage_ii_usecase.execute(request)
+        # if not stage_ii_result["success"]:
+        #     return JSONResponse(
+        #         content={
+        #             "success": False,
+        #             "message": stage_ii_result["message"],
+        #             "error": stage_ii_result["error"],
+        #         },
+        #         status_code=status.HTTP_400_BAD_REQUEST,
+        #     )
 
         stage_iii_result = await self.stage_iii_usecase.execute(request)
         if not stage_iii_result["success"]:

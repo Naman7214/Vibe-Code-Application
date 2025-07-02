@@ -29,6 +29,7 @@ You will receive:
 5. **file_structure**: Current project organization and absolute file paths
 
 NOTE: The code must be implemented using the version of the dependencies specified in the package.json file.
+NOTE: Must understand the context of the screen throughly and deeply before implementing the screen.
 </INPUT_DATA>
 
 <PACKAGE_DATA>
@@ -258,6 +259,8 @@ pages/screen_name/
 - Include accessibility attributes (aria-labels, alt texts, etc.)
 - Optimize for performance with efficient rendering patterns
 - Use recharts library for the charts and graphs.
+- PROPERLY manage the animations, border radius, spacing, shadows, breakpoints, layout, colors, typography and other design aspects by using the tailwindCSS classes.
+
 </CODE_QUALITY>
 
 NOTE: you are not supposed hold back on the implementation of the screen. Don't make up any screen component by yourself.
@@ -327,6 +330,58 @@ For each screen, create a scratchpad entry that includes:
 7. NO external API calls or complex backend integrations
 8. Focus on user experience and visual polish
 </CRITICAL_CONSTRAINTS>
+
+<FREQUENTLY_OCCURED_ERRORS>
+### 1. Array/Object Type Validation
+- **ALWAYS** ensure props expecting arrays are passed actual arrays, never primitives
+- **VERIFY** that methods like `.filter()`, `.map()`, `.reduce()` are only called on arrays
+- **DEFAULT** array props to `[]` if they might be undefined/null
+- **VALIDATE** data types match expected component interfaces
+
+### 2. Props Interface Consistency
+- **MATCH** prop types exactly between component definitions and usage
+- **CHECK** default values match expected data structures
+- **ENSURE** mock data structures mirror production data shapes
+- **VERIFY** all component prop expectations are met at call sites
+
+### 3. Mock Data Standards
+- **CREATE** realistic mock data with proper data types
+- **STRUCTURE** mock data to match real API responses exactly
+- **INCLUDE** all required fields that components expect
+- **TEST** mock data with the same operations used in components
+
+### 4. Error Prevention Patterns
+```javascript
+// ❌ WRONG - Passing primitive when array expected
+const user = {{ notifications: 3 }};
+<Component notifications={{user.notifications}} />
+
+// ✅ CORRECT - Proper array structure
+const notifications = [
+    {{ id: 1, title: "...", message: "...", read: false }}
+];
+<Component notifications={{notifications}} />
+
+// ❌ WRONG - No safety check
+const count = notifications.filter(n => !n.read).length;
+
+// ✅ CORRECT - With safety check
+const count = Array.isArray(notifications) 
+    ? notifications.filter(n => !n.read).length 
+    : 0;
+```
+
+<CODE_GENERATION_CHECKLIST>
+Before generating any component that handles data:
+- [ ] Are all array methods called on actual arrays?
+- [ ] Do mock data structures match component expectations?
+- [ ] Are prop types consistent between definition and usage?
+- [ ] Are default values provided for optional props?
+- [ ] Will the component handle empty/loading states gracefully?
+- [ ] Are data transformations type-safe?
+</CODE_GENERATION_CHECKLIST>
+
+</FREQUENTLY_OCCURED_ERRORS>
 
 Your generated code will be directly integrated into a React application, so it must be syntactically correct, properly formatted, and ready for immediate execution.
 Go beyond the basics to generate a fully functional screen.

@@ -37,7 +37,7 @@ Respond with JSON wrapped in <OUTPUT></OUTPUT> tags:
 <OUTPUT>
 {
     "domain": "clear domain identifier (e.g., 'fintech', 'healthtech', 'edtech')",
-    "industry_patterns": ["3-5 proven patterns specific to this domain"],
+    "industry_patterns": ["3-5 proven patterns specific to this domain with short description"],
     "screens": {
         "screen_1": "concise description focusing on core purpose",
         "screen_2": "concise description focusing on core purpose",
@@ -46,8 +46,8 @@ Respond with JSON wrapped in <OUTPUT></OUTPUT> tags:
     "business_context": {
         "business_type": "specific business model classification",
         "target_audience": "primary user segment with demographics/psychographics", 
-        "key_features": ["3-5 features that drive business value"],
-        "platform_considerations": "specific considerations for the target platform"
+        "key_features": ["3-5 features that drive business value with short description"],
+        "platform_considerations": "specific considerations for the target platform (about 2-3 sentences)"
     }
 }
 </OUTPUT>

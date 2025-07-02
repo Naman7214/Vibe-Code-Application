@@ -26,23 +26,27 @@ Analyze the provided domain context and selected screens to generate comprehensi
 <OUTPUT_REQUIREMENTS>
 - Provide structured JSON output wrapped in <OUTPUT> tags, only the requested JSON is required, no other text or comments
 - Include clear rationale for each screen's requirements
-- Focus on functional requirements rather than visual design
+- Focus on functional requirements rather than visual design by considering the users UX and UI needs.
 - Ensure data requirements are realistic and actionable
-- if the previous output of the SECOND stage is present then just extend it by adding the new screens and their requirements and provide the extended output in the <OUTPUT> tags
+- If the previous output of the SECOND stage is present then just extend it by adding the new screens and their requirements and provide the extended output in the <OUTPUT> tags
+- For providing the description at the required places, make sure to provide it in a manner that it indicates deeper reasoning and understanding of the users needs.
 </OUTPUT_REQUIREMENTS>
 
 
 <OUTPUT>
 {
     "screen_name": {
-        "primary_purpose": "clear purpose statement",
+        "primary_purpose": "clear purpose statement with deeper reasoning (about 5-6 sentences)",
         "data_needs": {
             "display_data": ["data_type1", "data_type2"],
-            "user_input": ["input_type1", "input_type2"]
+            "user_input": ["input_type1", "input_type2"],
+            "description": "description of the data needs (about 5-6 sentences)"
         },
         "interaction_patterns": ["pattern1", "pattern2"],
         "user_actions": ["action1", "action2"],
         "responsive_considerations": ["consideration1", "consideration2"]
+        "description": "description of the screen along with interaction patterns and user actions (about 2-3 sentences)",
+        "user_stories": ["description of the user story1 (about 4-5 sentences)", "description of the user story2 (about 4-5 sentences)"],
     },
     "global_data_requirements": ["shared_data1", "shared_data2"]
 }
