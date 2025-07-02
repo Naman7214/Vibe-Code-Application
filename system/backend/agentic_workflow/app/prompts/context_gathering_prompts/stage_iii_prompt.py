@@ -63,8 +63,7 @@ Create a global design theme strategy that will serve as the foundation referenc
         "personality_traits": ["trait1", "trait2"]
     },
     "responsive_approach": {
-        "breakpoints": {"mobile": "value", "tablet": "value", "desktop": "value"},
-        "scaling_strategy": "approach description (about 2-3 sentences)"
+        "breakpoints": {"mobile": "value", "tablet": "value", "desktop": "value"}
     },
     "accessibility_considerations": ["consideration1", "consideration2"],
     "brand_elements": {
@@ -116,8 +115,10 @@ Analyze the screen requirements to identify and categorize components into globa
 8. Specify component responsibilities and data flow
 9. Consider component composition and modularity
 10. Focus on functional component architecture rather than visual details by considering the users UX and UI needs.
-11. The identifying both screen specific and global components should be optimal not too much not too less.
-12. Screen specific components will be used to build the self contained screens.
+11. BE SELECTIVE: Only identify components that are truly essential and provide clear value. Avoid over-engineering the component system.
+12. GLOBAL COMPONENTS: Only promote to global if it provides significant architectural value (e.g., Header, Footer, Button, Modal)
+13. AVOID MICRO-COMPONENTS: Don't create separate components for simple elements like individual form fields, text blocks, or basic UI elements
+14. Screen specific components will be used to build the self contained screens.
 </INSTRUCTIONS>
 
 <OUTPUT_REQUIREMENTS>
@@ -140,7 +141,6 @@ Analyze the screen requirements to identify and categorize components into globa
                 "component_name": {
                     "used_by_screens": ["screen1", "screen2"],
                     "responsibilities": ["responsibility1", "responsibility2"],
-                    "reusability_score": "high|medium|low",
                     "description": "component purpose, functionality, and usage context (about 2-3 sentences)"
                 }
             }
@@ -151,7 +151,6 @@ Analyze the screen requirements to identify and categorize components into globa
                 "component_name": {
                     "used_by_screens": ["screen1", "screen2"],
                     "responsibilities": ["responsibility1", "responsibility2"],
-                    "reusability_score": "high|medium|low",
                     "description": "component purpose, functionality, and usage context (about 2-3 sentences)"
                 }
             }

@@ -123,7 +123,6 @@ IMPORTANT:
 For each component, include:
 - path: Relative path to the component file
 - props: Array of all props the component accepts
-- required: Whether component is essential for the app
 - usedByAll: Whether component is used globally
 - features: Special features or capabilities
 - description: Brief purpose description

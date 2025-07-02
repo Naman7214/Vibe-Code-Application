@@ -94,3 +94,20 @@ class ContextGatheringUsecase:
                 },
                 status_code=status.HTTP_400_BAD_REQUEST,
             )
+
+        # All stages completed successfully
+        return JSONResponse(
+            content={
+                "success": True,
+                "message": "Context gathering completed successfully across all stages",
+                "data": {
+                    "stage_i": stage_i_result,
+                    "stage_ii": stage_ii_result,
+                    "stage_iii": stage_iii_result,
+                    "stage_iv": stage_iv_result,
+                    "stage_v": stage_v_result,
+                },
+                "error": None,
+            },
+            status_code=status.HTTP_200_OK,
+        )

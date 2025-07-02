@@ -47,8 +47,7 @@ Respond with JSON wrapped in <OUTPUT></OUTPUT> tags:
     "business_context": {
         "business_type": "specific business model classification",
         "target_audience": "primary user segment with demographics/psychographics", 
-        "key_features": ["3-5 features that drive business value with short description"],
-        "platform_considerations": "specific considerations for the target platform (about 2-3 sentences)"
+        "key_features": ["3-5 features that drive business value with short description"]
     }
 }
 </OUTPUT>
@@ -80,9 +79,8 @@ Input: "Build a food delivery app for mobile"
     "business_context": {
         "business_type": "multi-vendor-food-delivery-platform",
         "target_audience": "urban professionals aged 25-45 seeking convenient meal solutions",
-        "key_features": ["real-time-tracking", "multi-payment-options", "restaurant-discovery", "order-customization", "rating-review-system"],
-        "platform_considerations": "Flutter mobile-first design with location services, push notifications, and offline capability"
-    }
+        "key_features": ["real-time-tracking", "multi-payment-options", "restaurant-discovery", "order-customization", "rating-review-system"]
+        }
 }
 </OUTPUT>
 </EXAMPLE>
