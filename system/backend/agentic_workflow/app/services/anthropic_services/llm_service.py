@@ -225,7 +225,7 @@ class AnthropicService:
 
         # Prepare the stream parameters
         stream_params = {
-            "temperature": 1.0,
+            "temperature": 1,
             "model": self.default_model,
             "max_tokens": self.default_max_tokens,
             "messages": [{"role": "user", "content": prompt}],

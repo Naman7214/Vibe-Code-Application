@@ -215,3 +215,4 @@ __marimo__/
 linters.sh
 artifacts/
 struct_logs/
+todo.md

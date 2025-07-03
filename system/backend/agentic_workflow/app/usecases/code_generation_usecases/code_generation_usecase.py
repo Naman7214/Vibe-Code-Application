@@ -1,3 +1,5 @@
+import asyncio
+
 from fastapi import Depends, status
 from fastapi.responses import JSONResponse
 
@@ -35,7 +37,9 @@ class CodeGenerationUsecase:
         self.stage_iv_usecase = stage_iv_usecase
 
     async def execute(self, request: CodeGenerationRequest) -> JSONResponse:
-        await setup_react_boilerplate.create_react_boilerplate()
+
+        # Run React boilerplate setup in background without blocking
+        asyncio.create_task(setup_react_boilerplate.create_react_boilerplate())
 
         stage_i_result = await self.stage_i_usecase.execute()
         if not stage_i_result["success"]:

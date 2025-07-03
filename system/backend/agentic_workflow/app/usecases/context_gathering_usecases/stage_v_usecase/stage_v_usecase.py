@@ -100,7 +100,6 @@ class StageVUsecase:
         user_prompt = INITIAL_USER_PROMPT.format(
             context=json.dumps(stage_iv_data, indent=1),
             screens=json.dumps(request.dict_of_screens, indent=1),
-            platform_type=request.platform_type,
         )
 
         # Call LLM service
@@ -147,7 +146,6 @@ class StageVUsecase:
         user_prompt = FOLLOWUP_USER_PROMPT.format(
             global_navigation=json.dumps(existing_global_nav, indent=1),
             new_screens=json.dumps(request.dict_of_screens, indent=1),
-            platform_type=request.platform_type,
         )
 
         # Call LLM service

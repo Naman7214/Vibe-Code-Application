@@ -65,4 +65,15 @@ loggers = {
         "screen_generation", "screen_generation.log"
     ),
     "openai": setup_logger("openai", "openai.log"),
+    # Flutter Context Gathering Loggers
+    "flutter_stage_ii": setup_logger(
+        "flutter_stage_ii", "flutter_stage_ii.log"
+    ),
+    "flutter_stage_iii": setup_logger(
+        "flutter_stage_iii", "flutter_stage_iii.log"
+    ),
+    "flutter_stage_iv": setup_logger(
+        "flutter_stage_iv", "flutter_stage_iv.log"
+    ),
+    "flutter_stage_v": setup_logger("flutter_stage_v", "flutter_stage_v.log"),
 }
