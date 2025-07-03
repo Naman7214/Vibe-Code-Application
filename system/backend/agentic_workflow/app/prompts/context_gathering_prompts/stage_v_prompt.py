@@ -74,6 +74,7 @@ INITIAL_USER_PROMPT = """
 <CONTEXT>
 Previous Stages Context: {context}
 Selected Screens: {screens}
+Platform: {platform_type}
 </CONTEXT>
 """
 
@@ -122,6 +123,7 @@ Current Global Navigation: {global_navigation}
 
 <NEW_SCREENS>
 Screens to Integrate: {new_screens}
+Platform: {platform_type}
 </NEW_SCREENS>
 
 <INSTRUCTION>

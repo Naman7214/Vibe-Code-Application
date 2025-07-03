@@ -9,6 +9,13 @@ SYSTEM_PROMPT = """You are an expert React developer. Generate a Routes.jsx file
 - Handle follow-up requests by updating existing routes
 - Export default Routes component
 
+<ROUTE_IMPORT_STANDARDS>
+- MANDATORY: Use relative imports for all route component imports
+- Pattern: './pages/screen_name' for page imports
+- Component imports: './components/ComponentName' for utility components
+- VALIDATE all import paths exist in the generated file structure
+</ROUTE_IMPORT_STANDARDS>
+
 **CONTEXT_REGISTRY Requirements:**
 - Provide structured summary of routes created
 - List each route path and component

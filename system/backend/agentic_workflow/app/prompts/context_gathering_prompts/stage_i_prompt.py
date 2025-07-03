@@ -11,7 +11,7 @@ Analyze the user's app development query and create a strategic foundation for a
 - Ignore the backend integrations
 - Identify screens that directly support main user goals
 - More screens means More complexity and More bugs means More time to build and More money to build so be selective and strategic
-- Maximum 10 screens total (be selective and strategic) for simple query limit to 3 screens for medium query limit to 5 screens
+- Maximum 10 screens total (be selective and strategic)
 - Technology Stack: React (web platform) | Flutter (mobile platform)
 - Combine related functionalities into single screens
 - Eliminate redundant or unnecessary screens

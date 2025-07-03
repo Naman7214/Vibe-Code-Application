@@ -332,7 +332,7 @@ export default App;
     <meta charset="UTF-8" />
     <link rel="icon" type="image/svg+xml" href="/favicon.ico" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>AI Generated React App</title>
+    <title>Velocity</title>
   </head>
   <body>
     <div id="root"></div>
@@ -549,7 +549,7 @@ export default ScrollToTop;
 
         # Create manifest.json for PWA support
         manifest = """{
-  "short_name": "AI React App",
+  "short_name": "Velocity",
   "name": "AI Generated React Application",
   "icons": [
     {
@@ -621,4 +621,4 @@ Disallow:
         print("✅ Dependencies installed successfully")
 
 
-setup_boilerplate = AIReactBoilerplateSetup()
+setup_react_boilerplate = AIReactBoilerplateSetup()

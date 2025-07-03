@@ -16,6 +16,17 @@ IGNORED_DIRS = {
     ".venv",
     "venv",
     "env",
+    "ios",
+    "android",
+    "web",
+    ".dart_tool",
+    ".flutter-plugins-dependencies",
+    ".flutter-plugins",
+    ".idea",
+    "linux",
+    "macos",
+    "windows",
+    "test",
 }
 
 
