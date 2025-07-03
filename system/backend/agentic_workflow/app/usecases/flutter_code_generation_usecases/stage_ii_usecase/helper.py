@@ -1,13 +1,12 @@
 import asyncio
 import json
-import logging
 
 from fastapi import Depends
 
 from system.backend.agentic_workflow.app.models.schemas.code_generation_schema import (
     CodeGenerationRequest,
 )
-from system.backend.agentic_workflow.app.prompts.code_generation_prompts.stage_iii_prompt import (
+from system.backend.agentic_workflow.app.prompts.flutter_code_generation_prompts.stage_ii_prompt import (
     SYSTEM_PROMPT,
     USER_PROMPT,
 )
@@ -35,15 +34,6 @@ class Helper:
         self, anthropic_service: AnthropicService = Depends(AnthropicService)
     ):
         self.anthropic_service = anthropic_service
-        self.logger = logging.getLogger("code_generation_stage_iii")
-        if not self.logger.handlers:
-            handler = logging.StreamHandler()
-            formatter = logging.Formatter(
-                "%(asctime)s - %(name)s - %(levelname)s - %(message)s"
-            )
-            handler.setFormatter(formatter)
-            self.logger.addHandler(handler)
-            self.logger.setLevel(logging.INFO)
 
     def read_context_files(self, request: CodeGenerationRequest):
         """
@@ -88,32 +78,20 @@ class Helper:
             file_structure,
         )
 
-    async def run_stage_3_pipeline(self, request: CodeGenerationRequest):
+    async def run_stage_2_pipeline(self, request: CodeGenerationRequest):
         """
         Processes the input for Stage 3 to generate the code for the screens.
         """
-        self.logger.info("Starting stage 3 pipeline to generate code for screens")
-        
         stage_iv_data, screen_navigation, global_scratchpad, file_structure = (
             self.read_context_files(request)
         )
-        
-        self.logger.info(f"successfully read the context files...")
 
         screen_names = list(stage_iv_data.keys())
         batch_size = 5
-        total_screens = len(screen_names)
-        total_batches = (total_screens + batch_size - 1) // batch_size
-        
-        self.logger.info(f"Processing {total_screens} screens in {total_batches} batches (batch size: {batch_size})")
-        
         all_code_files = []
 
         for i in range(0, len(screen_names), batch_size):
-            batch_number = (i // batch_size) + 1
             batch_screens = screen_names[i : i + batch_size]
-
-            self.logger.info(f"Starting batch {batch_number}/{total_batches} with screens: {batch_screens}")
 
             loggers["screen_generation"].info(
                 f"Processing batch of screens: {batch_screens}"
@@ -134,25 +112,20 @@ class Helper:
                 file_structure,
             )
 
-            self.logger.info(f"Completed batch {batch_number}/{total_batches}, generated {len(batch_code_files)} code files")
             all_code_files.extend(batch_code_files)
 
-        self.logger.info(f"All batches completed. Total code files generated: {len(all_code_files)}")
-        self.logger.info("Writing code files to filesystem")
         write_code_files(all_code_files, base_dir="")
 
-        self.logger.info("Generating updated directory structure")
         structure = generate_directory_structure(
             directory_path=f"{get_project_root()}/artifacts/{session_state.get()}/codebase",
             max_depth=10,
         )
 
-        structure_file_path = f"{get_project_root()}/artifacts/{session_state.get()}/scratchpads/file_structure.txt"
-        self.logger.info(f"Writing directory structure to {structure_file_path}")
-        with open(structure_file_path, "w") as f:
+        with open(
+            f"{get_project_root()}/artifacts/{session_state.get()}/scratchpads/file_structure.txt",
+            "w",
+        ) as f:
             f.write(structure)
-
-        self.logger.info("Stage 3 pipeline completed successfully")
 
     async def process_screen_batch(
         self,
@@ -164,15 +137,11 @@ class Helper:
         """
         Process a batch of screens (up to 5) in parallel using asyncio.
         """
-        batch_screens = list(batch_stage_iv.keys())
-        self.logger.info(f"Starting parallel processing of {len(batch_screens)} screens: {batch_screens}")
-        
         loggers["screen_generation"].info(
             f"Processing batch of screens: {batch_stage_iv.keys()}"
         )
         tasks = []
         for screen_name in batch_stage_iv.keys():
-            self.logger.info(f"Creating task for screen: {screen_name}")
             task = self.process_single_screen(
                 screen_name,
                 batch_stage_iv[screen_name],
@@ -182,16 +151,12 @@ class Helper:
             )
             tasks.append(task)
 
-        self.logger.info(f"Executing {len(tasks)} screen processing tasks in parallel")
         screen_results = await asyncio.gather(*tasks)
 
         all_code_files = []
-        for i, code_files in enumerate(screen_results):
-            screen_name = batch_screens[i]
-            self.logger.info(f"Screen '{screen_name}' generated {len(code_files)} code files")
+        for code_files in screen_results:
             all_code_files.extend(code_files)
 
-        self.logger.info(f"Batch processing completed. Total files from batch: {len(all_code_files)}")
         return all_code_files
 
     async def process_single_screen(
@@ -209,9 +174,7 @@ class Helper:
             f"Processing single screen: {screen_name}"
         )
 
-        system_prompt = SYSTEM_PROMPT.format(
-            base_path=f"{get_project_root()}/artifacts/{session_state.get()}",
-        )
+        system_prompt = SYSTEM_PROMPT
 
         single_screen_data = {screen_name: screen_data}
         single_navigation_data = {screen_name: screen_navigation_data}
@@ -226,8 +189,6 @@ class Helper:
         response = await self.anthropic_service.anthropic_client_request(
             system_prompt=system_prompt, prompt=user_prompt
         )
-        
-        self.logger.info(f"screen generated successfully... {screen_name}")
 
         code_files = parse_xml_to_dict(response)
 

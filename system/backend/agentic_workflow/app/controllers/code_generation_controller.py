@@ -7,7 +7,7 @@ from system.backend.agentic_workflow.app.models.schemas.code_generation_schema i
 from system.backend.agentic_workflow.app.usecases.code_generation_usecases.code_generation_usecase import (
     CodeGenerationUsecase,
 )
-from system.backend.agentic_workflow.app.usecases.flutter_code_generation_usecase.flutter_code_generation_usecase import (
+from system.backend.agentic_workflow.app.usecases.flutter_code_generation_usecases.flutter_code_generation_usecase import (
     FlutterCodeGenerationUsecase,
 )
 

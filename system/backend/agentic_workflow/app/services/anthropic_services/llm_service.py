@@ -21,7 +21,7 @@ class JsonResponseError(Exception):
 
 
 class AnthropicService:
-    def __init__(self, llm_usage_repo: LLMUsageRepository = Depends()):
+    def __init__(self):
         """
         Initialize the Anthropic service
 
@@ -39,7 +39,7 @@ class AnthropicService:
         self.openai_model = settings.OPENAI_DEFAULT_MODEL
         self.default_max_tokens = 55555
         self.default_temperature = 0.5
-        self.llm_usage_repo = llm_usage_repo
+        self.llm_usage_repo = llm_usage_repo = LLMUsageRepository()
 
         self.timeout = httpx.Timeout(
             connect=60.0,
@@ -189,6 +189,9 @@ class AnthropicService:
                     loggers["anthropic"].info(f"Anthropic usage: {usage_data}")
 
                 print(collected_text)
+                print("--------------------------------")
+                print(usage_data)
+                print("--------------------------------")
                 await self.llm_usage_repo.add_llm_usage(usage_data)
 
                 return collected_text
@@ -241,8 +244,6 @@ class AnthropicService:
                 }
             ]
 
-        print(stream_params)
-
         async with client.messages.stream(**stream_params) as stream:
 
             async for text in stream.text_stream:
@@ -250,9 +251,16 @@ class AnthropicService:
                 # print(text, end="", flush=True)
 
             final_message = await stream.get_final_message()
+            
+            usage_data = {
+                "input_tokens": final_message.usage.input_tokens,
+                "output_tokens": final_message.usage.output_tokens,
+                "cache_creation_input_tokens": final_message.usage.cache_creation_input_tokens,
+                "cache_read_input_tokens": final_message.usage.cache_read_input_tokens
+            }
 
-            loggers["anthropic"].info(f"Anthropic usage: {final_message.usage}")
+            loggers["anthropic"].info(f"Anthropic usage: {usage_data}")
 
-            await self.llm_usage_repo.add_llm_usage(final_message.usage)
+            await self.llm_usage_repo.add_llm_usage(usage_data)
 
         return collected_text

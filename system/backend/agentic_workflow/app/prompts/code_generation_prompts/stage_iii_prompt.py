@@ -142,7 +142,6 @@ Build a full-fledged web application frontend, not a static demo. Every button m
 - AVOID unnecessary centering that creates unused screen space
 </SCREEN_UTILIZATION_PATTERNS>
 
-
 <DATA_STRUCTURE_CONSISTENCY>
 - ENSURE prop data types match exactly between component definitions and usage
 - VALIDATE that array props receive arrays, object props receive complete objects with all required fields
@@ -294,7 +293,7 @@ pages/screen_name/
 </MAP_INTEGRATION>
 
 <NOTE>
-You are not supposed to hold back on the implementation of the screen. Don't make up any screen component by yourself.
+You are not supposed to hold back on the implementation of the screen.
 </NOTE>
 </IMPLEMENTATION_REQUIREMENTS>
 
@@ -342,6 +341,7 @@ You MUST return your response in this EXACT XML format with NO additional text, 
 </CODE_SNIPPET>
 </FILE>
 </FILES>
+</OUTPUT_FORMAT>
 
 
 <SCRATCHPAD_REQUIREMENTS>
