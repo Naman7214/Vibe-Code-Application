@@ -4,6 +4,7 @@ from fastapi.responses import JSONResponse
 from system.backend.agentic_workflow.app.models.schemas.context_gathering_schema import (
     ContextGatheringRequest,
 )
+
 # Stage I is directly reusable since it's platform-agnostic
 from system.backend.agentic_workflow.app.usecases.context_gathering_usecases.stage_i_usecase.stage_i_usecase import (
     StageIUsecase,
@@ -43,7 +44,7 @@ class FlutterContextGatheringUsecase:
         """
 
         # Execute all stages sequentially with error handling
-        
+
         stage_i_result = await self.stage_i_usecase.execute(request)
         if not stage_i_result["success"]:
             return JSONResponse(
@@ -110,4 +111,4 @@ class FlutterContextGatheringUsecase:
                 "error": None,
             },
             status_code=status.HTTP_200_OK,
-        ) 
+        )

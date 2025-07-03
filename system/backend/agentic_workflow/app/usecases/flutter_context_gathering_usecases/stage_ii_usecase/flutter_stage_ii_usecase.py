@@ -15,7 +15,9 @@ from system.backend.agentic_workflow.app.usecases.flutter_context_gathering_usec
 
 class FlutterStageIIUsecase:
     def __init__(
-        self, helper: FlutterHelper = Depends(), error_repo: ErrorRepo = Depends()
+        self,
+        helper: FlutterHelper = Depends(),
+        error_repo: ErrorRepo = Depends(),
     ):
         self.helper = helper
         self.error_repo = error_repo
@@ -46,4 +48,4 @@ class FlutterStageIIUsecase:
                 "message": "Error in the flutter stage ii of context gathering usecase: "
                 + str(e.detail),
                 "error": e.detail,
-            } 
+            }

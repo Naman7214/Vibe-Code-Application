@@ -21,7 +21,9 @@ class FlutterHelper:
     def __init__(self, anthropic_service: AnthropicService = Depends()):
         self.anthropic_service = anthropic_service
 
-    async def run_flutter_stage_2_pipeline(self, request: ContextGatheringRequest):
+    async def run_flutter_stage_2_pipeline(
+        self, request: ContextGatheringRequest
+    ):
         """
         Processes the input for Flutter Stage 2 to define mobile screen requirements.
         """
@@ -70,4 +72,4 @@ class FlutterHelper:
 
         file_path = os.path.join(output_dir, "stage_ii.json")
         with open(file_path, "w") as f:
-            json.dump(output_data, f, indent=2) 
+            json.dump(output_data, f, indent=2)

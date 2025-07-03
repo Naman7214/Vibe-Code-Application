@@ -35,7 +35,7 @@ class CodeGenerationUsecase:
         self.stage_iv_usecase = stage_iv_usecase
 
     async def execute(self, request: CodeGenerationRequest) -> JSONResponse:
-        
+
         await setup_boilerplate.create_react_boilerplate()
 
         stage_i_result = await self.stage_i_usecase.execute()
@@ -83,7 +83,7 @@ class CodeGenerationUsecase:
                 },
                 status_code=status.HTTP_400_BAD_REQUEST,
             )
-            
+
         return JSONResponse(
             content={
                 "success": True,
@@ -92,7 +92,7 @@ class CodeGenerationUsecase:
                     "stage_i": stage_i_result,
                     "stage_ii": stage_ii_result,
                     "stage_iii": stage_iii_result,
-                    "stage_iv": stage_iv_result
+                    "stage_iv": stage_iv_result,
                 },
                 "error": None,
             },

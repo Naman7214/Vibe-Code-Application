@@ -20,12 +20,12 @@ class AIReactBoilerplateSetup:
 
     async def create_react_boilerplate(self) -> str:
         """Create React project boilerplate for AI code generation"""
-        
+
         # Get session_id from context when method is actually called
         self.session_id = session_state.get()
         if not self.session_id:
             raise ValueError("Session ID not found in context")
-            
+
         self.base_path = Path(f"artifacts/{self.session_id}/codebase")
 
         # Remove existing project if exists
@@ -95,7 +95,7 @@ class AIReactBoilerplateSetup:
         )
 
         # Send 'y' to confirm any prompts and close stdin
-        stdout, stderr = await process.communicate(input=b'y\n')
+        stdout, stderr = await process.communicate(input=b"y\n")
 
         if process.returncode != 0:
             raise Exception(f"Failed to create Vite project: {stderr.decode()}")
@@ -513,18 +513,22 @@ export default ScrollToTop;
         print("🖼️ Setting up assets...")
 
         # Path to the static no_image.png file in backend
-        static_no_image_path = Path("system/backend/static/assets/images/no_image.png")
-        
+        static_no_image_path = Path(
+            "system/backend/static/assets/images/no_image.png"
+        )
+
         # Copy the actual no_image.png file from backend static assets
         if static_no_image_path.exists():
             shutil.copy2(
                 static_no_image_path,
-                self.base_path / "public/assets/images/no_image.png"
+                self.base_path / "public/assets/images/no_image.png",
             )
             print(f"  ✅ Copied no_image.png from backend static assets")
         else:
             # Fallback to base64 if the static file doesn't exist
-            print("  ⚠️ Static no_image.png not found, creating base64 placeholder")
+            print(
+                "  ⚠️ Static no_image.png not found, creating base64 placeholder"
+            )
             placeholder_png = base64.b64decode(
                 "iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mNkYPhfDwAChAGA6xjzTgAAAABJRU5ErkJggg=="
             )

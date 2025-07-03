@@ -24,7 +24,9 @@ class FlutterHelper:
     def __init__(self, anthropic_service: AnthropicService = Depends()):
         self.anthropic_service = anthropic_service
 
-    async def run_flutter_stage_3_pipeline(self, request: ContextGatheringRequest):
+    async def run_flutter_stage_3_pipeline(
+        self, request: ContextGatheringRequest
+    ):
         """
         Processes the input for Flutter Stage 3 to define mobile theme and widget strategy.
         """
@@ -49,7 +51,9 @@ class FlutterHelper:
             "message": "Flutter Stage 3 pipeline completed successfully",
         }
 
-    async def _flutter_global_theme_generation(self, request: ContextGatheringRequest):
+    async def _flutter_global_theme_generation(
+        self, request: ContextGatheringRequest
+    ):
         """
         Generates the global mobile theme for the Flutter project.
         """
@@ -87,7 +91,9 @@ class FlutterHelper:
             "message": "Flutter global theme generation completed successfully",
         }
 
-    async def _generate_flutter_widgets_details(self, request: ContextGatheringRequest):
+    async def _generate_flutter_widgets_details(
+        self, request: ContextGatheringRequest
+    ):
         """
         Generates the Flutter widget architecture and screen-specific widget details.
         """
@@ -148,4 +154,4 @@ class FlutterHelper:
 
         file_path = os.path.join(output_dir, output_file_name)
         with open(file_path, "w") as f:
-            json.dump(output_data, f, indent=2) 
+            json.dump(output_data, f, indent=2)

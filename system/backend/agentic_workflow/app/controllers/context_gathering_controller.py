@@ -19,7 +19,9 @@ class ContextGatheringController:
         flutter_context_gathering_usecase: FlutterContextGatheringUsecase = Depends(),
     ):
         self.context_gathering_usecase = context_gathering_usecase
-        self.flutter_context_gathering_usecase = flutter_context_gathering_usecase
+        self.flutter_context_gathering_usecase = (
+            flutter_context_gathering_usecase
+        )
 
     async def execute(self, request: ContextGatheringRequest) -> JSONResponse:
         """

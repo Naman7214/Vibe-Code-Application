@@ -37,8 +37,8 @@ class AnthropicService:
         self.openai_base_url = "https://api.openai.com/v1/chat/completions"
         self.default_model = settings.ANTHROPIC_DEFAULT_MODEL
         self.openai_model = settings.OPENAI_DEFAULT_MODEL
-        self.default_max_tokens = 31000
-        self.default_temperature = 0.2
+        self.default_max_tokens = 55555
+        self.default_temperature = 0.5
         self.llm_usage_repo = llm_usage_repo
 
         self.timeout = httpx.Timeout(
@@ -58,7 +58,7 @@ class AnthropicService:
             "content-type": "application/json",
             "anthropic-beta": "extended-cache-ttl-2025-04-11",
         }
-        
+
     def _get_openai_headers(self) -> Dict[str, str]:
         """Get default headers for OpenAI API requests"""
         return {
@@ -85,13 +85,15 @@ class AnthropicService:
         if provider.lower() == "openai":
             return await self._make_openai_request(prompt, system_prompt)
         else:
-            return await self._make_anthropic_request(prompt, system_prompt, web_search)
+            return await self._make_anthropic_request(
+                prompt, system_prompt, web_search
+            )
 
     async def _make_anthropic_request(
-        self, 
-        prompt: str, 
-        system_prompt: Optional[str] = None, 
-        web_search: bool = False
+        self,
+        prompt: str,
+        system_prompt: Optional[str] = None,
+        web_search: bool = False,
     ) -> Dict[str, Any]:
         """Make request to Anthropic API"""
         payload = {
@@ -122,18 +124,16 @@ class AnthropicService:
         return await self._make_request(payload, "anthropic")
 
     async def _make_openai_request(
-        self, 
-        prompt: str, 
-        system_prompt: Optional[str] = None
+        self, prompt: str, system_prompt: Optional[str] = None
     ) -> Dict[str, Any]:
         """Make request to OpenAI API"""
         messages = []
-        
+
         if system_prompt:
             messages.append({"role": "system", "content": system_prompt})
-        
+
         messages.append({"role": "user", "content": prompt})
-        
+
         payload = {
             "model": self.openai_model,
             "max_completion_tokens": self.default_max_tokens,
@@ -143,7 +143,9 @@ class AnthropicService:
 
         return await self._make_request(payload, "openai")
 
-    async def _make_request(self, payload: Dict[str, Any], provider: str) -> Dict[str, Any]:
+    async def _make_request(
+        self, payload: Dict[str, Any], provider: str
+    ) -> Dict[str, Any]:
         """
         Make a API request to the specified provider
 
@@ -175,7 +177,9 @@ class AnthropicService:
                 collected_text = ""
                 if provider == "openai":
                     # Extract text from OpenAI Chat Completions response format
-                    collected_text = response_data["choices"][0]["message"]["content"]
+                    collected_text = response_data["choices"][0]["message"][
+                        "content"
+                    ]
                     usage_data = response_data["usage"]
                     loggers["openai"].info(f"OpenAI usage: {usage_data}")
                 else:
@@ -221,9 +225,10 @@ class AnthropicService:
 
         # Prepare the stream parameters
         stream_params = {
+            "temperature": 1,
             "model": self.default_model,
             "max_tokens": self.default_max_tokens,
-            "messages": [{"role": "user", "content": prompt}]
+            "messages": [{"role": "user", "content": prompt}],
         }
 
         # Add system prompt with caching if provided
@@ -235,6 +240,8 @@ class AnthropicService:
                     "cache_control": {"type": "ephemeral"},
                 }
             ]
+
+        print(stream_params)
 
         async with client.messages.stream(**stream_params) as stream:
 

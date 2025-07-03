@@ -116,7 +116,7 @@ class FlutterStageVUsecase:
             existing_screen_nav = existing_stage_v.get("screen_navigation", {})
             new_screen_nav = navigation_data.get("screen_navigation", {})
             merged_screen_nav = {**existing_screen_nav, **new_screen_nav}
-            
+
             navigation_data["screen_navigation"] = merged_screen_nav
 
         # Save to stage_v.json
@@ -127,4 +127,4 @@ class FlutterStageVUsecase:
             "success": True,
             "message": "Flutter Stage V completed successfully",
             "error": None,
-        } 
+        }

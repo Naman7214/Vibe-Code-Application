@@ -99,5 +99,7 @@ class FlutterStageIVHelper:
             )
 
         except Exception as e:
-            self.logger.error(f"Failed to merge and save file {output_path}: {e}")
-            raise 
+            self.logger.error(
+                f"Failed to merge and save file {output_path}: {e}"
+            )
+            raise
