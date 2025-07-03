@@ -18,13 +18,9 @@ You will receive:
 <REQUIREMENTS>
 1. Generate a comprehensive Flutter theme system that includes:
    - lib/config/app_theme.dart (Main theme configuration with Material 3 support)
-   - lib/config/colors.dart (Complete color palette definitions)
-   - lib/config/text_styles.dart (Typography system with proper hierarchy)
-   - lib/config/theme_extensions.dart (Custom theme extensions for app-specific needs)
 
 2. Theme configuration requirements:
    - Use Material 3 (Material You) design system
-   - Support both light and dark themes
    - Include proper ColorScheme definitions
    - Configure AppBarTheme, ButtonTheme, CardTheme, etc.
    - Implement custom theme extensions for brand colors
@@ -55,7 +51,6 @@ You will receive:
    - Material 3 design specifications
    - Both Android and iOS platforms
    - Responsive design principles
-   - Accessibility guidelines (WCAG)
 </REQUIREMENTS>
 
 <CRITICAL_FLUTTER_THEME_REQUIREMENTS>
@@ -91,8 +86,6 @@ You will receive:
    - Support Material 3 component specifications
 
 6. **ACCESSIBILITY COMPLIANCE** (Required for production apps):
-   - Ensure minimum contrast ratios (4.5:1 for normal text, 3:1 for large text)
-   - Support high contrast mode
    - Include proper semantic colors for status indicators
    - Configure appropriate touch target sizes
 
@@ -102,8 +95,6 @@ VALIDATION CHECKLIST:
 ✅ Theme extensions properly structured with copyWith() and lerp()
 ✅ Component themes configured for consistency
 ✅ Accessibility requirements met
-✅ Both light and dark themes supported
-✅ Google Fonts integration (if custom fonts specified)
 </CRITICAL_FLUTTER_THEME_REQUIREMENTS>
 
 <FLUTTER_THEME_INTEGRATION>
@@ -115,24 +106,12 @@ DESIGN GUIDELINES:
 * Ensure cross-platform consistency
 * Prioritize accessibility and usability
 * Use professional, polished design patterns
-* Support both light and dark themes seamlessly
 </FLUTTER_THEME_INTEGRATION>
 
 <PROFESSIONAL_FLUTTER_PATTERNS>
 🚨 ENTERPRISE-GRADE FLUTTER THEME ARCHITECTURE:
 
-1. **THEME STRUCTURE ORGANIZATION**:
-   ```dart
-   // ✅ REQUIRED: Proper theme file organization
-   lib/
-     config/
-       app_theme.dart          // Main theme configuration
-       colors.dart            // Color definitions
-       text_styles.dart       // Typography system
-       theme_extensions.dart  // Custom extensions
-   ```
-
-2. **MATERIAL 3 COLOR SCHEME**:
+1. **MATERIAL 3 COLOR SCHEME**:
    ```dart
    // ✅ REQUIRED: Complete Material 3 color scheme
    static ColorScheme _lightColorScheme = ColorScheme.fromSeed(
@@ -146,7 +125,7 @@ DESIGN GUIDELINES:
    );
    ```
 
-3. **CUSTOM THEME EXTENSIONS**:
+2. **CUSTOM THEME EXTENSIONS**:
    ```dart
    // ✅ REQUIRED: Proper theme extension structure
    class AppColorsExtension extends ThemeExtension<AppColorsExtension> {
@@ -162,7 +141,7 @@ DESIGN GUIDELINES:
    }
    ```
 
-4. **TYPOGRAPHY CONFIGURATION**:
+3. **TYPOGRAPHY CONFIGURATION**:
    ```dart
    // ✅ REQUIRED: Material 3 typography implementation
    static TextTheme _textTheme = TextTheme(
@@ -193,12 +172,11 @@ Generate your response in the following XML format ONLY. Do not include any expl
 </FILES>
 
 IMPORTANT NOTES:
-- File paths should be relative to the Flutter project lib directory
+- File paths should be relative to the Flutter project lib directory (always use : lib/theme/app_theme.dart)
 - Colors should be generated based on the design system provided in context
 - Typography should use the font family specified in the design system
 - Include proper Material 3 theming with ColorScheme.fromSeed() when appropriate
 - Ensure all semantic colors (success, warning, error, info) are properly defined
-- Support both light and dark themes with proper contrast ratios
 - MUST use uppercase XML tags: FILES, FILE, FILE_PATH, CODE_SNIPPET
 - Replace placeholder colors with actual values from the design system context
 
@@ -209,7 +187,6 @@ IMPORTANT NOTES:
 - ✅ Google Fonts integration included in pubspec.yaml dependencies
 - ✅ Component themes configured for Material 3 consistency
 - ✅ Accessibility contrast ratios met (4.5:1 minimum)
-- ✅ Both light and dark theme support implemented
 - ✅ Semantic color system (success, warning, error, info) included
 """
 

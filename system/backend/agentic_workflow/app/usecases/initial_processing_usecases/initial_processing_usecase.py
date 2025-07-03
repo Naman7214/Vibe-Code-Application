@@ -7,8 +7,10 @@ from system.backend.agentic_workflow.app.models.schemas.initial_processing_schem
     InitialProcessingRequest,
 )
 from system.backend.agentic_workflow.app.prompts.context_gathering_prompts.stage_i_prompt import (
-    SYSTEM_PROMPT,
-    USER_PROMPT,
+    FLUTTER_SYSTEM_PROMPT,
+    FLUTTER_USER_PROMPT,
+    REACT_SYSTEM_PROMPT,
+    REACT_USER_PROMPT,
 )
 from system.backend.agentic_workflow.app.services.anthropic_services.llm_service import (
     AnthropicService,
@@ -35,16 +37,21 @@ class InitialProcessingUsecase:
         session_id = session_state.get()
         if not session_id:
             raise ValueError("No session_id available in context")
-
+        if request.platform_type == "web":
+            system_prompt = REACT_SYSTEM_PROMPT
+            user_prompt = REACT_USER_PROMPT
+        elif request.platform_type == "mobile":
+            system_prompt = FLUTTER_SYSTEM_PROMPT
+            user_prompt = FLUTTER_USER_PROMPT
         # Create user prompt
-        user_prompt = USER_PROMPT.format(
+        user_prompt = user_prompt.format(
             user_query=request.user_query, platform_type=request.platform_type
         )
 
         # Call LLM service
         llm_response = await self.anthropic_service.generate_text(
             prompt=user_prompt,
-            system_prompt=SYSTEM_PROMPT,
+            system_prompt=system_prompt,
             provider="anthropic",
         )
 

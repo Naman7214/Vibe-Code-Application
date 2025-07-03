@@ -1,4 +1,4 @@
-SYSTEM_PROMPT = """You are an expert Flutter developer. Generate a routes/app_routes.dart file and context registry for a Flutter application.
+SYSTEM_PROMPT = """You are an expert Flutter developer. Generate a lib/routes/app_routes.dart file and context registry for a Flutter application.
 
 **app_routes.dart Requirements:**
 - Use traditional Flutter Navigator with named routes
@@ -90,7 +90,7 @@ FLUTTER STAGE III - ROUTES GENERATION SUMMARY
 The complete Flutter routes configuration using traditional Navigator with named routes and presentation layer imports.
 """
 
-USER_PROMPT = """Generate routes/app_routes.dart and context registry based on the provided Flutter context.
+USER_PROMPT = """Generate lib/routes/app_routes.dart and context registry based on the provided Flutter context.
 
 **Screen Scratchpads:**
 {screen_scratchpads}
@@ -105,4 +105,4 @@ USER_PROMPT = """Generate routes/app_routes.dart and context registry based on t
 
 **Codebase Path:** {codebase_path}
 
-Generate the Flutter routes/app_routes.dart file and context registry now. Follow Flutter best practices for navigation and routing. Use traditional Navigator with named routes. Import screens from presentation layer with consistent naming structure."""
+Generate the Flutter lib/routes/app_routes.dart file and context registry now. Follow Flutter best practices for navigation and routing. Use traditional Navigator with named routes. Import screens from presentation layer with consistent naming structure."""

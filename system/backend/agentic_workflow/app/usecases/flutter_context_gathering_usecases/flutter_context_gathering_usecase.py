@@ -5,10 +5,7 @@ from system.backend.agentic_workflow.app.models.schemas.context_gathering_schema
     ContextGatheringRequest,
 )
 
-# Stage I is directly reusable since it's platform-agnostic
-from system.backend.agentic_workflow.app.usecases.context_gathering_usecases.stage_i_usecase.stage_i_usecase import (
-    StageIUsecase,
-)
+from system.backend.agentic_workflow.app.usecases.context_gathering_usecases.stage_i_usecase.stage_i_usecase import StageIUsecase
 from system.backend.agentic_workflow.app.usecases.flutter_context_gathering_usecases.stage_ii_usecase.flutter_stage_ii_usecase import (
     FlutterStageIIUsecase,
 )
@@ -26,7 +23,7 @@ from system.backend.agentic_workflow.app.usecases.flutter_context_gathering_usec
 class FlutterContextGatheringUsecase:
     def __init__(
         self,
-        stage_i_usecase: StageIUsecase = Depends(),  # Reusing original Stage I
+        stage_i_usecase: StageIUsecase = Depends(),  # Flutter-specific Stage I
         stage_ii_usecase: FlutterStageIIUsecase = Depends(),
         stage_iii_usecase: FlutterStageIIIUsecase = Depends(),
         stage_iv_usecase: FlutterStageIVUsecase = Depends(),
@@ -56,6 +53,8 @@ class FlutterContextGatheringUsecase:
                 status_code=status.HTTP_400_BAD_REQUEST,
             )
 
+        print("stage 1 completed")
+
         stage_ii_result = await self.stage_ii_usecase.execute(request)
         if not stage_ii_result["success"]:
             return JSONResponse(
@@ -67,6 +66,8 @@ class FlutterContextGatheringUsecase:
                 status_code=status.HTTP_400_BAD_REQUEST,
             )
 
+        print("stage 2 completed")
+
         stage_iii_result = await self.stage_iii_usecase.execute(request)
         if not stage_iii_result["success"]:
             return JSONResponse(
@@ -77,6 +78,8 @@ class FlutterContextGatheringUsecase:
                 },
                 status_code=status.HTTP_400_BAD_REQUEST,
             )
+
+        print("stage 3 completed")
 
         # Stage IV: Screen Detailed Planning (Flutter-specific)
         stage_iv_result = await self.stage_iv_usecase.execute(
@@ -92,6 +95,8 @@ class FlutterContextGatheringUsecase:
                 status_code=status.HTTP_400_BAD_REQUEST,
             )
 
+        print("stage 4 completed")
+
         # Stage V: Navigation & State (Flutter-specific)
         stage_v_result = await self.stage_v_usecase.execute(request)
         if not stage_v_result["success"]:
@@ -103,6 +108,8 @@ class FlutterContextGatheringUsecase:
                 },
                 status_code=status.HTTP_400_BAD_REQUEST,
             )
+
+        print("stage 5 completed")
 
         return JSONResponse(
             content={

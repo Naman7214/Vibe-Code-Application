@@ -92,11 +92,8 @@ Analyze the provided domain context and selected screens to generate actionable 
 4. Consider mobile-first design needs and cross-platform considerations (iOS/Android)
 5. Ensure logical flow between screens with proper mobile navigation patterns
 6. Consider platform-specific UI guidelines (Material Design for Android, Cupertino for iOS)
-7. Account for mobile-specific features (offline capabilities, push notifications, device sensors)
-8. Ensure zero feature loss during requirement analysis
-9. NEVER infer any new screens, only use the screens that are provided in the <OUTPUT_FROM_FIRST_STAGE> tags having field `screens`
-10. Consider mobile performance implications and data usage patterns
-11. Factor in mobile accessibility requirements and gesture-based interactions
+7. Ensure zero feature loss during requirement analysis
+8. NEVER infer any new screens, only use the screens that are provided in the <OUTPUT_FROM_FIRST_STAGE> tags having field `screens`
 </INSTRUCTIONS>
 
 <OUTPUT_REQUIREMENTS>
@@ -130,12 +127,11 @@ Make sure to use proper escape characters for the new lines and other special ch
         "responsive_considerations": ["phone_consideration1", "tablet_consideration2", "orientation_consideration3"],
         "mobile_specific_features": ["feature1", "feature2", "platform_integration3"],
         "description": "description of the mobile screen along with interaction patterns and user actions (about 2-3 sentences)",
-        "user_stories": ["description of the mobile user story1 focusing on mobile usage patterns (about 4-5 sentences)", "description of the mobile user story2 considering mobile context (about 4-5 sentences)"],
+        "user_stories": ["description of the mobile user story1 focusing on mobile usage patterns (about 2-3 sentences)", "description of the mobile user story2 considering mobile context (about 4-5 sentences)"],
         "platform_considerations": {
             "ios": ["ios_specific_consideration1", "ios_guideline2"],
             "android": ["android_specific_consideration1", "material_design_guideline2"]
         },
-        "performance_considerations": ["loading_optimization1", "data_efficiency2", "battery_impact3"]
     },
     "global_data_requirements": ["shared_mobile_data1", "cached_data2", "sync_data3"],
     "mobile_architecture_notes": "Overall mobile app architecture considerations and cross-screen patterns"

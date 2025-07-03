@@ -26,7 +26,7 @@ You will receive a comprehensive JSON context object containing:
 </INTEGRATION_APPROACH>
 
 <NATURAL_LANGUAGE_DESCRIPTIONS>
-Each screen specification must comprehensively define its purpose within the user journey, target audience and their goals, and core value proposition, while detailing the visual layout structure, content hierarchy, responsive behavior across devices, and all interactive elements. The specification should clearly outline what data is displayed and its formatting, distinguish between real-time and static content with appropriate refresh rates, identify data sources and processing methods, and define empty states for when data is unavailable. Additionally, it must describe primary user actions, navigation patterns, performance expectations, and accessibility features, alongside business rules including access controls, personalization logic, error handling procedures, and success metrics for measuring screen effectiveness.
+Each screen specification must comprehensively define its purpose within the user journey, target audience and their goals, and core value proposition, while detailing the visual layout structure, content hierarchy, responsive behavior across devices, and all interactive elements. The specification should clearly outline what data is displayed and its formatting, distinguish between real-time and static content with appropriate refresh rates, identify data sources and processing methods, and define empty states for when data is unavailable. Additionally, it must describe primary user actions, navigation patterns, and accessibility features, alongside business rules including access controls, personalization logic, error handling procedures, and success metrics for measuring screen effectiveness.
 </NATURAL_LANGUAGE_DESCRIPTIONS>
 
 <THINKING_PROCESS>
@@ -156,7 +156,7 @@ You will receive a comprehensive JSON context object containing:
 - Leverage Flutter's built-in widgets (AppBar, Scaffold, ListView, etc.) while identifying custom widget needs
 - Maintain alignment with Material Design and Cupertino guidelines for platform consistency
 - Go beyond basic requirements to create compelling, production-ready mobile experiences
-- Consider mobile-specific constraints like screen sizes, touch targets, and performance
+- Consider mobile-specific constraints like screen sizes, touch targets
 </INTEGRATION_APPROACH>
 
 <FLUTTER_DATA_STRUCTURE_REQUIREMENTS>
@@ -180,14 +180,14 @@ You will receive a comprehensive JSON context object containing:
 </WIDGET_PARAMETER_SAFETY_SPECIFICATIONS>
 
 <NATURAL_LANGUAGE_DESCRIPTIONS>
-Each mobile screen specification must comprehensively define its purpose within the mobile user journey, target mobile audience and their goals, and core value proposition for mobile users, while detailing the mobile-optimized visual layout structure, content hierarchy, responsive behavior across different mobile screen sizes and orientations, and all touch-based interactive elements. The specification should clearly outline what data is displayed and its mobile-appropriate formatting, distinguish between real-time and static content with appropriate refresh rates considering mobile data constraints, identify data sources and mobile-optimized processing methods, and define empty states for when data is unavailable on mobile. Additionally, it must describe primary mobile user actions, mobile navigation patterns, mobile performance expectations, and mobile accessibility features, alongside business rules including mobile access controls, mobile personalization logic, mobile error handling procedures, and success metrics for measuring mobile screen effectiveness.
+Each mobile screen specification must comprehensively define its purpose within the mobile user journey, target mobile audience and their goals, and core value proposition for mobile users, while detailing the mobile-optimized visual layout structure, content hierarchy, responsive behavior across different mobile screen sizes and orientations, and all touch-based interactive elements. The specification should clearly outline what data is displayed and its mobile-appropriate formatting, distinguish between real-time and static content with appropriate refresh rates considering mobile data constraints, identify data sources and mobile-optimized processing methods, and define empty states for when data is unavailable on mobile. Additionally, it must describe primary mobile user actions, mobile navigation patterns, and mobile accessibility features, alongside business rules including mobile access controls, mobile personalization logic, mobile error handling procedures, and success metrics for measuring mobile screen effectiveness.
 </NATURAL_LANGUAGE_DESCRIPTIONS>
 
 <SELF_CONTAINED_FUNCTIONALITY>
 - Every mobile screen should be fully functional without dependencies on unimplemented features
 - Use bottom sheets, dialogs, and in-page interactions instead of navigation to incomplete screens for smart mobile interactions
 - Every touch-based interactive element must have clear, implementable functionality with proper touch targets
-- Exclude backend integrations and edge cases that require live data
+- Exclude backend integrations and every edge cases that require live data
 - Only suggest screen specifications that work with mock or static data. Exclude authentication, role-based menus, live API data, or session management. Focus on mobile UI widgets that demonstrate mobile navigation patterns, visual states, and touch interactions using mock data only
 - Consider mobile-specific interaction patterns (swipe, pinch, pull-to-refresh, etc.)
 </SELF_CONTAINED_FUNCTIONALITY>
@@ -204,13 +204,10 @@ Each mobile screen specification must comprehensively define its purpose within 
 </WIDGET_SPECIFICATION_REQUIREMENTS>
 
 <MOBILE_SPECIFIC_CONSIDERATIONS>
-- Touch target sizes must meet accessibility guidelines (minimum 44dp)
 - Consider thumb-reachable zones for primary actions on mobile devices
 - Account for different mobile screen densities and sizes
 - Include gesture-based interactions where appropriate
 - Consider mobile keyboard behavior and input methods
-- Plan for mobile-specific states (network connectivity, battery optimization)
-- Include haptic feedback considerations for enhanced mobile UX
 - Account for mobile platform conventions (iOS vs Android navigation patterns)
 </MOBILE_SPECIFIC_CONSIDERATIONS>
 

@@ -164,7 +164,7 @@ Make sure to add the proper escape characters for the new lines and other specia
 {
     "screen_navigation": {
         "screen_name": {
-            "mobile_workflow_analysis": "Mobile Screen Purpose Analysis: [Primary function and mobile user goals for this screen.]\n\nMobile User Journey Integration: [How this screen fits into overall mobile user workflows and touch-based interactions.]\n\nMobile Navigation Patterns: [Specific mobile navigation behaviors, gestures, and interactions within this screen.]\n\nWidget Requirements: [Screen-specific Flutter widgets needed for navigation functionality.]\n\nFlutter Implementation Notes: [Technical guidance for Flutter mobile implementation including routing and state management.]\n\nMobile Routing Specifications: [Define specific scenarios when this mobile screen should navigate to other screens. Include routing triggers, target screens, data passing requirements, and mobile-specific navigation patterns.] Avoid screen-to-screen navigation unless necessary for mobile UX.",
+            "mobile_workflow_analysis": "Mobile Screen Purpose Analysis: [Primary function and mobile user goals for this screen.]\n\nMobile User Journey Integration: [How this screen fits into overall mobile user workflows and touch-based interactions.]\n\nMobile Navigation Patterns: [Specific mobile navigation behaviors, gestures, and interactions within this screen.]\n\nWidget Requirements: [Screen-specific Flutter widgets needed for navigation functionality.]\n\nFlutter Implementation Notes: [Technical guidance for Flutter mobile implementation including routing and state management.]",
             
             "mobile_interaction_design": "Internal Mobile Navigation Strategy: [How mobile users navigate within this screen using touch interactions.]\n\nMobile Transition Patterns: [How mobile users enter and exit this screen with appropriate animations and gestures.]\n\nMobile State Management: [Screen-level state coordination and lifecycle management.]\n\nCross-Device Behavior: [Navigation adaptations across different mobile screen sizes and orientations.]\n\nMobile Accessibility Considerations: [Inclusive design requirements for mobile screen navigation including touch targets and screen readers.]\n\nFlutter Navigation Implementation: [Specific Flutter routing patterns needed for this mobile screen, including Navigator.push(), route parameters, and state passing between screens with mobile optimizations.]",
             
@@ -177,7 +177,7 @@ Make sure to add the proper escape characters for the new lines and other specia
 
 <MOBILE_CONTENT_GUIDELINES>
 Generate organized, professional mobile navigation descriptions with:
-1. Our focus is to make every mobile screens fully self-contained; use screen-to-screen navigation only when essential for mobile UX.
+1. Our focus is to make every mobile screens fully self-contained.
 2. Only suggest mobile navigation systems that work with mock or static data. Exclude authentication, role-based menus, live API data, or session management. Focus on mobile UI widgets that demonstrate navigation patterns, visual states, and touch interactions using mock data only.
 3. **Clear Mobile Section Headings**: Use consistent formatting like "Mobile Screen Purpose Analysis:", "Mobile Navigation Patterns:"
 4. **Concise Mobile Explanations**: Focused, specific guidance for mobile navigation without repetitive verbose text
