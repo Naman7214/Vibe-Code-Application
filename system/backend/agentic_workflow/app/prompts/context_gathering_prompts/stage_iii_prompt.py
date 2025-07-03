@@ -17,10 +17,16 @@ Create a global design theme strategy that will serve as the foundation referenc
 1. Develop a cohesive color palette that reflects the brand personality and domain
 2. Select typography hierarchy that balances readability with brand character
 3. Define the overall visual mood and design philosophy
-4. Create spacing and layout principles for consistency
-5. Establish component styling guidelines at a high level
-6. Consider accessibility and usability standards
-7. Keep it as a reference framework - not overly detailed, but comprehensive enough to guide screen-specific design generation
+4. Balance ideal design with practical development constraints
+5. Consider React implementation implications for each design decision
+6. Create spacing and layout principles for consistency
+7. Establish component styling guidelines at a high level
+8. Consider accessibility and usability standards
+9. Ensure all decisions work together as a unified system without overwhelming users
+10. Keep it as a reference framework - not overly detailed, but comprehensive enough to guide screen-specific design generation
+11. For the typography, must use the 3-4 fonts from the google fonts only that align with the brand personality and domain.
+
+🚨 CRITICAL: ALWAYS include semantic colors (success, warning, error, info) in the color palette even if not explicitly mentioned in the domain context. These are essential for UI components and will cause errors if missing.
 </INSTRUCTIONS>
 
 <OUTPUT_REQUIREMENTS>
@@ -45,6 +51,12 @@ Make sure to use proper escape characters for the new lines and other special ch
             "text_primary": "hex_code",
             "text_secondary": "hex_code",
             "description": "description of the neutral colors"
+        },
+        "semantic": {
+            "success": {"color": "hex_code", "description": "color for success states and positive feedback"},
+            "warning": {"color": "hex_code", "description": "color for warning states and cautions"},
+            "error": {"color": "hex_code", "description": "color for error states and negative feedback"},
+            "info": {"color": "hex_code", "description": "color for informational states and neutral feedback"}
         }
     },
     "typography": {
@@ -73,6 +85,7 @@ Make sure to use proper escape characters for the new lines and other special ch
     }
 }
 </OUTPUT>
+Your output is used by the react developer to build the design system. So make sure to provide the output in a manner that it'll be easy to understand and use by the react developer.
 """
 
 USER_PROMPT_A = """
@@ -106,6 +119,7 @@ Analyze the screen requirements to identify and categorize components into globa
 
 <INSTRUCTIONS>
 1. Identify components that will be used across multiple screens (global components)
+2. Only suggest components that work with mock or static data. Exclude authentication, role-based menus, live API data, or session management. Focus on UI components that demonstrate navigation patterns, visual states, and interactions using mock data only.
 2. Group global components into logical clusters based on their functionality (e.g., "navigation", "ui_elements", "data_display", "forms", "auth", "layout", etc.)
 3. Create a "miscellaneous" cluster for components that don't fit into specific groups
 4. For the global components make sure to give the comprehensive details.
@@ -130,7 +144,7 @@ Analyze the screen requirements to identify and categorize components into globa
 - For providing the description at the required places, make sure to provide it in a manner that it indicates deeper reasoning and understanding of the users needs.
 - Make sure to add the proper escape characters for the new lines and other special characters such that it'll not cause any error in the upcoming parsing of the output.
 </OUTPUT_REQUIREMENTS>
-
+Make sure to use proper escape characters for the new lines and other special characters such that it'll not cause any error in the upcoming parsing of the output.
 <OUTPUT>
 {
     "global_components": {
@@ -166,6 +180,7 @@ Analyze the screen requirements to identify and categorize components into globa
     }
 }
 </OUTPUT>
+Your output is used by the react developer to build the components. So make sure to provide the output in a manner that it'll be easy to understand and use by the react developer.
 """
 
 USER_PROMPT_B = """

@@ -165,7 +165,7 @@ class StageIVUsecase:
             response = await self.anthropic_service.generate_text(
                 prompt=user_message_str,
                 system_prompt=SYSTEM_PROMPT,
-                provider="openai",
+                provider="anthropic",
             )
             print("MESSAGE SENT")
             # Extract text content

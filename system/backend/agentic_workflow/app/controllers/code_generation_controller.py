@@ -24,13 +24,13 @@ class CodeGenerationController:
         :return: JSONResponse with generated code data and individual file paths
         """
 
-        code_generation_result = await self.code_generation_usecase.execute(
+        await self.code_generation_usecase.execute(
             request
         )
 
         return JSONResponse(
             content={
-                "data": code_generation_result,
+                "data": "None",
                 "message": "Code generation completed successfully",
                 "error": None,
             },

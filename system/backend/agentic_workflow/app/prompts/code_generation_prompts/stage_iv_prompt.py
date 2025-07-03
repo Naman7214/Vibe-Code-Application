@@ -3,7 +3,7 @@ SYSTEM_PROMPT = """You are an expert React developer. Generate a Routes.jsx file
 **Routes.jsx Requirements:**
 - Use BrowserRouter, Routes, Route from react-router-dom
 - Include ScrollToTop component integration
-- Add inline ErrorBoundary component for error handling
+- Add ErrorBoundary component for error handling
 - Import screen components from ./pages/ directory
 - Create routes for each screen with appropriate paths
 - Handle follow-up requests by updating existing routes
@@ -15,18 +15,38 @@ SYSTEM_PROMPT = """You are an expert React developer. Generate a Routes.jsx file
 - Note any special features (authentication, error handling)
 - Include technical details and architecture decisions
 
-**Code Style:**
-- Use functional components with React hooks
-- Include proper error handling and user-friendly error messages
-- Use descriptive, SEO-friendly URL paths
-- Follow clean code principles with helpful comments
+# Output Format
+Strictly follow the below XML tags based output format.
 
-**Output Format:**
 <FILES>
 <FILE>
 <FILE_PATH>src/Routes.jsx</FILE_PATH>
 <CODE_SNIPPET>
-[Complete Routes.jsx implementation]
+import React from "react";
+import { BrowserRouter, Routes as RouterRoutes, Route } from "react-router-dom";
+import ScrollToTop from "components/ScrollToTop";
+import ErrorBoundary from "components/ErrorBoundary";
+// Add your imports here
+import PropertySearchResults from "pages/property-search-results";
+import PropertyDetails from "pages/property-details";
+
+const Routes = () => {
+  return (
+    <BrowserRouter>
+      <ErrorBoundary>
+      <ScrollToTop />
+      <RouterRoutes>
+        {/* Define your routes here */}
+        <Route path="/" element={<PropertySearchResults />} />
+        <Route path="/property-search-results" element={<PropertySearchResults />} />
+        <Route path="/property-details" element={<PropertyDetails />} />
+      </RouterRoutes>
+      </ErrorBoundary>
+    </BrowserRouter>
+  );
+};
+
+export default Routes;
 </CODE_SNIPPET>
 </FILE>
 <FILE>
@@ -50,31 +70,8 @@ STAGE IV - ROUTES GENERATION SUMMARY
 </FILE>
 </FILES>
 
-**Reference Structure:**
-import React from "react";
-import { BrowserRouter, Routes as RouterRoutes, Route } from "react-router-dom";
-import ScrollToTop from "./components/ScrollToTop";
-// Import page components
-
-const ErrorBoundary = ({ children }) => {
-  // Error boundary implementation
-};
-
-const Routes = () => {
-  return (
-    <BrowserRouter>
-      <ErrorBoundary>
-        <ScrollToTop />
-        <RouterRoutes>
-          <Route path="/" element={<Homepage />} />
-          {/* Additional routes */}
-        </RouterRoutes>
-      </ErrorBoundary>
-    </BrowserRouter>
-  );
-};
-
-export default Routes;
+**Reference Routes.jsx:**
+full code of the Routes.jsx file goes here
 """
 
 USER_PROMPT = """Generate Routes.jsx and context registry based on the provided context.

@@ -8,8 +8,10 @@ Analyze the user's app development query and create a strategic foundation for a
 </TASK>
 
 <CONSTRAINTS>
-- More screens = More complexity = More bugs = More time to build = More money to build so be selective and strategic
-- Maximum 10 screens total (be selective and strategic)
+- Ignore the backend integrations
+- Identify screens that directly support main user goals
+- More screens means More complexity and More bugs means More time to build and More money to build so be selective and strategic
+- Maximum 10 screens total (be selective and strategic) for simple query limit to 3 screens for medium query limit to 5 screens
 - Technology Stack: React (web platform) | Flutter (mobile platform)
 - Combine related functionalities into single screens
 - Eliminate redundant or unnecessary screens
@@ -26,10 +28,17 @@ Analyze the user's app development query and create a strategic foundation for a
 <SCREEN_OPTIMIZATION_RULES>
 - Never focus on authentication, role based access control, or any other security related to screens and backend integrations unless mentioned in the user query.
 - Each screen must be accessible to all of the users.
-- Merge listing and detail views when possible (e.g., search + results)
+- Each screen serve multiple related functions
+- Combine listing, filtering, and detail views into single interfaces
 - Consolidate user profile, settings, and account management
 - Avoid separate screens for simple actions (confirmations, success messages)
 - Think user journeys, not isolated features
+- Avoid navigation-heavy architectures
+PROVEN CONSOLIDATION PATTERNS:
+- Search + Results + Details = Single Discovery Screen
+- List + Create + Edit = Single Management Screen  
+- Profile + Settings + Preferences = Single Account Screen
+- Dashboard + Quick Actions + Status = Single Screen
 </SCREEN_OPTIMIZATION_RULES>
 
 <OUTPUT_STRUCTURE>
@@ -40,8 +49,8 @@ Make sure to use proper escape characters for the new lines and other special ch
     "domain": "clear domain identifier (e.g., 'fintech', 'healthtech', 'edtech')",
     "industry_patterns": ["3-5 proven patterns specific to this domain with short description"],
     "screens": {
-        "screen_1": "concise description focusing on core purpose",
-        "screen_2": "concise description focusing on core purpose",
+        "name_of_screen_1": "concise description focusing on core purpose",
+        "name_of_screen_2": "concise description focusing on core purpose",
         "..." : "maximum 10 screens total"
     },
     "business_context": {
@@ -55,11 +64,13 @@ Make sure to use proper escape characters for the new lines and other special ch
 
 <QUALITY_CHECKLIST>
 Before finalizing:
-- Are all screens essential for MVP success?
-- Can any screens be combined without losing functionality?
 - Does this reflect how experienced developers would structure the app?
 - Are the screens optimized for the target platform?
 - Does each screen serve a clear business purpose?
+- User can complete full workflows without excessive navigation ?
+- No single-purpose or redundant screens?
+- Every screen must enable users to complete a full task/goal?
+- Can we reduce back-and-forth navigation?
 </QUALITY_CHECKLIST>
 """
 

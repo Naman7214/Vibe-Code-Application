@@ -271,17 +271,57 @@ export default App;
 """
 
         # src/styles/index.css - CSS resets
-        index_css = """body {
-  margin: 0;
-  padding: 0;
-  font-family: Inter;
+        index_css = """/* src/styles/index.css - Minimal, Non-Conflicting */
+
+/* Only browser-specific fixes that Tailwind doesn't handle */
+*, *::before, *::after {
+  -webkit-tap-highlight-color: transparent;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
 }
 
-* {
-  box-sizing: border-box;
-  line-height: normal;
-  font-family: inherit;
-  margin: unset;
+/* Critical accessibility that LLM might miss */
+*:focus {
+  outline: 2px solid #3b82f6;
+  outline-offset: 2px;
+}
+
+*:focus:not(:focus-visible) {
+  outline: none;
+}
+
+/* Screen reader utility */
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+/* Performance optimizations */
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}
+
+/* Print styles */
+@media print {
+  body {
+    background: white !important;
+    color: black !important;
+  }
+  
+  .no-print {
+    display: none !important;
+  }
 }
 """
 
@@ -472,21 +512,33 @@ export default ScrollToTop;
         """Setup assets directory and placeholder files"""
         print("🖼️ Setting up assets...")
 
-        # Create a simple placeholder image (1x1 pixel transparent PNG)
-        placeholder_png = base64.b64decode(
-            "iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mNkYPhfDwAChAGA6xjzTgAAAABJRU5ErkJggg=="
-        )
+        # Path to the static no_image.png file in backend
+        static_no_image_path = Path("system/backend/static/assets/images/no_image.png")
+        
+        # Copy the actual no_image.png file from backend static assets
+        if static_no_image_path.exists():
+            shutil.copy2(
+                static_no_image_path,
+                self.base_path / "public/assets/images/no_image.png"
+            )
+            print(f"  ✅ Copied no_image.png from backend static assets")
+        else:
+            # Fallback to base64 if the static file doesn't exist
+            print("  ⚠️ Static no_image.png not found, creating base64 placeholder")
+            placeholder_png = base64.b64decode(
+                "iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mNkYPhfDwAChAGA6xjzTgAAAABJRU5ErkJggg=="
+            )
+            with open(
+                self.base_path / "public/assets/images/no_image.png", "wb"
+            ) as f:
+                f.write(placeholder_png)
 
         # Create favicon.ico (simple 16x16 blue square)
         favicon_data = base64.b64decode(
             "AAABAAEAEBAAAAEACABoBQAAFgAAACgAAAAQAAAAIAAAAAEACAAAAAAAAAEAAAAAAAAAAAAAAAEAAAEAAAAAAAAA"
         )
 
-        # Write placeholder files
-        with open(
-            self.base_path / "public/assets/images/no_image.png", "wb"
-        ) as f:
-            f.write(placeholder_png)
+        # Write favicon file
 
         with open(self.base_path / "public/favicon.ico", "wb") as f:
             f.write(favicon_data)

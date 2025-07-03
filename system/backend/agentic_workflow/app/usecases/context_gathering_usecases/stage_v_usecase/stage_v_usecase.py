@@ -107,7 +107,7 @@ class StageVUsecase:
         llm_response = await self.anthropic_service.generate_text(
             prompt=user_prompt,
             system_prompt=INITIAL_SYSTEM_PROMPT,
-            provider="openai",
+            provider="anthropic",
         )
 
         # Parse the JSON output
@@ -154,7 +154,7 @@ class StageVUsecase:
         llm_response = await self.anthropic_service.generate_text(
             prompt=user_prompt,
             system_prompt=FOLLOWUP_SYSTEM_PROMPT,
-            provider="openai",
+            provider="anthropic",
         )
 
         # Parse the JSON output

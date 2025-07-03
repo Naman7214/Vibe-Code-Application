@@ -77,7 +77,7 @@ class Helper:
         response = await self.anthropic_service.generate_text(
             system_prompt=SYSTEM_PROMPT_A,
             prompt=user_prompt,
-            provider="openai",
+            provider="anthropic",
         )
 
         parsed_response = parse_model_output(response)
@@ -126,7 +126,7 @@ class Helper:
         response = await self.anthropic_service.generate_text(
             system_prompt=SYSTEM_PROMPT_B,
             prompt=user_prompt,
-            provider="openai",
+            provider="anthropic",
         )
 
         parsed_response = parse_model_output(response)

@@ -24,13 +24,13 @@ class ContextGatheringController:
         :return: JSONResponse with generated screens data and individual file paths
         """
 
-        context_gathering_result = await self.context_gathering_usecase.execute(
+        await self.context_gathering_usecase.execute(
             request
         )
 
         return JSONResponse(
             content={
-                "data": context_gathering_result,
+                "data":"None" ,
                 "message": "Context gathering completed successfully",
                 "error": None,
             },
