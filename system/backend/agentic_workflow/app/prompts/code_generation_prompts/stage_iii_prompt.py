@@ -45,6 +45,8 @@ The screen details are reference material only, providing an overview and basic 
 - Implement complete user flows with proper state management and user feedback.
 - Deliver rich, engaging user experiences that justify using React over static HTML.
 - Ensure every element serves a functional purpose with meaningful interactivity.
+- Implement the screen in bottom-up manner, start with the sub components and then the index.jsx file.
+- Ensure that index.jsx file must use all the sub components that are created in the components folder.
 </RESPONSIBILITIES>
 
 <FUNCTIONALITY_MANDATE>
@@ -100,6 +102,7 @@ Build a full-fledged web application frontend, not a static demo. Every button m
 - If inferring new design components, ensure they align with the existing design system.
 - Use Tailwind's responsive utilities to ensure the screen works across all screen sizes.
 - Use Tailwind's flex and grid utilities to create responsive layouts and perfect alignment.
+- Ensure proper contrast in the text and background colors for visual accessibility and readability.
 </DESIGN_SYSTEM_GROUNDING>
 
 <COMPONENT_INTEGRATION>
@@ -133,148 +136,41 @@ Build a full-fledged web application frontend, not a static demo. Every button m
 </ACCESSIBILITY>
 
 <WRAPPER_COMPONENTS>
-- Use these wrapper components when applicable:
-    - AppIcon.jsx: For all icon implementations using Lucide React
-    - AppImage.jsx: For all image rendering with error fallback
-    - ErrorBoundary.jsx: Wrap complex components prone to errors
-    - ScrollToTop.jsx: Include in pages requiring scroll reset
-    
-here's the content of the wrapper components:
-AppIcon.jsx:
+Use these wrapper components when applicable:
 
-import React from 'react';
-import * as LucideIcons from 'lucide-react';
-import {{ HelpCircle }} from 'lucide-react';
+<ICON_IMPLEMENTATION_STANDARD>
+- Component: `src/components/AppIcon.jsx`
+- Purpose: For all icon implementations using Lucide React
+- Import: `import Icon from "components/AppIcon";`
+- Props: name (string, required), size (number, default: 24), color (string, default: "currentColor"), strokeWidth (number, default: 2), className (string)
+- Usage: `<Icon name="IconName" size={{24}} color="var(--primary)" />`
+</ICON_IMPLEMENTATION_STANDARD>
 
-function Icon({{
-    name,
-    size = 24,
-    color = "currentColor",
-    className = "",
-    strokeWidth = 2,
-    ...props
-}}) {{
-    const IconComponent = LucideIcons[name];
+<IMAGE_IMPLEMENTATION_STANDARD>
+- Component: `src/components/AppImage.jsx`
+- Purpose: For all image rendering with error fallback to no_image.png
+- Import: `import Image from "components/AppImage";`
+- Props: src (string, required), alt (string, default: "Image Name"), className (string)
+- Usage: `<Image src="https://example.com/image.jpg" alt="Description" className="w-full h-auto" />`
+</IMAGE_IMPLEMENTATION_STANDARD>
 
-    if (!IconComponent) {{
-        return <HelpCircle size={{size}} color="gray" strokeWidth={{strokeWidth}} className={{className}} {{...props}} />;
-    }}
+<ERROR_BOUNDARY_STANDARD>
+- Component: `src/components/ErrorBoundary.jsx`
+- Purpose: Wrap complex components prone to errors
+- Import: `import ErrorBoundary from "components/ErrorBoundary";`
+- Usage: `<ErrorBoundary><YourComponent /></ErrorBoundary>`
+</ERROR_BOUNDARY_STANDARD>
 
-    return <IconComponent
-        size={{size}}
-        color={{color}}
-        strokeWidth={{strokeWidth}}
-        className={{className}}
-        {{...props}}
-    />;
-}}
-export default Icon;
+<SCROLL_RESET_STANDARD>
+- Component: `src/components/ScrollToTop.jsx`
+- Purpose: Include in pages requiring scroll reset on route change
+- Import: `import ScrollToTop from "components/ScrollToTop";`
+- Usage: `<ScrollToTop />` (typically in route components)
+</SCROLL_RESET_STANDARD>
 
-
-AppImage.jsx:
-
-import React from 'react';
-
-function Image({{
-    src,
-    alt = "Image Name",
-    className = "",
-    ...props
-    }}) {{
-
-    return (
-        <img
-        src={{src}}
-        alt={{alt}}
-        className={{className}}
-        onError={{(e) => {{
-            e.target.src = "/assets/images/no_image.png"
-        }}}}
-        {{...props}}
-        />
-    );
-}}
-
-export default Image;
-
-
-ErrorBoundary.jsx:
-
-import React from "react";
-import Icon from "./AppIcon";
-
-class ErrorBoundary extends React.Component {{
-    constructor(props) {{
-        super(props);
-        this.state = {{ hasError: false }};
-    }}
-
-    static getDerivedStateFromError(error) {{
-        return {{ hasError: true }};
-    }}
-
-    componentDidCatch(error, errorInfo) {{
-        console.error("Error caught by ErrorBoundary:", error, errorInfo);
-    }}
-
-    render() {{
-        if (this.state.hasError) {{
-        return (
-            <div className="min-h-screen flex items-center justify-center bg-neutral-50">
-            <div className="text-center p-8 max-w-md">
-                <div className="flex justify-center items-center mb-2">
-                <svg xmlns="http://www.w3.org/2000/svg" width="42px" height="42px" viewBox="0 0 32 33" fill="none">
-                    <path d="M16 28.5C22.6274 28.5 28 23.1274 28 16.5C28 9.87258 22.6274 4.5 16 4.5C9.37258 4.5 4 9.87258 4 16.5C4 23.1274 9.37258 28.5 16 28.5Z" stroke="#343330" strokeWidth="2" strokeMiterlimit="10" />
-                    <path d="M11.5 15.5C12.3284 15.5 13 14.8284 13 14C13 13.1716 12.3284 12.5 11.5 12.5C10.6716 12.5 10 13.1716 10 14C10 14.8284 10.6716 15.5 11.5 15.5Z" fill="#343330" />
-                    <path d="M20.5 15.5C21.3284 15.5 22 14.8284 22 14C22 13.1716 21.3284 12.5 20.5 12.5C19.6716 12.5 19 13.1716 19 14C19 14.8284 19.6716 15.5 20.5 15.5Z" fill="#343330" />
-                    <path d="M21 22.5C19.9625 20.7062 18.2213 19.5 16 19.5C13.7787 19.5 12.0375 20.7062 11 22.5" stroke="#343330" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
-                </svg>
-                </div>
-                <div className="flex flex-col gap-1 text-center">
-                <h1 className="text-2xl font-medium text-neutral-800">Something went wrong</h1>
-                <p className="text-neutral-600 text-base w-8/12 mx-auto">We encountered an unexpected error while processing your request.</p>
-                </div>
-                <div className="flex justify-center items-center mt-6">
-                <button
-                    onClick={{() => {{
-                    window.location.href = "/";
-                    }}}}
-                    className="bg-blue-500 hover:bg-blue-600 text-white font-medium py-2 px-4 rounded flex items-center gap-2 transition-colors duration-200 shadow-sm"
-                >
-                    <Icon name="ArrowLeft" size={{18}} color="#fff" />
-                    Back
-                </button>
-                </div>
-            </div>
-            </div>
-        );
-        }}
-
-        return this.props.children;
-    }}
-}}
-
-export default ErrorBoundary;
-
-
-
-ScrollToTop.jsx:
-
-import {{ useEffect }} from "react";
-import {{ useLocation }} from "react-router-dom";
-
-const ScrollToTop = () => {{
-    const {{ pathname }} = useLocation();
-
-    useEffect(() => {{
-        window.scrollTo(0, 0);
-    }}, [pathname]);
-
-    return null;
-}};
-
-export default ScrollToTop;
-
+<NOTE>
+- Must use correct import paths for these wrapper components since you have access to the file structure.
+</NOTE>
 </WRAPPER_COMPONENTS>
 
 <FILE_STRUCTURE>
@@ -324,6 +220,7 @@ pages/screen_name/
 - Build as if the screen will be deployed to real users tomorrow.
 - Demonstrate why React is essential over static HTML with rich functionality.
 - Mock data must be embedded directly in the screen component, do not use any external data sources.
+- Never change or modify any file located at src/components or src/components/ui folder.
 
 <ROUTING_DECISION_MATRIX>
 - Use navigate() ONLY when screen_navigation context explicitly specifies routing scenarios
@@ -341,6 +238,23 @@ pages/screen_name/
 - Use optional chaining and provide fallbacks for all object property access
 - Avoid direct DOM manipulation; use React state and props.
 </REACT_ERROR_PREVENTION>
+
+<MAP_INTEGRATION>
+- Use Google Maps iframe to display maps where required, using mock latitude and longitude values.
+- Implement the iframe with the following structure, ensuring it integrates with the design system’s layout and styling:
+```jsx
+<iframe
+    width="100%"
+    height="100%"
+    loading="lazy"
+    title="Place Name"
+    referrerpolicy="no-referrer-when-downgrade"
+    src="https://www.google.com/maps?q={{lat}},{{3}}&z=14&output=embed"
+    className="rounded-md shadow-sm"
+/>
+- Ensure the map is responsive, using Tailwind classes (e.g., w-full h-64 md:h-96) to define dimensions.
+- Use mock coordinates (e.g., lat: 40.7128, lng: -74.0060 for New York) relevant to the screen’s context.
+</MAP_INTEGRATION>
 
 <NOTE>
 You are not supposed to hold back on the implementation of the screen. Don't make up any screen component by yourself.
@@ -455,6 +369,13 @@ Before generating any component that handles data:
 - [ ] Are default values provided for optional props?
 - [ ] Will the component handle empty/loading states gracefully?
 - [ ] Are data transformations type-safe?
+- [ ] Have you maintained consistent code quality and readability?
+- [ ] Have you followed the file structure and naming conventions?
+- [ ] Have you followed the implementation requirements?
+- [ ] Have you followed the scratchpad requirements?
+- [ ] Have you followed the frequently occuring errors?
+- [ ] Have you followed the code generation checklist?
+- [ ] Have you followed the output format?
 </CODE_GENERATION_CHECKLIST>
 
 </FREQUENTLY_OCCURED_ERRORS>
