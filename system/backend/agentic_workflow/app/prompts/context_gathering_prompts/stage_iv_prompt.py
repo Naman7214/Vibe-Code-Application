@@ -21,31 +21,18 @@ You will receive a comprehensive JSON context object containing:
 
 <INSTRUCTIONS>
 <INTEGRATION_APPROACH>
-- Seamlessly integrate the global design system components, tokens, and patterns into screen's visual specifications
 - Leverage existing global components while identifying screen-specific component needs
 - Maintain alignment with brand guidelines and established interaction patterns
-- Go beyond basic requirements to create compelling, production-ready experiences
 </INTEGRATION_APPROACH>
-
-<REACT_DATA_STRUCTURE_REQUIREMENTS>
-- ALL form inputs must specify initial state as empty strings ('') NOT null values
-- ALL array props must be defined as arrays ([]) with proper mock data structures
-- ALL object props must specify complete object schemas with all required properties
-- ALL scalar props (strings, numbers, booleans) must have explicit default values
-- NEVER specify null or undefined as default values for React component props
-</REACT_DATA_STRUCTURE_REQUIREMENTS>
-
-<PROP_TYPE_SAFETY_SPECIFICATIONS>
-- Define clear prop interfaces for all components including expected data types
-- Specify enum values for props like size ('small', 'medium', 'large'), variant, etc.
-- Ensure mock data structures exactly match component prop expectations
-- Include validation rules for form inputs and data transformation requirements
-- Document required vs optional props with clear default value specifications
-</PROP_TYPE_SAFETY_SPECIFICATIONS>
 
 <NATURAL_LANGUAGE_DESCRIPTIONS>
 Each screen specification must comprehensively define its purpose within the user journey, target audience and their goals, and core value proposition, while detailing the visual layout structure, content hierarchy, responsive behavior across devices, and all interactive elements. The specification should clearly outline what data is displayed and its formatting, distinguish between real-time and static content with appropriate refresh rates, identify data sources and processing methods, and define empty states for when data is unavailable. Additionally, it must describe primary user actions, navigation patterns, performance expectations, and accessibility features, alongside business rules including access controls, personalization logic, error handling procedures, and success metrics for measuring screen effectiveness.
 </NATURAL_LANGUAGE_DESCRIPTIONS>
+
+<THINKING_PROCESS>
+- Wear the user psychology hat and think from the user's perspective for each detail of the screen.
+- Use hooked thinking process to think about the screen and the user's journey.
+</THINKING_PROCESS> 
 
 <SELF_CONTAINED_FUNCTIONALITY>
 - Every screen should be fully functional without dependencies on unimplemented features
@@ -53,6 +40,7 @@ Each screen specification must comprehensively define its purpose within the use
 - Every interactive element must have clear, implementable functionality
 - Exclude the backend integrations and every edge cases.
 - Only suggest screen specifications that work with mock or static data. Exclude authentication, role-based menus, live API data, or session management. Focus on UI components that demonstrates navigation patterns, visual states, and interactions using mock data only.
+- Always use fully working and meaningful image URLs from Unsplash or similar free image platforms
 </SELF_CONTAINED_FUNCTIONALITY>
 
 <COMPONENT_SPECIFICATION_REQUIREMENTS>
@@ -69,14 +57,18 @@ Each screen specification must comprehensively define its purpose within the use
 <OUTPUT_FORMAT>
 Generate a JSON object where each screen name is a top-level key containing:
 
-1. **`description`** (required): A comprehensive natural language description (7-8) about the screen.
+<DESCRIPTION>
+A comprehensive natural language description (7-8 sentences) about the screen.
+</DESCRIPTION>
 
-2. **Flexible structured context**: Any additional keys and nested objects needed to fully specify the screen implementation, such as:
-    - `components`: Component specifications and usage
-    - `content`: Mock data and content requirements
-    - `interactions`: User flows and interactive behaviors  
-    - `responsive`: Device-specific considerations
-    - Any other keys needed for complete implementation context
+<COMPONENTS>
+Any additional keys and nested objects needed to fully specify the screen implementation, such as:
+  - `components`: Component specifications and usage
+  - `content`: Mock data and content requirements
+  - `interactions`: User flows and interactive behaviors  
+  - `responsive`: Device-specific considerations
+  - Any other keys needed for complete implementation context
+</COMPONENTS>
 
 The structure should be flexible and adapted to each screen's specific needs while maintaining consistency in quality.
 
@@ -110,8 +102,8 @@ EXAMPLE OUTPUT STRUCTURE:
         "background_image": "background image of the section",
         "mock_data": [
           {
-            "title": "mock_data_title",
-            "description": "mock_data_description",
+            "title": "mock data title",
+            "description": "description of the mock_data",
             "required_image_data": "true|false"
           }
         ]
@@ -129,6 +121,11 @@ EXAMPLE OUTPUT STRUCTURE:
   }
 }
 </OUTPUT>
+
+<NOTE>
+- Use the exact output structure as shown in the example output structure, no extra keys or formatting.
+</NOTE>
+</OUTPUT_FORMAT>
 
 Go beyond basic requirements to create rich requirements that are immediately actionable for React frontend developers while remaining accessible to non-technical stakeholders.
 """

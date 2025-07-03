@@ -109,16 +109,16 @@ class StageIIHelper:
         :return: List of clusters for parallel processing
         """
         clusters = []
-        
+
         for cluster_name, cluster_data in global_components.items():
             if isinstance(cluster_data, dict) and "components" in cluster_data:
                 cluster_info = {
                     "cluster_name": cluster_name,
                     "description": cluster_data.get("description", ""),
-                    "components": cluster_data.get("components", {})
+                    "components": cluster_data.get("components", {}),
                 }
                 clusters.append(cluster_info)
-        
+
         return clusters
 
     async def get_navigation_structure(self, session_id: str) -> Dict[str, Any]:
@@ -207,7 +207,7 @@ class StageIIHelper:
         cluster_context = {
             "cluster_name": cluster_data["cluster_name"],
             "cluster_description": cluster_data["description"],
-            "components": cluster_data["components"]
+            "components": cluster_data["components"],
         }
 
         # Format the user prompt with cluster-specific context data
@@ -261,7 +261,9 @@ class StageIIHelper:
         valid_responses = []
         for i, response in enumerate(responses):
             if isinstance(response, Exception):
-                print(f"Error generating cluster {clusters[i]['cluster_name']}: {str(response)}")
+                print(
+                    f"Error generating cluster {clusters[i]['cluster_name']}: {str(response)}"
+                )
             else:
                 valid_responses.append(response)
 
@@ -332,9 +334,13 @@ class StageIIHelper:
                     f"<TIMESTAMP>{datetime.now().strftime('%Y-%m-%d %H:%M:%S')}</TIMESTAMP>\n"
                 )
                 if is_parallel:
-                    f.write(f"<GENERATION_TYPE>PARALLEL_CLUSTERS</GENERATION_TYPE>\n")
+                    f.write(
+                        f"<GENERATION_TYPE>PARALLEL_CLUSTERS</GENERATION_TYPE>\n"
+                    )
                 else:
-                    f.write(f"<GENERATION_TYPE>SINGLE_BATCH</GENERATION_TYPE>\n")
+                    f.write(
+                        f"<GENERATION_TYPE>SINGLE_BATCH</GENERATION_TYPE>\n"
+                    )
                 f.write(f"<CONTEXT_REGISTRY>\n")
                 f.write(content)
                 f.write(f"\n</CONTEXT_REGISTRY>\n")
@@ -437,7 +443,9 @@ class StageIIHelper:
                 # Separate regular files from context registry
                 for file_data in file_data_list:
                     if file_data["file_path"] == "CONTEXT_REGISTRY":
-                        all_context_registry_content.append(file_data["code_snippet"])
+                        all_context_registry_content.append(
+                            file_data["code_snippet"]
+                        )
                     else:
                         all_regular_files.append(file_data)
 
@@ -453,7 +461,12 @@ class StageIIHelper:
         if all_context_registry_content:
             # Add cluster generation timestamp and summary
             cluster_summary = f"PARALLEL_CLUSTER_GENERATION - {len(all_context_registry_content)} clusters processed"
-            combined_content = f"{cluster_summary}\n\n" + "\n\n--- CLUSTER SEPARATOR ---\n\n".join(all_context_registry_content)
+            combined_content = (
+                f"{cluster_summary}\n\n"
+                + "\n\n--- CLUSTER SEPARATOR ---\n\n".join(
+                    all_context_registry_content
+                )
+            )
             await self.append_to_global_scratchpad(
                 session_id, combined_content, is_parallel=True
             )
@@ -477,25 +490,33 @@ class StageIIHelper:
 
             if clusters and len(clusters) > 1:
                 # Use parallel generation for multiple clusters
-                print(f"Generating {len(clusters)} component clusters in parallel")
-                llm_responses = await self.generate_global_components_parallel(context_data)
+                print(
+                    f"Generating {len(clusters)} component clusters in parallel"
+                )
+                llm_responses = await self.generate_global_components_parallel(
+                    context_data
+                )
 
                 # Process multiple responses and write files
                 await self.process_multiple_llm_responses_and_write_files(
                     llm_responses, session_id
                 )
-                
+
                 success_message = f"Stage II global components generation completed successfully with {len(clusters)} clusters processed in parallel"
             else:
                 # Fallback to original single generation approach
-                print("Using single generation approach (no clusters or only one cluster)")
-                llm_response = await self.generate_global_components(context_data)
+                print(
+                    "Using single generation approach (no clusters or only one cluster)"
+                )
+                llm_response = await self.generate_global_components(
+                    context_data
+                )
 
                 # Process response and write files
                 await self.process_llm_response_and_write_files(
                     llm_response, session_id
                 )
-                
+
                 success_message = "Stage II global components generation completed successfully"
 
             # Update file structure after all files are written

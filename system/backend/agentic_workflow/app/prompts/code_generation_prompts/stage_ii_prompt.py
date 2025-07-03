@@ -74,12 +74,23 @@ You have access to these dependencies that you can import and use in your compon
 - USE proper prop destructuring with explicit defaults: ({{ size = 'medium', variant = 'primary' }})
 </REACT_RENDERING_CONSTRAINTS>
 
+<NUMERIC_PROP_SAFETY>
+- ALWAYS validate numeric props before calling number methods (.toFixed, .toLocaleString)
+- CONVERT props to numbers safely: const numericValue = Number(prop) || 0
+- PROVIDE fallback values for all numeric operations
+- EXAMPLE: const safeDeliveryFee = Number(deliveryFee) || 0; then use safeDeliveryFee.toFixed(2)
+</NUMERIC_PROP_SAFETY>
+
+
 <PROP_VALIDATION_REQUIREMENTS>
 - Define explicit prop interfaces with supported values (e.g., size: 'small' | 'medium' | 'large')
 - Include runtime prop validation for critical props like size, variant, type
 - Provide fallback values when props don't match expected enum values
 - Ensure component contracts are consistent between definition and expected usage
 - Document all required props and their expected data structures in component comments
+- VERIFY all props match expected data types at component entry
+- HANDLE undefined/null values gracefully with default values
+- PROVIDE fallback values for all numeric operations
 </PROP_VALIDATION_REQUIREMENTS>
 
 <CODING_STANDARDS>
