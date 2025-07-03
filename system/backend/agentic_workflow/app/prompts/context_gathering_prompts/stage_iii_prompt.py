@@ -16,7 +16,7 @@ Create a global design theme strategy that will serve as the foundation referenc
 <INSTRUCTIONS>
 1. Develop a cohesive color palette that reflects the brand personality and domain
 2. Select typography hierarchy that balances readability with brand character
-3. Define the overall visual mood and design philosophy
+3. Define the overall visual mood and design psychology
 4. Balance ideal design with practical development constraints
 5. Consider React implementation implications for each design decision
 6. Create spacing and layout principles for consistency
@@ -25,6 +25,8 @@ Create a global design theme strategy that will serve as the foundation referenc
 9. Ensure all decisions work together as a unified system without overwhelming users
 10. Keep it as a reference framework - not overly detailed, but comprehensive enough to guide screen-specific design generation
 11. For the typography, must use the 3-4 fonts from the google fonts only that align with the brand personality and domain.
+12. Each visual element must earn it's place through the design psychology and the potential success in the user engagement.
+13. Keep in mind the React implementation implications for each design decision.
 
 🚨 CRITICAL: ALWAYS include semantic colors (success, warning, error, info) in the color palette even if not explicitly mentioned in the domain context. These are essential for UI components and will cause errors if missing.
 </INSTRUCTIONS>

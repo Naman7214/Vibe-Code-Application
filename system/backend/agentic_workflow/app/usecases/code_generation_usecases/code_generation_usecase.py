@@ -16,8 +16,8 @@ from system.backend.agentic_workflow.app.usecases.code_generation_usecases.stage
 from system.backend.agentic_workflow.app.usecases.code_generation_usecases.stage_iv_usecase.stage_iv_usecase import (
     StageIVUsecase,
 )
-from system.backend.agentic_workflow.app.utils.boilerplate_setup import (
-    setup_boilerplate,
+from system.backend.agentic_workflow.app.utils.react_boilerplate_setup import (
+    setup_react_boilerplate,
 )
 
 
@@ -35,8 +35,7 @@ class CodeGenerationUsecase:
         self.stage_iv_usecase = stage_iv_usecase
 
     async def execute(self, request: CodeGenerationRequest) -> JSONResponse:
-        
-        await setup_boilerplate.create_react_boilerplate()
+        await setup_react_boilerplate.create_react_boilerplate()
 
         stage_i_result = await self.stage_i_usecase.execute()
         if not stage_i_result["success"]:
@@ -83,7 +82,7 @@ class CodeGenerationUsecase:
                 },
                 status_code=status.HTTP_400_BAD_REQUEST,
             )
-            
+
         return JSONResponse(
             content={
                 "success": True,
@@ -92,7 +91,7 @@ class CodeGenerationUsecase:
                     "stage_i": stage_i_result,
                     "stage_ii": stage_ii_result,
                     "stage_iii": stage_iii_result,
-                    "stage_iv": stage_iv_result
+                    "stage_iv": stage_iv_result,
                 },
                 "error": None,
             },

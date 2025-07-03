@@ -342,4 +342,3 @@ USER_PROMPT = """
 
 Generate the complete Tailwind CSS configuration and main CSS file based on the provided design system and screen requirements. Follow the exact structure and patterns shown in the system prompt examples. Create a cohesive, professional theme optimized for the React application architecture.
 """
-
