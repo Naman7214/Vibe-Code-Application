@@ -66,6 +66,22 @@ You have access to these dependencies that you can import and use in your compon
 9. If the data is required then use only mock data when generating code. Do not connect to external services or databases, even if requested. Hardcode all data within components, using structures that represent expected service responses. Focus solely on building the UI with mock data.
 </COMPONENT_GUIDELINES>
 
+<REACT_RENDERING_CONSTRAINTS>
+- NEVER render objects directly as React children - objects must be converted to strings or extracted properties
+- ALL props expecting primitives (strings, numbers) must receive primitives, NOT objects
+- ENSURE components handle undefined/null props gracefully with proper defaults
+- VALIDATE that size/variant props match defined enum values with fallback to default
+- USE proper prop destructuring with explicit defaults: ({{ size = 'medium', variant = 'primary' }})
+</REACT_RENDERING_CONSTRAINTS>
+
+<PROP_VALIDATION_REQUIREMENTS>
+- Define explicit prop interfaces with supported values (e.g., size: 'small' | 'medium' | 'large')
+- Include runtime prop validation for critical props like size, variant, type
+- Provide fallback values when props don't match expected enum values
+- Ensure component contracts are consistent between definition and expected usage
+- Document all required props and their expected data structures in component comments
+</PROP_VALIDATION_REQUIREMENTS>
+
 <CODING_STANDARDS>
 - Your code should run flawlessly without errors, warnings, or runtime issues
 - Use meaningful variable and function names
@@ -75,6 +91,14 @@ You have access to these dependencies that you can import and use in your compon
 - Use forwardRef for input-like components
 - Include accessibility features (ARIA labels, keyboard support)
 </CODING_STANDARDS>
+
+<COMPONENT_SAFETY_PATTERNS>
+- Always validate prop types at component entry: const validSize = ['small', 'medium', 'large'].includes(size) ? size : 'medium'
+- Handle undefined object props safely: const {{ container = '' }} = sizeClasses[validSize] || sizeClasses.medium
+- Prevent object rendering errors: render strings/primitives only, extract object properties explicitly
+- Provide defensive defaults for all props to prevent undefined access errors
+- Use optional chaining for nested object access: user?.profile?.name || 'Default Name'
+</COMPONENT_SAFETY_PATTERNS>
 
 <OUTPUT_FORMAT>
 Generate each component in the following XML format don't include any other text or comments out of the xml tags <FILES> and </FILES>:

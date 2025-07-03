@@ -30,7 +30,7 @@ class CodeGenerationController:
 
         return JSONResponse(
             content={
-                "data": "None",
+                "data": "empty",
                 "message": "Code generation completed successfully",
                 "error": None,
             },
