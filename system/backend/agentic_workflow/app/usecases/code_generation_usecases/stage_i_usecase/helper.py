@@ -61,29 +61,47 @@ class StageIHelper:
             self.logger.error(f"Invalid JSON in stage_iii_a.json: {e}")
             context_data["stage_iii_a"] = {}
 
-        # Read stage_iv.json and extract specific keys
+        # Read stage_iv.json and extract specific keys (new format)
         try:
             with open(stage_iv_path, "r", encoding="utf-8") as f:
                 stage_iv_data = json.load(f)
 
-            # Extract specific keys for each page
+            # Extract specific keys for each screen (exclude content key)
             filtered_stage_iv = {}
-            for page_name, page_data in stage_iv_data.items():
-                if isinstance(page_data, dict):
-                    filtered_page_data = {}
-                    for key in [
-                        "screen_design",
-                        "component_details",
-                        "interactions",
-                        "responsive_design",
-                    ]:
-                        if key in page_data:
-                            filtered_page_data[key] = page_data[key]
-                    if filtered_page_data:
-                        filtered_stage_iv[page_name] = filtered_page_data
+            for screen_name, screen_data in stage_iv_data.items():
+                if isinstance(screen_data, dict):
+                    # Check if it's the nested structure (screen_name -> screen_name -> data)
+                    if screen_name in screen_data and isinstance(screen_data[screen_name], dict):
+                        nested_screen_data = screen_data[screen_name]
+                        filtered_screen_data = {}
+                        for key in [
+                            "description",
+                            "components", 
+                            "interactions",
+                            "responsive",
+                            "design",
+                        ]:
+                            if key in nested_screen_data:
+                                filtered_screen_data[key] = nested_screen_data[key]
+                        if filtered_screen_data:
+                            filtered_stage_iv[screen_name] = filtered_screen_data
+                    else:
+                        # Handle direct structure (screen_name -> data)
+                        filtered_screen_data = {}
+                        for key in [
+                            "description",
+                            "components",
+                            "interactions", 
+                            "responsive",
+                            "design",
+                        ]:
+                            if key in screen_data:
+                                filtered_screen_data[key] = screen_data[key]
+                        if filtered_screen_data:
+                            filtered_stage_iv[screen_name] = filtered_screen_data
 
             context_data["stage_iv_a"] = filtered_stage_iv
-            self.logger.info(f"Successfully read and filtered stage_iv.json")
+            self.logger.info(f"Successfully read and filtered stage_iv.json with new format")
         except FileNotFoundError:
             self.logger.error(f"stage_iv.json not found at {stage_iv_path}")
             context_data["stage_iv_a"] = {}
