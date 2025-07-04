@@ -15,6 +15,9 @@ from system.backend.agentic_workflow.app.services.anthropic_services.llm_service
     AnthropicService,
 )
 from system.backend.agentic_workflow.app.utils.parser import parse_model_output
+from system.backend.agentic_workflow.app.utils.session_context import (
+    session_state,
+)
 
 
 class Helper:
@@ -23,22 +26,26 @@ class Helper:
 
     async def run_stage_2_pipeline(self, request: ContextGatheringRequest):
         """
-        Processes the input for Stage 2 to define screen requirements.
+        Processes the input for Stage 2.
         """
+        # Get session_id from context (set by middleware)
+        session_id = session_state.get()
+        if not session_id:
+            raise ValueError("No session_id available in context")
 
         with open(
-            f"artifacts/{request.session_id}/project_context/stage_i.json", "r"
+            f"artifacts/{session_id}/project_context/stage_i.json", "r"
         ) as f:
             project_context = json.load(f)
 
         previous_output = {}
         if not os.path.exists(
-            f"artifacts/{request.session_id}/project_context/stage_ii.json"
+            f"artifacts/{session_id}/project_context/stage_ii.json"
         ):
             previous_output = {}
         else:
             with open(
-                f"artifacts/{request.session_id}/project_context/stage_ii.json",
+                f"artifacts/{session_id}/project_context/stage_ii.json",
                 "r",
             ) as f:
                 previous_output = json.load(f)
@@ -58,7 +65,7 @@ class Helper:
 
         parsed_response = parse_model_output(response)
 
-        await self._save_output(request.session_id, parsed_response)
+        await self._save_output(session_id, parsed_response)
 
     async def _save_output(self, session_id: str, output_data: Dict[str, Any]):
         """

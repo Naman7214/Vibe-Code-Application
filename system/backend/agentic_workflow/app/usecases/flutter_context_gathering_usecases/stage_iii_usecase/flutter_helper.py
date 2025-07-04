@@ -18,6 +18,9 @@ from system.backend.agentic_workflow.app.services.anthropic_services.llm_service
     AnthropicService,
 )
 from system.backend.agentic_workflow.app.utils.parser import parse_model_output
+from system.backend.agentic_workflow.app.utils.session_context import (
+    session_state,
+)
 
 
 class FlutterHelper:
@@ -30,15 +33,20 @@ class FlutterHelper:
         """
         Processes the input for Flutter Stage 3 to define mobile theme and widget strategy.
         """
+        # Get session_id from context (set by middleware)
+        session_id = session_state.get()
+        if not session_id:
+            raise ValueError("No session_id available in context")
+
         if request.is_follow_up:
-            result = await self._generate_flutter_widgets_details(request)
+            result = await self._generate_flutter_widgets_details(request, session_id)
 
             if not result.get("success"):
                 return result
 
         else:
-            global_theme_task = self._flutter_global_theme_generation(request)
-            widgets_task = self._generate_flutter_widgets_details(request)
+            global_theme_task = self._flutter_global_theme_generation(request, session_id)
+            widgets_task = self._generate_flutter_widgets_details(request, session_id)
 
             results = await asyncio.gather(global_theme_task, widgets_task)
 
@@ -52,7 +60,7 @@ class FlutterHelper:
         }
 
     async def _flutter_global_theme_generation(
-        self, request: ContextGatheringRequest
+        self, request: ContextGatheringRequest, session_id: str
     ):
         """
         Generates the global mobile theme for the Flutter project.
@@ -61,12 +69,12 @@ class FlutterHelper:
         print("entered flutter global theme generation")
 
         with open(
-            f"artifacts/{request.session_id}/project_context/stage_i.json", "r"
+            f"artifacts/{session_id}/project_context/stage_i.json", "r"
         ) as f:
             first_stage_output = json.load(f)
 
         with open(
-            f"artifacts/{request.session_id}/project_context/stage_ii.json", "r"
+            f"artifacts/{session_id}/project_context/stage_ii.json", "r"
         ) as f:
             second_stage_output = json.load(f)
 
@@ -83,7 +91,7 @@ class FlutterHelper:
         parsed_response = parse_model_output(response)
 
         await self._save_output(
-            request.session_id, parsed_response, "stage_iii_a.json"
+            session_id, parsed_response, "stage_iii_a.json"
         )
 
         return {
@@ -92,14 +100,14 @@ class FlutterHelper:
         }
 
     async def _generate_flutter_widgets_details(
-        self, request: ContextGatheringRequest
+        self, request: ContextGatheringRequest, session_id: str
     ):
         """
         Generates the Flutter widget architecture and screen-specific widget details.
         """
 
         with open(
-            f"artifacts/{request.session_id}/project_context/stage_ii.json", "r"
+            f"artifacts/{session_id}/project_context/stage_ii.json", "r"
         ) as f:
             second_stage_output = json.load(f)
 
@@ -114,7 +122,7 @@ class FlutterHelper:
             second_stage_output = filtered_output
 
             with open(
-                f"artifacts/{request.session_id}/project_context/stage_iii_b.json",
+                f"artifacts/{session_id}/project_context/stage_iii_b.json",
                 "r",
             ) as f:
                 previous_output = json.load(f)
@@ -132,7 +140,7 @@ class FlutterHelper:
         parsed_response = parse_model_output(response)
 
         await self._save_output(
-            request.session_id, parsed_response, "stage_iii_b.json"
+            session_id, parsed_response, "stage_iii_b.json"
         )
 
         return {

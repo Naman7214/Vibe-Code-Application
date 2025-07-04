@@ -15,6 +15,9 @@ from system.backend.agentic_workflow.app.usecases.flutter_code_generation_usecas
 from system.backend.agentic_workflow.app.usecases.flutter_code_generation_usecases.stage_iii_usecase.stage_iii_usecase import (
     FlutterStageIIIUsecase,
 )
+from system.backend.agentic_workflow.app.usecases.code_generation_usecases.stage_v_usecase.stage_v_usecase import (
+    StageVUsecase,
+)
 from system.backend.agentic_workflow.app.utils.flutter_boilerplate_setup import (
     setup_flutter_boilerplate,
 )
@@ -26,10 +29,12 @@ class FlutterCodeGenerationUsecase:
         stage_i_usecase: FlutterStageIUsecase = Depends(),
         stage_ii_usecase: StageIIUsecase = Depends(),
         stage_iii_usecase: FlutterStageIIIUsecase = Depends(),
+        stage_v_usecase: StageVUsecase = Depends(),
     ):
         self.stage_i_usecase = stage_i_usecase
         self.stage_ii_usecase = stage_ii_usecase
         self.stage_iii_usecase = stage_iii_usecase
+        self.stage_v_usecase = stage_v_usecase
 
     async def execute(self, request: CodeGenerationRequest) -> JSONResponse:
         # Wait for Flutter boilerplate setup to complete before proceeding
@@ -70,14 +75,29 @@ class FlutterCodeGenerationUsecase:
                 status_code=status.HTTP_400_BAD_REQUEST,
             )
 
+        # Execute Stage V validation
+        stage_v_result = await self.stage_v_usecase.execute(request)
+        
+        if not stage_v_result["success"]:
+            return JSONResponse(
+                content={
+                    "success": False,
+                    "message": stage_v_result["message"],
+                    "error": stage_v_result["error"],
+                    "validation_details": stage_v_result.get("data", {}),
+                },
+                status_code=status.HTTP_400_BAD_REQUEST,
+            )
+
         return JSONResponse(
             content={
                 "success": True,
-                "message": "Flutter code generation completed successfully across all stages",
+                "message": "Flutter code generation and validation completed successfully across all stages",
                 "data": {
                     "stage_i": stage_i_result,
                     "stage_ii": stage_ii_result,
                     "stage_iii": stage_iii_result,
+                    "stage_v": stage_v_result,
                 },
                 "error": None,
             },

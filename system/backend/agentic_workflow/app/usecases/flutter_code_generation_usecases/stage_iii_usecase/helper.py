@@ -40,7 +40,7 @@ class FlutterStageIIIHelper:
         """
         # Define paths for Flutter project
         screen_scratchpads_dir = (
-            f"artifacts/{session_id}/scratchpads/flutter_screen_scratchpads"
+            f"artifacts/{session_id}/scratchpads/screen_scratchpads"
         )
         routes_file_path = (
             f"artifacts/{session_id}/codebase/lib/routes/app_routes.dart"

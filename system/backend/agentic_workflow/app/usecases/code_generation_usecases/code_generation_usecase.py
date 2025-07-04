@@ -18,6 +18,9 @@ from system.backend.agentic_workflow.app.usecases.code_generation_usecases.stage
 from system.backend.agentic_workflow.app.usecases.code_generation_usecases.stage_iv_usecase.stage_iv_usecase import (
     StageIVUsecase,
 )
+from system.backend.agentic_workflow.app.usecases.code_generation_usecases.stage_v_usecase.stage_v_usecase import (
+    StageVUsecase,
+)
 from system.backend.agentic_workflow.app.utils.react_boilerplate_setup import (
     setup_react_boilerplate,
 )
@@ -30,11 +33,13 @@ class CodeGenerationUsecase:
         stage_ii_usecase: StageIIUsecase = Depends(),
         stage_iii_usecase: StageIIIUsecase = Depends(),
         stage_iv_usecase: StageIVUsecase = Depends(),
+        stage_v_usecase: StageVUsecase = Depends(),
     ):
         self.stage_i_usecase = stage_i_usecase
         self.stage_ii_usecase = stage_ii_usecase
         self.stage_iii_usecase = stage_iii_usecase
         self.stage_iv_usecase = stage_iv_usecase
+        self.stage_v_usecase = stage_v_usecase
 
     async def execute(self, request: CodeGenerationRequest) -> JSONResponse:
 
@@ -87,15 +92,29 @@ class CodeGenerationUsecase:
                 status_code=status.HTTP_400_BAD_REQUEST,
             )
 
+        stage_v_result = await self.stage_v_usecase.execute(request)
+        
+        if not stage_v_result["success"]:
+            return JSONResponse(
+                content={
+                    "success": False,
+                    "message": stage_v_result["message"],
+                    "error": stage_v_result["error"],
+                    "validation_details": stage_v_result.get("data", {}),
+                },
+                status_code=status.HTTP_400_BAD_REQUEST,
+            )
+
         return JSONResponse(
             content={
                 "success": True,
-                "message": "Code generation completed successfully across all stages",
+                "message": "Code generation and validation completed successfully across all stages",
                 "data": {
                     "stage_i": stage_i_result,
-                    "stage_ii": stage_ii_result,
+                    "stage_ii": stage_ii_result, 
                     "stage_iii": stage_iii_result,
                     "stage_iv": stage_iv_result,
+                    "stage_v": stage_v_result,
                 },
                 "error": None,
             },

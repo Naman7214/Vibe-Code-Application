@@ -10,9 +10,6 @@ class ContextGatheringRequest(BaseModel):
     platform_type: str = Field(
         ..., description="The platform type to generate the context"
     )
-    session_id: str = Field(
-        ..., description="The session id to generate the context"
-    )
     is_follow_up: bool = Field(
         ..., description="Whether the request is a follow-up request"
     )
