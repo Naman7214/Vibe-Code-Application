@@ -455,7 +455,7 @@ Before generating any component that handles data:
 - [ ] Have you followed the file structure and naming conventions?
 - [ ] Have you followed the implementation requirements?
 - [ ] Have you followed the scratchpad requirements?
-- [ ] Have you followed the frequently occuring errors?
+- [ ] Have you followed the frequently occurring errors?
 - [ ] Have you followed the code generation checklist?
 - [ ] Have you followed the output format?
 </CODE_GENERATION_CHECKLIST>

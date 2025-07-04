@@ -203,6 +203,7 @@ Generate organized, professional mobile navigation descriptions with:
 10. **Mobile User-Focused Analysis**: How navigation serves mobile user goals and touch-based mental models
 11. For the screens to screen navigation make sure to refer to the screen name in this format only : '/exercise-library', '/workout-dashboard'
 Keep descriptions focused and actionable for Flutter mobile code generation.
+12. This is the modern era not the medieval so all the navigation decision should be according to modern navigation principles and not the medieval ones.
 </MOBILE_CONTENT_GUIDELINES>
 
 <SIMPLIFIED_MOBILE_NAVIGATION>

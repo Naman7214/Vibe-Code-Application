@@ -33,6 +33,7 @@ import '../presentation/exercise_library/exercise_library.dart';
 import '../presentation/workout_dashboard/workout_dashboard.dart';
 ```
 IMPORTANT: Use the exact screen names from the screen scratchpads. NO exceptions. screen scratchpads are your only source of truth for the import pattern so obey them.
+if it is [screen_name]_screen then use it as that name  if it's only [screen_name] then use it as that name.
 
 **CONTEXT_REGISTRY Requirements:**
 - Provide structured summary of routes created
@@ -49,25 +50,25 @@ Strictly follow the below XML tags based output format.
 <FILE_PATH>lib/routes/app_routes.dart</FILE_PATH>
 <CODE_SNIPPET>
 import 'package:flutter/material.dart';
-import '../presentation/onboarding_flow/onboarding_flow.dart';
-import '../presentation/menu_item_detail_screen/menu_item_detail_screen.dart';
-import '../presentation/restaurant_home_screen/restaurant_home_screen.dart';
-import '../presentation/restaurant_detail_screen/restaurant_detail_screen.dart';
+import '../presentation/dashboard_home/dashboard_home.dart';
+import '../presentation/market_news/market_news.dart';
+import '../presentation/trading_interface/trading_interface.dart';
+import '../presentation/splash_screen/splash_screen.dart';
 
 class AppRoutes {
   // TODO: Add your routes here
   static const String initial = '/';
-  static const String onboardingFlow = '/onboarding-flow';
-  static const String menuItemDetailScreen = '/menu-item-detail-screen';
-  static const String restaurantHomeScreen = '/restaurant-home-screen';
-  static const String restaurantDetailScreen = '/restaurant-detail-screen';
+  static const String splashScreen = '/splash';
+  static const String dashboardHome = '/dashboard-home';
+  static const String marketNews = '/market-news';
+  static const String tradingInterface = '/trading-interface';
 
   static Map<String, WidgetBuilder> routes = {
-    initial: (context) => const OnboardingFlow(),
-    onboardingFlow: (context) => const OnboardingFlow(),
-    menuItemDetailScreen: (context) => const MenuItemDetailScreen(),
-    restaurantHomeScreen: (context) => const RestaurantHomeScreen(),
-    restaurantDetailScreen: (context) => const RestaurantDetailScreen(),
+    initial: (context) => const SplashScreen(),
+    splashScreen: (context) => const SplashScreen(),
+    dashboardHome: (context) => const DashboardHome(),
+    marketNews: (context) => const MarketNewsScreen(),
+    tradingInterface: (context) => const TradingInterface(),
     // TODO: Add your other routes here
   };
 }

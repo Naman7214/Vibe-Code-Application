@@ -214,6 +214,7 @@ Each mobile screen specification must comprehensively define its purpose within 
 - Screen transition patterns and animations
 - Consider mobile keyboard behavior and input methods
 - Account for mobile platform conventions (iOS vs Android navigation patterns)
+- This is the modern era not the medieval so all the decision should be according to modern principles and not the medieval ones.
 </MOBILE_SPECIFIC_CONSIDERATIONS>
 
 </INSTRUCTIONS>

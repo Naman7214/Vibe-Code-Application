@@ -232,7 +232,7 @@ Create a global mobile design theme strategy that will serve as the foundation r
 13. Consider device capabilities (screen sizes, pixel densities)
 14. Creates a native mobile experience, not a web experience
 15. Balances innovation/creativity with usability and practicality
-
+16. This is the modern era not the medieval so all the design decision should be according to modern design principles and not the medieval ones.
 <UNIFIED_PLATFORM_STRATEGY>
 **Foundation Approach**: Material 3 as primary design system with Cupertino adaptations only for critical UX differences
 **Color System**: Use Material 3 ColorScheme.fromSeed() as base, semantic colors work across both platforms
@@ -345,6 +345,7 @@ Analyze the mobile screen requirements to identify and categorize custom Flutter
 12. Focus on StatefulWidget vs StatelessWidget decisions based on screen requirements
 13. Your technical context will be used to build the flutter app that runs entirely without any backend dependencies. Uses mock data, hardcoded values, and simulated responses instead of real API calls, database connections, or external services. For features requiring permissions (camera, location, etc.) or third-party integrations (payments, GPS, social login), create mock implementations that demonstrate the UI/UX flow without actual functionality. Focus on creating a complete, interactive frontend experience that showcases the app's design and user interface rather than implementing real-world integrations.
 14. Use ListView/GridView, Cards & Tiles, Dialogs & Alerts, Bottom Sheet when required. it helps to make the fully interactive and intuitive screen.
+15. This is the modern era not the medieval so all the widgets selection decision should be according to modern widgets principles and not the medieval ones.
 </INSTRUCTIONS>
 
 <WIDGET_STATE_DECISION_FRAMEWORK>

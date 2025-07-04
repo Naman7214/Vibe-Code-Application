@@ -131,6 +131,10 @@ dependencies:
   sizer: ^2.0.15
   fl_chart: ^0.65.0
   google_fonts: ^6.1.0
+  flutter_form_builder: ^9.1.1
+  flex_color_scheme: ^7.3.1
+  material_color_utilities: ^0.11.1
+  provider: ^6.1.2
   web: any
 dev_dependencies: 
   flutter_test: 
