@@ -17,10 +17,10 @@ class SearchReplaceUseCase:
         self,
         query: str,
         replacement: str,
-        explanation: str,
+        default_path: str,
         options: Optional[Dict[str, Any]] = None,
     ) -> Dict[str, Any]:
 
         return await self.search_replace_service.search_and_replace(
-            query, replacement, explanation, options
+            query, replacement, default_path, options
         )

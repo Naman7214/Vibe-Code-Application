@@ -1,4 +1,4 @@
-from typing import Any, Dict, List
+from typing import Any, Dict, List, Optional
 
 from fastapi import Depends
 
@@ -12,7 +12,9 @@ class FileSearchUseCase:
         self.file_search_service = file_search_service
 
     async def execute(
-        self, pattern: str, explanation: str
+        self, pattern: str, default_path: str
     ) -> List[Dict[str, Any]]:
 
-        return await self.file_search_service.search_files(pattern, explanation)
+        return await self.file_search_service.search_files(
+            pattern, default_path
+        )

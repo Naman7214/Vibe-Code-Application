@@ -1,4 +1,5 @@
 import json
+import os
 from typing import Any, Dict, List
 
 import httpx
@@ -6,6 +7,9 @@ from fastapi import HTTPException
 
 from system.backend.agentic_workflow.app.config.settings import settings
 from system.backend.agentic_workflow.app.utils.logger import loggers
+from system.backend.agentic_workflow.app.utils.session_context import (
+    session_state,
+)
 
 
 class IDEAgentTools:
@@ -27,59 +31,58 @@ class IDEAgentTools:
         return [
             {
                 "name": "read_file",
-                "description": "Read the contents of a file. Use this to examine code, configuration files, or any text-based file in the codebase.",
+                "description": "Reads the contents of a specified file. You may choose to read the entire file or a specific range of lines by providing optional start and end line numbers. The tool returns the file content.",
                 "input_schema": {
                     "type": "object",
                     "properties": {
                         "file_path": {
                             "type": "string",
-                            "description": "The path to the file to read",
+                            "description": "The absolute path to the file to read",
                         },
                         "start_line": {
                             "type": "integer",
-                            "description": "Optional: The line number to start reading from",
+                            "description": "The line number to start reading from",
                         },
                         "end_line": {
                             "type": "integer",
-                            "description": "Optional: The line number to stop reading at",
-                        },
-                        "explanation": {
-                            "type": "string",
-                            "description": "Brief explanation of why you're reading this file",
-                        },
+                            "description": "The line number to stop reading at",
+                        }
                     },
-                    "required": ["file_path", "explanation"],
+                    "required": ["file_path"],
                 },
             },
             {
                 "name": "edit_file",
-                "description": "Edit a file by providing new code content. Use this to fix bugs, add features, or modify existing code.",
+                "description": """Use this tool to propose an edit to an existing file or write the content in a new file. This will be read by a less intelligent model, which will quickly apply the edit. You should make it clear what the edit is, while also minimizing the unchanged code you write. You should still bias towards repeating as few lines of the original file as possible to convey the change. But, each edit should contain sufficient context of unchanged lines around the code you're editing to resolve ambiguity. Make sure it is clear what the edit should be, and where it should be applied.
+
+                IMPORTANT: If you need to make multiple changes to the same file, COMBINE ALL CHANGES into a SINGLE tool call. Do NOT use this tool multiple times for the same file - consolidate all modifications, additions, and deletions into one comprehensive edit by following the below formatting requirements.
+
+                CRITICAL FORMATTING REQUIREMENTS:
+                - For ADDITIONS/MODIFICATIONS: Include 3 lines of UNCHANGED code above and below your new/modified code to provide precise context for placement
+                - For DELETIONS: Show the code block WITH the target lines already removed, including 3 unchanged context lines around the deletion area
+                - The FastApply model needs this context to accurately locate where changes should be applied
+                """,
                 "input_schema": {
                     "type": "object",
                     "properties": {
                         "target_file_path": {
                             "type": "string",
-                            "description": "The path to the file to edit",
+                            "description": "The absolute path to the file to edit",
                         },
                         "code_snippet": {
                             "type": "string",
                             "description": "The new code content to write to the file",
-                        },
-                        "explanation": {
-                            "type": "string",
-                            "description": "Explanation of what changes you're making and why",
-                        },
+                        }
                     },
                     "required": [
                         "target_file_path",
                         "code_snippet",
-                        "explanation",
                     ],
                 },
             },
             {
                 "name": "search_replace",
-                "description": "Search for specific text patterns and replace them. Use this for precise text replacements across files.",
+                "description": "A tool for searching pattern in files and replace it with new text. this tool allows you to perform search and replace operation across files in codebase.",
                 "input_schema": {
                     "type": "object",
                     "properties": {
@@ -90,10 +93,6 @@ class IDEAgentTools:
                         "replacement": {
                             "type": "string",
                             "description": "The text to replace the matched content with",
-                        },
-                        "explanation": {
-                            "type": "string",
-                            "description": "Explanation of what you're searching and replacing",
                         },
                         "options": {
                             "type": "object",
@@ -116,9 +115,9 @@ class IDEAgentTools:
                                     "description": "Paths to search in",
                                 },
                             },
-                        },
+                        }
                     },
-                    "required": ["query", "replacement", "explanation"],
+                    "required": ["query", "replacement"],
                 },
             },
             {
@@ -127,97 +126,67 @@ class IDEAgentTools:
                 "input_schema": {
                     "type": "object",
                     "properties": {
-                        "command": {
+                        "cmd": {
                             "type": "string",
                             "description": "The terminal command to execute",
                         },
-                        "explanation": {
-                            "type": "string",
-                            "description": "Explanation of what this command does and why you're running it",
-                        },
+                        "is_background": {
+                            "type": "boolean",
+                            "description": "Whether to run the command in the background",
+                        }
                     },
-                    "required": ["command", "explanation"],
+                    "required": ["cmd", "is_background"],
                 },
             },
             {
                 "name": "list_directory",
-                "description": "List the contents of a directory to understand the project structure.",
+                "description": "List the contents of a directory. The quick tool to use for discovery, before using more targeted tools like semantic search or file reading. Useful to try to understand the file structure before diving deeper into specific files.",
                 "input_schema": {
                     "type": "object",
                     "properties": {
                         "dir_path": {
                             "type": "string",
-                            "description": "The path to the directory to list",
+                            "description": "The path to the directory to list, If not provided, the default path is the codebase path",
                         },
                         "recursive": {
                             "type": "boolean",
                             "description": "Whether to list subdirectories recursively",
-                        },
-                        "explanation": {
-                            "type": "string",
-                            "description": "Explanation of why you're listing this directory",
-                        },
+                        }
                     },
-                    "required": ["explanation"],
+                    "required": [],
                 },
             },
             {
                 "name": "search_files",
-                "description": "Search for files by name pattern in the codebase.",
+                "description": "Fast file search based on fuzzy matching against file path. Use if you know part of the file path but don't know where it's located exactly.",
                 "input_schema": {
                     "type": "object",
                     "properties": {
                         "pattern": {
                             "type": "string",
-                            "description": "The pattern to search for in file names",
-                        },
-                        "explanation": {
-                            "type": "string",
-                            "description": "Explanation of what files you're looking for",
-                        },
+                            "description": "The fuzzy filename pattern to search for in the current directory.",
+                        }
                     },
-                    "required": ["pattern", "explanation"],
+                    "required": ["pattern"],
                 },
             },
             {
                 "name": "delete_file",
-                "description": "Delete a file from the filesystem. Use with caution.",
+                "description": "Deletes a file or directory at the specified path with strict safety checks. Protected system or project-critical paths (e.g., node_modules, .env, src) and hidden/system files cannot be deleted. The tool returns the deletion status and an error message if the deletion is rejected or fails",
                 "input_schema": {
                     "type": "object",
                     "properties": {
                         "path": {
                             "type": "string",
-                            "description": "The path to the file to delete",
-                        },
-                        "explanation": {
-                            "type": "string",
-                            "description": "Explanation of why you're deleting this file",
-                        },
+                            "description": "The absolute path to the file that should be deleted. ",
+                        }
                     },
-                    "required": ["path", "explanation"],
-                },
-            },
-            {
-                "name": "code_base_search",
-                "description": "Perform semantic search across the codebase to find relevant code, functions, or patterns.",
-                "input_schema": {
-                    "type": "object",
-                    "properties": {
-                        "query": {
-                            "type": "string",
-                            "description": "The search query describing what you're looking for",
-                        },
-                        "explanation": {
-                            "type": "string",
-                            "description": "Explanation of what you're searching for and why",
-                        },
-                    },
-                    "required": ["query", "explanation"],
+                    "required": ["path"],
                 },
             },
             {
                 "name": "grep_search",
-                "description": "Search for exact text patterns or regex in files using grep-like functionality.",
+                "description": "This is best for finding exact text matches or regex patterns. This is preferred over semantic search when we know the exact symbol/function name/etc. to search in some set of directories/file types. Use this tool to run fast, exact regex searches over text files using the `ripgrep` engine. To avoid overwhelming output, the results are capped at 50 matches. Use the include or exclude patterns to filter the search scope by file type or specific paths.",
                 "input_schema": {
                     "type": "object",
                     "properties": {
@@ -225,32 +194,36 @@ class IDEAgentTools:
                             "type": "string",
                             "description": "The regex pattern or text to search for",
                         },
-                        "explanation": {
-                            "type": "string",
-                            "description": "Explanation of what pattern you're searching for",
+                        "case_sensitive": {
+                            "type": "boolean",
+                            "description": "Whether to search case-sensitively",
                         },
+                        "include_pattern": {
+                            "type": "string",
+                            "description": "The pattern to include in the search",
+                        },
+                        "exclude_pattern": {
+                            "type": "string",
+                            "description": "The pattern to exclude in the search",
+                        }
                     },
-                    "required": ["query", "explanation"],
+                    "required": ["query"],
                 },
             },
             {
-                "name": "web_search",
-                "description": "Search the web for information, documentation, or solutions to coding problems.",
+                "name": "exit_tool",
+                "description": "Use this tool to exit the agent loop. This is useful when you have completed your task and want to exit the agent loop.",
                 "input_schema": {
                     "type": "object",
                     "properties": {
-                        "query": {
+                        "summary": {
                             "type": "string",
-                            "description": "The search query for web search",
-                        },
-                        "explanation": {
-                            "type": "string",
-                            "description": "Explanation of what information you're looking for",
-                        },
+                            "description": "What things you have done so far",
+                        }
                     },
-                    "required": ["query", "explanation"],
+                    "required": ["summary"],
                 },
-            },
+            }
         ]
 
     async def call_tool(
@@ -259,6 +232,31 @@ class IDEAgentTools:
         """
         Call a specific tool with the given input parameters
         """
+        # Get the current session's codebase path from session context
+        session_id = session_state.get_session_id()
+        codebase_path = (
+            f"artifacts/{session_id}/codebase" if session_id else None
+        )
+
+        # For directory/search tools, send default codebase path (can be overridden)
+        directory_search_tools = {
+            "list_directory",
+            "grep_search",
+            "run_terminal_cmd",
+            "search_replace",
+            "search_files",
+        }
+
+        # For file-specific tools, IDE agent sends absolute paths directly
+        file_specific_tools = {"read_file", "edit_file", "delete_file"}
+
+        if tool_name in directory_search_tools and codebase_path:
+            # Set default working directory for directory/search operations
+            tool_input["default_path"] = codebase_path
+        
+        if tool_name == "exit_tool":
+            tool_input["summary"] = os.path.join(codebase_path, "scratchpads/global_scratchpad.txt")
+
         try:
             endpoint_map = {
                 "read_file": "/read-file",
@@ -271,6 +269,7 @@ class IDEAgentTools:
                 "code_base_search": "/code-base-search",
                 "grep_search": "/grep-search",
                 "web_search": "/web-search",
+                "exit_tool": "/exit-tool",
             }
 
             if tool_name not in endpoint_map:
@@ -319,23 +318,24 @@ class IDEAgentTools:
         """
         if tool_name == "run_terminal_cmd":
             return {
-                "command": tool_input.get("command"),
-                "explanation": tool_input.get("explanation"),
+                "cmd": tool_input.get("cmd"),
+                "is_background": tool_input.get("is_background"),
+                "default_path": tool_input.get("default_path")
             }
         elif tool_name == "web_search":
             return {
                 "search_query": tool_input.get("query"),
-                "explanation": tool_input.get("explanation"),
             }
         elif tool_name == "code_base_search":
             return {
-                "search_query": tool_input.get("query"),
-                "explanation": tool_input.get("explanation"),
-            }
+                "search_query": tool_input.get("query")            }
         elif tool_name == "grep_search":
             return {
                 "query": tool_input.get("query"),
-                "explanation": tool_input.get("explanation"),
+                "case_sensitive": tool_input.get("case_sensitive"),
+                "include_pattern": tool_input.get("include_pattern"),
+                "exclude_pattern": tool_input.get("exclude_pattern"),
+                "default_path": tool_input.get("default_path"),
             }
         else:
             # For most tools, the input can be passed directly

@@ -28,16 +28,13 @@ class SearchReplaceRequest(BaseModel):
     options: Optional[SearchReplaceOptions] = Field(
         default=None, description="Search options"
     )
-    explanation: str = Field(
-        ..., description="The explanation for the search and replace request"
+    default_path: str = Field(
+        ..., description="The default base path to search in"
     )
 
 
 class EditFileRequest(BaseModel):
     target_file_path: str = Field(
-        ..., description="The path to the file to edit"
+        ..., description="The absolute path to the file to edit"
     )
     code_snippet: str = Field(..., description="The code snippet to edit")
-    explanation: str = Field(
-        ..., description="The explanation for the file edit request"
-    )

@@ -36,13 +36,12 @@ class FileDeletionService:
             ".venv",
         }
 
-    async def delete_file(self, path: str, explanation: str) -> Dict[str, Any]:
+    async def delete_file(self, path: str) -> Dict[str, Any]:
         """
         Delete a file or directory with safety checks.
 
         Args:
             path: Path to the file or directory to delete
-            explanation: Explanation for why the deletion is needed
 
         Returns:
             A dictionary with the deletion status and any error

@@ -12,9 +12,9 @@ class EditFileUsecase:
         self.edit_file_service = edit_file_service
 
     async def execute(
-        self, target_file_path: str, code_snippet: str, explanation: str
+        self, target_file_path: str, code_snippet: str
     ) -> Dict[str, Any]:
 
         return await self.edit_file_service.edit_file(
-            target_file_path, code_snippet, explanation
+            target_file_path, code_snippet
         )

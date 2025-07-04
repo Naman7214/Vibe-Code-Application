@@ -19,7 +19,6 @@ class FileReadService:
         file_path: str,
         start_line: Optional[int],
         end_line: Optional[int],
-        explanation: str,
     ):
         try:
             # Check if path is safe
@@ -35,6 +34,13 @@ class FileReadService:
                 raise HTTPException(
                     status_code=status.HTTP_403_FORBIDDEN,
                     detail=f"Access denied: {error_msg}",
+                )
+
+            # Use the absolute file path directly
+            if not os.path.exists(file_path):
+                raise HTTPException(
+                    status_code=status.HTTP_404_NOT_FOUND,
+                    detail=f"File not found: {file_path}",
                 )
 
             stats = os.stat(file_path)

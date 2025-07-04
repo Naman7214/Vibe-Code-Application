@@ -17,7 +17,9 @@ class DirectoryListController:
 
     async def execute(self, request: DirectoryListRequest):
         response = await self.directory_list_usecase.execute(
-            request.dir_path, request.recursive, request.explanation
+            request.dir_path,
+            request.recursive,
+            request.default_path
         )
 
         return JSONResponse(

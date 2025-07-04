@@ -18,7 +18,6 @@ class FileReadController:
             request.file_path,
             request.start_line,
             request.end_line,
-            request.explanation,
         )
 
         return JSONResponse(

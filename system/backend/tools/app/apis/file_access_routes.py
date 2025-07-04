@@ -3,6 +3,9 @@ from fastapi import APIRouter, Depends
 from system.backend.tools.app.controllers.file_access_tools.directory_list_controller import (
     DirectoryListController,
 )
+from system.backend.tools.app.controllers.file_access_tools.exit_tool_controller import (
+    ExitToolController,
+)
 from system.backend.tools.app.controllers.file_access_tools.file_deletion_controller import (
     FileDeletionController,
 )
@@ -14,6 +17,7 @@ from system.backend.tools.app.controllers.file_access_tools.file_search_controll
 )
 from system.backend.tools.app.models.schemas.file_access_schemas import (
     DirectoryListRequest,
+    ExitToolRequest,
     FileReadRequest,
     FilesDeleteRequest,
     FileSearchRequest,
@@ -61,3 +65,13 @@ async def search_files(
 ):
 
     return await file_search_controller.execute(request)
+
+
+@router.post("/exit-tool")
+@handle_exceptions
+async def exit_tool(
+    request: ExitToolRequest,
+    exit_tool_controller: ExitToolController = Depends(),
+):
+
+    return await exit_tool_controller.execute(request)

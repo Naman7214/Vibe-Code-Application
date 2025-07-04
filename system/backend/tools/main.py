@@ -38,7 +38,7 @@ app.include_router(
 # Add CORS middleware
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["http://localhost:8001"],
+    allow_origins=["http://localhost:8000", "http://localhost:8001"],
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
@@ -52,9 +52,9 @@ async def root():
 
 if __name__ == "__main__":
     uvicorn.run(
-        "backend.main:app",
+        "system.backend.tools.main:app",
         host="0.0.0.0",
-        port=8000,
+        port=8001,
         reload=True,
         reload_exclude=["artifacts/*", "artifacts/**/*"],
     )

@@ -1,18 +1,15 @@
 import os
-import sys
 from datetime import datetime
-from typing import Any, Dict, List
-
-project_root = os.path.abspath(
-    os.path.join(os.path.dirname(__file__), "../../../../..")
-)
-sys.path.insert(0, project_root)
+from typing import Any, Dict, List, Optional
 
 from fastapi import Depends, HTTPException, status
 
 from system.backend.tools.app.models.domain.error import Error
 from system.backend.tools.app.repositories.error_repo import ErrorRepo
-from system.backend.tools.app.utils.path_validator import is_safe_path
+from system.backend.tools.app.utils.path_validator import (
+    get_directory_exclusion_patterns,
+    is_safe_path,
+)
 
 
 class DirectoryListService:
@@ -23,17 +20,29 @@ class DirectoryListService:
         self,
         dir_path: str,
         recursive: bool,
-        explanation: str,
+        default_path: Optional[str] = None,
     ) -> List[Dict[str, Any]]:
         try:
-            # Ensure dir_path is not empty or just whitespace
+            # Determine the actual directory path to list
             if dir_path in ["", ".", "./"]:
-                dir_path = os.path.join(project_root, "codebase")
+                # Use default_path if dir_path is empty or current directory
+                if default_path:
+                    actual_path = default_path
+                else:
+                    actual_path = os.getcwd()
+            elif os.path.isabs(dir_path):
+                # If dir_path is absolute, use it directly
+                actual_path = dir_path
             else:
-                dir_path = os.path.join(project_root, dir_path)
+                # If dir_path is relative, combine with default_path or current directory
+                base_path = default_path if default_path else os.getcwd()
+                actual_path = os.path.join(base_path, dir_path)
+
+            # Normalize the path
+            actual_path = os.path.abspath(actual_path)
 
             # Check if path is safe
-            is_safe, error_msg = is_safe_path(dir_path)
+            is_safe, error_msg = is_safe_path(actual_path)
             if not is_safe:
                 await self.error_repo.insert_error(
                     Error(
@@ -48,29 +57,20 @@ class DirectoryListService:
                 )
 
             # Verify that the directory exists
-            if not os.path.exists(dir_path):
+            if not os.path.exists(actual_path):
                 raise HTTPException(
                     status_code=status.HTTP_404_NOT_FOUND,
-                    detail=f"Directory not found: {dir_path}",
+                    detail=f"Directory not found: {actual_path}",
                 )
 
-            if not os.path.isdir(dir_path):
+            if not os.path.isdir(actual_path):
                 raise HTTPException(
                     status_code=status.HTTP_400_BAD_REQUEST,
-                    detail=f"Path is not a directory: {dir_path}",
+                    detail=f"Path is not a directory: {actual_path}",
                 )
 
-            # Directories to exclude from listing
-            excluded_dirs = [
-                "node_modules",
-                "venv",
-                ".venv",
-                "env",
-                ".env",
-                ".git",
-                "__pycache__",
-                ".DS_Store",
-            ]
+            # Get comprehensive list of directories to exclude from listing
+            excluded_dirs = get_directory_exclusion_patterns()
 
             async def process_directory(
                 current_path: str,
@@ -79,8 +79,8 @@ class DirectoryListService:
 
                 try:
                     for item in os.listdir(current_path):
-                        # Skip hidden files and excluded directories
-                        if item.startswith(".") or item in excluded_dirs:
+                        # Skip items that should be excluded
+                        if self._should_exclude_item(item, excluded_dirs):
                             continue
 
                         full_path = os.path.join(current_path, item)
@@ -132,7 +132,7 @@ class DirectoryListService:
 
                 return items
 
-            return await process_directory(dir_path)
+            return await process_directory(actual_path)
 
         except HTTPException:
             # Re-raise HTTP exceptions to preserve their status codes
@@ -141,11 +141,39 @@ class DirectoryListService:
             await self.error_repo.insert_error(
                 Error(
                     tool_name="DirectoryListService",
-                    error_message=f"Error listing directory {dir_path}: {str(e)}",
+                    error_message=f"Error listing directory {actual_path}: {str(e)}",
                     timestamp=datetime.now().isoformat(),
                 )
             )
             raise HTTPException(
                 status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
-                detail=f"Error listing directory {dir_path}: {str(e)}",
+                detail=f"Error listing directory {actual_path}: {str(e)}",
             )
+
+    def _should_exclude_item(
+        self, item_name: str, excluded_patterns: List[str]
+    ) -> bool:
+        """
+        Check if an item (file or directory) should be excluded.
+
+        Args:
+            item_name: The name of the file or directory
+            excluded_patterns: List of patterns to exclude
+
+        Returns:
+            True if the item should be excluded, False otherwise
+        """
+        # Check if item name matches any exclusion pattern
+        for pattern in excluded_patterns:
+            # Exact match
+            if item_name == pattern:
+                return True
+            # Remove trailing slash and check again
+            if item_name == pattern.rstrip("/"):
+                return True
+            # Check if it's a hidden file starting with dot
+            if item_name.startswith(".") and pattern.startswith("."):
+                if item_name == pattern:
+                    return True
+
+        return False

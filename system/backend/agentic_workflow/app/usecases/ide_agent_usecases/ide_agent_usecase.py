@@ -9,6 +9,7 @@ from system.backend.agentic_workflow.app.models.schemas.ide_agent_schema import 
 )
 from system.backend.agentic_workflow.app.prompts.ide_agent_prompts.ide_agent_prompt import (
     SYSTEM_PROMPT,
+    USER_PROMPT 
 )
 from system.backend.agentic_workflow.app.repositories.error_repo import (
     ErrorRepo,
@@ -67,19 +68,20 @@ class IDEAgentUsecase:
 
             # Get tool definitions and system prompt
             tools = self.ide_tools.get_tool_definitions()
-            system_prompt_with_context = f"{SYSTEM_PROMPT}\n\n**Session Context:**\n- Session ID: {session_id}\n- Codebase location: {codebase_path}\n- You are working on the codebase generated for this session."
+            system_prompt_with_context = f"{SYSTEM_PROMPT}\n\n**Session Context:** Codebase location: {codebase_path}"
 
             print(f"📁 Codebase found at: {codebase_path}")
             print(f"🛠️  Available tools: {len(tools)}")
 
             # Initialize messages list for the conversation
+            user_prompt = USER_PROMPT.format(user_query=request.user_query, codebase_path=codebase_path)
             messages = [
                 {
                     "role": "user",
                     "content": [
                         {
                             "type": "text",
-                            "text": f"<USER_QUERY>\n{request.user_query}\n</USER_QUERY>\n\nPlease help me with this request. The codebase is located at {codebase_path}.",
+                            "text": user_prompt,
                         }
                     ],
                 }
@@ -87,8 +89,10 @@ class IDEAgentUsecase:
 
             # Tool calling loop
             while tool_call_count < self.max_tool_calls:
-                print(f"\n💭 Making request to LLM (iteration {tool_call_count + 1})...")
-                
+                print(
+                    f"\n💭 Making request to LLM (iteration {tool_call_count + 1})..."
+                )
+
                 # Make request to LLM with tools
                 response = (
                     await self.anthropic_service.generate_text_with_tools(
@@ -109,7 +113,9 @@ class IDEAgentUsecase:
 
                 # Show agent's response if there's text content
                 if response["content"] and response["content"].strip():
-                    print(f"🤖 Agent says: {response['content'][:200]}{'...' if len(response['content']) > 200 else ''}")
+                    print(
+                        f"🤖 Agent says: {response['content'][:200]}{'...' if len(response['content']) > 200 else ''}"
+                    )
 
                 # If no tool calls, we're done
                 if not response["tool_calls"]:
@@ -119,7 +125,9 @@ class IDEAgentUsecase:
                     )
                     break
 
-                print(f"🔧 Received {len(response['tool_calls'])} tool call(s) to execute")
+                print(
+                    f"🔧 Received {len(response['tool_calls'])} tool call(s) to execute"
+                )
 
                 # Execute tool calls
                 tool_results = []
@@ -135,7 +143,7 @@ class IDEAgentUsecase:
                     tool_input = tool_call["input"]
 
                     print(f"  ⚡ Executing: {tool_name} (#{tool_call_count})")
-                    
+
                     loggers["ide_agent"].info(
                         f"Calling tool: {tool_name} (call #{tool_call_count})"
                     )
@@ -150,8 +158,14 @@ class IDEAgentUsecase:
                         )
 
                         # Show tool result (truncated for readability)
-                        result_preview = formatted_result[:300] if formatted_result else "No result"
-                        print(f"    ✅ Result: {result_preview}{'...' if len(formatted_result) > 300 else ''}")
+                        result_preview = (
+                            formatted_result[:300]
+                            if formatted_result
+                            else "No result"
+                        )
+                        print(
+                            f"    ✅ Result: {result_preview}{'...' if len(formatted_result) > 300 else ''}"
+                        )
 
                         tool_results.append(
                             {
@@ -173,7 +187,7 @@ class IDEAgentUsecase:
                     except Exception as e:
                         error_msg = f"Error calling tool {tool_name}: {str(e)}"
                         loggers["ide_agent"].error(error_msg)
-                        
+
                         print(f"    ❌ Tool failed: {error_msg}")
 
                         tool_results.append(
@@ -233,7 +247,9 @@ class IDEAgentUsecase:
 
                 # If we've reached the maximum tool calls, break
                 if tool_call_count >= self.max_tool_calls:
-                    print(f"⚠️  Maximum tool calls ({self.max_tool_calls}) reached - stopping execution")
+                    print(
+                        f"⚠️  Maximum tool calls ({self.max_tool_calls}) reached - stopping execution"
+                    )
                     loggers["ide_agent"].warning(
                         f"Maximum tool calls ({self.max_tool_calls}) reached"
                     )
@@ -265,7 +281,9 @@ class IDEAgentUsecase:
 
                 # Show final summary
                 if final_response["content"]:
-                    print(f"📋 Summary: {final_response['content'][:400]}{'...' if len(final_response['content']) > 400 else ''}")
+                    print(
+                        f"📋 Summary: {final_response['content'][:400]}{'...' if len(final_response['content']) > 400 else ''}"
+                    )
 
                 conversation_history.append(
                     {
@@ -275,8 +293,10 @@ class IDEAgentUsecase:
                     }
                 )
 
-            print(f"🎯 IDE Agent completed! Total tool calls: {tool_call_count}")
-            
+            print(
+                f"🎯 IDE Agent completed! Total tool calls: {tool_call_count}"
+            )
+
             return {
                 "success": True,
                 "message": f"IDE agent completed successfully. Used {tool_call_count} tool calls.",
