@@ -1,6 +1,6 @@
 import os
 from datetime import datetime
-from typing import Optional
+
 
 from fastapi import Depends, HTTPException, status
 
@@ -12,13 +12,13 @@ from system.backend.tools.app.utils.path_validator import is_safe_path
 class FileReadService:
     def __init__(self, error_repo: ErrorRepo = Depends()):
         self.error_repo = error_repo
-        self.MAX_LINES = 1500  # Maximum number of lines to return
+        self.MAX_LINES = 1500  # Maximum number of lines to return (matches default end_line)
 
     async def read_file(
         self,
         file_path: str,
-        start_line: Optional[int],
-        end_line: Optional[int],
+        start_line: int = 0,
+        end_line: int = 1500,
     ):
         try:
             # Check if path is safe
@@ -73,15 +73,9 @@ class FileReadService:
                 total_lines = len(lines)
 
                 # Handle line range specification
-                if start_line is not None or end_line is not None:
-                    start = max(0, start_line if start_line is not None else 0)
-                    end = min(
-                        total_lines,
-                        end_line if end_line is not None else total_lines,
-                    )
-                else:
-                    start = 0
-                    end = min(total_lines, self.MAX_LINES)
+                # Now that we have explicit defaults (0, 1500), we always have values
+                start = max(0, start_line)
+                end = min(total_lines, end_line)
 
                 # Check if we need to truncate
                 is_truncated = total_lines > end

@@ -243,6 +243,63 @@ export const useWorkflow = () => {
     }
   };
 
+  // Utility function to parse build errors from validation results
+  const parseBuildErrorsFromResponse = (response) => {
+    if (!response || !response.message) return null;
+    
+    // Check if the message contains "Code validation failed with errors"
+    if (response.message.includes('Code validation failed with errors')) {
+      // Try to extract validation results if they exist
+      try {
+        // Look for validation_results in the response
+        if (response.validation_results) {
+          const validationResults = response.validation_results;
+          
+          if (validationResults.validation_results && Array.isArray(validationResults.validation_results)) {
+            let errorMessages = [];
+            
+            validationResults.validation_results.forEach(result => {
+              if (result.has_errors && result.error_details) {
+                // Add command and description context
+                errorMessages.push(`Command: ${result.command}`);
+                if (result.description) {
+                  errorMessages.push(`Description: ${result.description}`);
+                }
+                
+                // Add the raw output which contains the actual error
+                if (result.error_details.raw_output) {
+                  errorMessages.push('Build Error Output:');
+                  errorMessages.push(result.error_details.raw_output);
+                }
+                
+                // Add parsed errors if available
+                if (result.error_details.parsed_errors && Array.isArray(result.error_details.parsed_errors)) {
+                  result.error_details.parsed_errors.forEach(error => {
+                    if (error.error_line) {
+                      errorMessages.push(`\nError: ${error.error_line}`);
+                      if (error.file_path) {
+                        errorMessages.push(`File: ${error.file_path}`);
+                      }
+                    }
+                  });
+                }
+              }
+            });
+            
+            return errorMessages.length > 0 ? errorMessages.join('\n') : null;
+          }
+        }
+      } catch (e) {
+        console.warn('Failed to parse validation results:', e);
+      }
+      
+      // Fallback: return the error message as is
+      return response.message;
+    }
+    
+    return null;
+  };
+
   // Step 3: Code Generation
   const runCodeGeneration = async () => {
     setLoading(true);
@@ -254,15 +311,42 @@ export const useWorkflow = () => {
       
       const response = await apiService.generateCode(sessionId, screensToProcess, platformType, isFollowUp);
       
-      if (response.error) {
-        // If there are build errors, proceed to IDE agent
-        setCurrentStep(workflowMode === 'followup' ? 5 : 4);
-        return response;
+      // Check for build errors in the response
+      const buildErrors = parseBuildErrorsFromResponse(response);
+      
+      if (buildErrors) {
+        console.log('Build errors detected, automatically triggering IDE agent...');
+        
+        // Automatically trigger IDE agent to fix the build errors
+        setLoading(true); // Keep loading state for seamless transition
+        
+        try {
+          const errorMessage = `The build failed with the following errors. Please analyze and fix them:\n\n${buildErrors}`;
+          const ideResponse = await apiService.ideAgent(sessionId, errorMessage, platformType);
+          
+          if (ideResponse.success) {
+            // IDE agent successfully fixed the errors
+            setCodebasePath(`artifacts/${sessionId}/codebase`);
+            setCurrentStep(workflowMode === 'followup' ? 6 : 5);
+            console.log('Build errors automatically fixed by IDE agent');
+          } else {
+            // IDE agent failed to fix the errors
+            throw new Error(ideResponse.error || 'IDE agent failed to fix the build errors');
+          }
+        } catch (ideError) {
+          console.error('IDE agent failed:', ideError);
+          setError(`Code generation failed with build errors, and automatic fix failed: ${ideError.message}`);
+          return false;
+        }
+      } else if (response.error) {
+        // Other types of errors (not build errors)
+        throw new Error(response.error);
+      } else {
+        // Success - show codebase path
+        setCodebasePath(`artifacts/${sessionId}/codebase`);
+        setCurrentStep(workflowMode === 'followup' ? 6 : 5);
       }
-
-      // Success - show codebase path
-      setCodebasePath(`artifacts/${sessionId}/codebase`);
-      setCurrentStep(workflowMode === 'followup' ? 6 : 5);
+      
       return response;
     } catch (error) {
       handleError(error);
