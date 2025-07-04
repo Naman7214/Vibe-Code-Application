@@ -12,9 +12,9 @@ class FileSearchUseCase:
         self.file_search_service = file_search_service
 
     async def execute(
-        self, pattern: str, explanation: str, default_path: Optional[str] = None
+        self, pattern: str, default_path: str
     ) -> List[Dict[str, Any]]:
 
         return await self.file_search_service.search_files(
-            pattern, explanation, default_path
+            pattern, default_path
         )

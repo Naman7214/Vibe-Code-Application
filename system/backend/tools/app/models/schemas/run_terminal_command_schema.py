@@ -8,10 +8,7 @@ class RunTerminalCommandRequest(BaseModel):
     is_background: bool = Field(
         ..., description="Whether to run the command in the background"
     )
-    explanation: str = Field(
-        ..., description="The explanation for the terminal command request"
-    )
-    default_path: Optional[str] = Field(
-        default=None,
+    default_path: str = Field(
+        ...,
         description="The default working directory for the command",
     )

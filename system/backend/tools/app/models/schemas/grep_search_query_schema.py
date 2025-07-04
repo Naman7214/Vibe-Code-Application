@@ -1,4 +1,3 @@
-from typing import Optional
 
 from pydantic import BaseModel, Field
 
@@ -14,9 +13,6 @@ class GrepSearchQueryRequest(BaseModel):
     exclude_pattern: str | None = Field(
         default=None, description="The pattern to exclude in the search"
     )
-    explanation: str = Field(
-        ..., description="The explanation for the grep search request"
-    )
-    default_path: Optional[str] = Field(
-        default=None, description="The default base path to search in"
+    default_path: str = Field(
+        ..., description="The default base path to search in"
     )

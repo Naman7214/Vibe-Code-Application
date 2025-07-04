@@ -57,7 +57,7 @@ class FileSearchService:
         raise FileNotFoundError("fzf executable not found")
 
     async def search_files(
-        self, pattern: str, explanation: str, default_path: Optional[str] = None
+        self, pattern: str, default_path: str
     ) -> List[Dict[str, Any]]:
         try:
             # Determine the search directory

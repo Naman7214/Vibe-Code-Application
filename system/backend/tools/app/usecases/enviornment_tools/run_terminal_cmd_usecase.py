@@ -187,8 +187,7 @@ class RunTerminalCmdUsecase:
         self,
         command: str,
         is_background: bool,
-        explanation: Optional[str] = None,
-        default_path: Optional[str] = None,
+        default_path: str,
     ) -> Dict[str, Any]:
         """
         Run a terminal command on the user's system with safety checks and node_modules exclusion.
@@ -196,7 +195,6 @@ class RunTerminalCmdUsecase:
         Args:
             command: The terminal command to execute
             is_background: Whether the command should be run in the background
-            explanation: Explanation for why the command is needed
             default_path: The default working directory for the command
 
         Returns:
@@ -221,10 +219,6 @@ class RunTerminalCmdUsecase:
                     "exit_code": 1,
                     "status": "blocked_dangerous_command",
                 }
-
-            # Log command and explanation if provided
-            if explanation:
-                print(f"Explanation: {explanation}")
 
             print(f"Executing command: {command}")
             print(f"Run in background: {is_background}")

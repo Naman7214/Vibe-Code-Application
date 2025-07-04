@@ -13,17 +13,11 @@ class FileReadRequest(BaseModel):
     end_line: int = Field(
         default=None, description="The line number to stop reading at"
     )
-    explanation: str = Field(
-        ..., description="The explanation for the file read request"
-    )
 
 
 class FilesDeleteRequest(BaseModel):
     path: str = Field(
         ..., description="The absolute path to the file to delete"
-    )
-    explanation: str = Field(
-        ..., description="The explanation for the file deletion request"
     )
 
 
@@ -35,9 +29,6 @@ class DirectoryListRequest(BaseModel):
     recursive: bool = Field(
         default=True, description="Whether to list subdirectories recursively"
     )
-    explanation: str = Field(
-        ..., description="The explanation for the directory list request"
-    )
     default_path: Optional[str] = Field(
         default=None,
         description="The default base path to use if dir_path is relative",
@@ -48,11 +39,8 @@ class FileSearchRequest(BaseModel):
     pattern: str = Field(
         ..., description="The pattern to search for in file names"
     )
-    explanation: str = Field(
-        ..., description="The explanation for the file search request"
-    )
-    default_path: Optional[str] = Field(
-        default=None, description="The default base path to search in"
+    default_path: str = Field(
+        ..., description="The default base path to search in"
     )
 
 

@@ -20,7 +20,6 @@ class DirectoryListService:
         self,
         dir_path: str,
         recursive: bool,
-        explanation: str,
         default_path: Optional[str] = None,
     ) -> List[Dict[str, Any]]:
         try:

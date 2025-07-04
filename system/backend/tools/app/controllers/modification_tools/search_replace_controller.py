@@ -24,9 +24,8 @@ class SearchReplaceController:
         response = await self.search_replace_usecase.execute(
             request.query,
             request.replacement,
-            request.explanation,
-            options,
             request.default_path,
+            options
         )
 
         status_code = status.HTTP_200_OK

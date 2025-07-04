@@ -19,8 +19,7 @@ class DirectoryListController:
         response = await self.directory_list_usecase.execute(
             request.dir_path,
             request.recursive,
-            request.explanation,
-            request.default_path,
+            request.default_path
         )
 
         return JSONResponse(

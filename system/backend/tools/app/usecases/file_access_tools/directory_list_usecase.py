@@ -17,10 +17,9 @@ class DirectoryListUseCase:
         self,
         dir_path: str,
         recursive: bool,
-        explanation: str,
         default_path: Optional[str] = None,
     ) -> List[Dict[str, Any]]:
 
         return await self.directory_list_service.list_directory(
-            dir_path, recursive, explanation, default_path
+            dir_path, recursive, default_path
         )

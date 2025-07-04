@@ -19,7 +19,6 @@ class FileReadService:
         file_path: str,
         start_line: Optional[int],
         end_line: Optional[int],
-        explanation: str,
     ):
         try:
             # Check if path is safe

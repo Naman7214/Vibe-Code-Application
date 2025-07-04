@@ -23,9 +23,8 @@ class SearchReplaceService:
         self,
         query: str,
         replacement: str,
-        explanation: str,
+        default_path: str,
         options: Optional[Dict[str, Any]] = None,
-        default_path: Optional[str] = None,
     ) -> Dict[str, Any]:
         """
         Search for text and replace it in files.
@@ -34,7 +33,6 @@ class SearchReplaceService:
             query: The text or regex pattern to search for
             replacement: The text to replace the matched content with
             options: Dictionary containing search options
-            explanation: Explanation for the operation
             default_path: Default base path to search in
 
         Returns:

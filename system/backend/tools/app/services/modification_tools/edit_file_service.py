@@ -33,7 +33,7 @@ class EditFileService:
         )
 
     async def edit_file(
-        self, target_file_path: str, code_snippet: str, explanation: str
+        self, target_file_path: str, code_snippet: str
     ):
         """
         Edit a file by applying code changes using the Relace API.
