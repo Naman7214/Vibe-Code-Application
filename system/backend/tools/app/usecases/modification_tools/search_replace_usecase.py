@@ -19,8 +19,9 @@ class SearchReplaceUseCase:
         replacement: str,
         explanation: str,
         options: Optional[Dict[str, Any]] = None,
+        default_path: Optional[str] = None,
     ) -> Dict[str, Any]:
 
         return await self.search_replace_service.search_and_replace(
-            query, replacement, explanation, options
+            query, replacement, explanation, options, default_path
         )

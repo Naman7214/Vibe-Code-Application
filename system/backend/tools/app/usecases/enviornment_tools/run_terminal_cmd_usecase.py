@@ -1,13 +1,7 @@
 import asyncio
 import os
 import re
-import sys
 from typing import Any, Dict, List, Optional, Pattern, Set, Tuple
-
-project_root = os.path.abspath(
-    os.path.join(os.path.dirname(__file__), "../../../../..")
-)
-sys.path.insert(0, project_root)
 
 
 class RunTerminalCmdUsecase:
@@ -194,6 +188,7 @@ class RunTerminalCmdUsecase:
         command: str,
         is_background: bool,
         explanation: Optional[str] = None,
+        default_path: Optional[str] = None,
     ) -> Dict[str, Any]:
         """
         Run a terminal command on the user's system with safety checks and node_modules exclusion.
@@ -202,6 +197,7 @@ class RunTerminalCmdUsecase:
             command: The terminal command to execute
             is_background: Whether the command should be run in the background
             explanation: Explanation for why the command is needed
+            default_path: The default working directory for the command
 
         Returns:
             A dictionary with the command output and execution status
@@ -233,6 +229,9 @@ class RunTerminalCmdUsecase:
             print(f"Executing command: {command}")
             print(f"Run in background: {is_background}")
 
+            # Determine working directory
+            working_dir = default_path if default_path else os.getcwd()
+
             if is_background:
                 # For background processes, use Popen and don't wait
                 process = subprocess.Popen(
@@ -241,7 +240,7 @@ class RunTerminalCmdUsecase:
                     stderr=subprocess.PIPE,
                     text=True,
                     start_new_session=True,
-                    cwd=os.path.join(project_root, "codebase"),
+                    cwd=working_dir,
                     shell=True,  # Use shell to expand wildcards, variables, etc.
                 )
                 return {
@@ -255,7 +254,7 @@ class RunTerminalCmdUsecase:
                     command,
                     stdout=subprocess.PIPE,
                     stderr=subprocess.PIPE,
-                    cwd=os.path.join(project_root, "codebase"),
+                    cwd=working_dir,
                 )
 
                 stdout, stderr = await process.communicate()

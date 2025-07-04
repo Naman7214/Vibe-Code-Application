@@ -1,3 +1,5 @@
+from typing import Optional
+
 from pydantic import BaseModel, Field
 
 
@@ -14,4 +16,7 @@ class GrepSearchQueryRequest(BaseModel):
     )
     explanation: str = Field(
         ..., description="The explanation for the grep search request"
+    )
+    default_path: Optional[str] = Field(
+        default=None, description="The default base path to search in"
     )

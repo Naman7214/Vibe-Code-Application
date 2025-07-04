@@ -2,20 +2,17 @@ import asyncio
 import glob
 import os
 import re
-import sys
 from datetime import datetime
 from typing import Any, Dict, Optional
-
-project_root = os.path.abspath(
-    os.path.join(os.path.dirname(__file__), "../../../../..")
-)
-sys.path.insert(0, project_root)
 
 from fastapi import Depends, HTTPException, status
 
 from system.backend.tools.app.models.domain.error import Error
 from system.backend.tools.app.repositories.error_repo import ErrorRepo
-from system.backend.tools.app.utils.path_validator import is_safe_path
+from system.backend.tools.app.utils.path_validator import (
+    get_common_exclusion_patterns,
+    is_safe_path,
+)
 
 
 class SearchReplaceService:
@@ -28,6 +25,7 @@ class SearchReplaceService:
         replacement: str,
         explanation: str,
         options: Optional[Dict[str, Any]] = None,
+        default_path: Optional[str] = None,
     ) -> Dict[str, Any]:
         """
         Search for text and replace it in files.
@@ -37,25 +35,28 @@ class SearchReplaceService:
             replacement: The text to replace the matched content with
             options: Dictionary containing search options
             explanation: Explanation for the operation
+            default_path: Default base path to search in
 
         Returns:
             Dictionary with results of the operation
         """
 
         if options is None:
-            options = {
-                "search_paths": [os.path.join(project_root, "codebase")],
-            }
+            options = {}
 
         case_sensitive = options.get("case_sensitive", True)
         include_pattern = options.get("include_pattern", "*")
         exclude_pattern = options.get("exclude_pattern", "")
-        search_paths = options.get("search_paths", "")
+        search_paths = options.get("search_paths", [])
 
-        if search_paths:
-            search_paths = [os.path.abspath(path) for path in search_paths]
-        else:
-            search_paths = [os.path.join(project_root, "codebase")]
+        # Use default_path if no search_paths specified
+        if not search_paths and default_path:
+            search_paths = [default_path]
+        elif not search_paths:
+            search_paths = [os.getcwd()]  # Fallback to current directory
+
+        # Convert to absolute paths
+        search_paths = [os.path.abspath(path) for path in search_paths]
 
         safe_search_paths = []
         for path in search_paths:
@@ -138,28 +139,47 @@ class SearchReplaceService:
     ) -> None:
         """Process a single search path asynchronously."""
 
+        # Get default exclusion patterns and combine with user patterns
+        default_exclusions = get_common_exclusion_patterns()
+        combined_exclude_patterns = default_exclusions.copy()
+
+        if exclude_pattern:
+            # Add user-specified exclusion patterns
+            user_patterns = [p.strip() for p in exclude_pattern.split(",")]
+            combined_exclude_patterns.extend(user_patterns)
+
         if os.path.isdir(path):
             include_paths = []
-            for root, _, files in os.walk(path):
+            for root, dirs, files in os.walk(path):
+                # Filter out excluded directories during walk to avoid traversing them
+                dirs[:] = [
+                    d
+                    for d in dirs
+                    if not self._should_exclude_directory(
+                        os.path.join(root, d), combined_exclude_patterns
+                    )
+                ]
+
                 for inc_pattern in include_pattern.split(","):
                     inc_pattern = inc_pattern.strip()
                     glob_pattern = os.path.join(root, inc_pattern)
-                    include_paths.extend(glob.glob(glob_pattern))
+                    matched_files = glob.glob(glob_pattern)
 
-            if exclude_pattern:
-                for root, _, files in os.walk(path):
-                    for exc_pattern in exclude_pattern.split(","):
-                        exc_pattern = exc_pattern.strip()
-                        glob_pattern = os.path.join(root, exc_pattern)
-                        exclude_paths = set(glob.glob(glob_pattern))
-                        include_paths = [
-                            p for p in include_paths if p not in exclude_paths
-                        ]
+                    # Filter out excluded files
+                    for file_path in matched_files:
+                        if not self._should_exclude_file(
+                            file_path, combined_exclude_patterns
+                        ):
+                            include_paths.append(file_path)
         else:
-            include_paths = (
-                [path] if self._matches_pattern(path, include_pattern) else []
-            )
-            if exclude_pattern and self._matches_pattern(path, exclude_pattern):
+            # Single file: check if it matches include pattern and is not excluded
+            if self._matches_pattern(
+                path, include_pattern
+            ) and not self._should_exclude_file(
+                path, combined_exclude_patterns
+            ):
+                include_paths = [path]
+            else:
                 include_paths = []
 
         file_tasks = []
@@ -172,12 +192,55 @@ class SearchReplaceService:
 
         await asyncio.gather(*file_tasks)
 
+    def _should_exclude_directory(
+        self, dir_path: str, exclude_patterns: list
+    ) -> bool:
+        """Check if a directory should be excluded based on patterns."""
+        dir_name = os.path.basename(dir_path)
+        dir_path_relative = os.path.relpath(dir_path)
+
+        for pattern in exclude_patterns:
+            # Check exact directory name match
+            if dir_name == pattern or dir_name == pattern.rstrip("/"):
+                return True
+            # Check if pattern matches the relative path
+            if self._matches_pattern(dir_path_relative, pattern):
+                return True
+            # Check if it's a dotfile/hidden directory and pattern matches hidden files
+            if dir_name.startswith(".") and pattern.startswith("."):
+                if self._matches_pattern(dir_name, pattern):
+                    return True
+        return False
+
+    def _should_exclude_file(
+        self, file_path: str, exclude_patterns: list
+    ) -> bool:
+        """Check if a file should be excluded based on patterns."""
+        file_name = os.path.basename(file_path)
+        file_path_relative = os.path.relpath(file_path)
+
+        for pattern in exclude_patterns:
+            # Check exact file name match
+            if file_name == pattern:
+                return True
+            # Check if pattern matches the relative path
+            if self._matches_pattern(file_path_relative, pattern):
+                return True
+            # Check if pattern matches the file name with glob
+            if self._matches_pattern(file_name, pattern):
+                return True
+        return False
+
     def _matches_pattern(self, path: str, pattern: str) -> bool:
         """Check if a path matches a glob pattern."""
         for single_pattern in pattern.split(","):
             single_pattern = single_pattern.strip()
             if glob.fnmatch.fnmatch(os.path.basename(path), single_pattern):
                 return True
+            # Also check full path for patterns with slashes
+            if "/" in single_pattern or "\\" in single_pattern:
+                if glob.fnmatch.fnmatch(path, single_pattern):
+                    return True
         return False
 
     async def _process_file(

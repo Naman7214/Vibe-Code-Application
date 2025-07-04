@@ -1,3 +1,5 @@
+from typing import Optional
+
 from pydantic import BaseModel, Field
 
 
@@ -8,4 +10,8 @@ class RunTerminalCommandRequest(BaseModel):
     )
     explanation: str = Field(
         ..., description="The explanation for the terminal command request"
+    )
+    default_path: Optional[str] = Field(
+        default=None,
+        description="The default working directory for the command",
     )

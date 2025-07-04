@@ -1,4 +1,4 @@
-from typing import Any, Dict, List
+from typing import Any, Dict, List, Optional
 
 from fastapi import Depends
 
@@ -14,9 +14,13 @@ class DirectoryListUseCase:
         self.directory_list_service = directory_list_service
 
     async def execute(
-        self, dir_path: str, recursive: bool, explanation: str
+        self,
+        dir_path: str,
+        recursive: bool,
+        explanation: str,
+        default_path: Optional[str] = None,
     ) -> List[Dict[str, Any]]:
 
         return await self.directory_list_service.list_directory(
-            dir_path, recursive, explanation
+            dir_path, recursive, explanation, default_path
         )

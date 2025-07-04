@@ -1,7 +1,7 @@
 import os
-from typing import Tuple
+from typing import List, Tuple
 
-# Define system directories that are off-limits
+# Define system directories that are off-limits (only critical system paths)
 SYSTEM_DIRECTORIES = [
     os.path.abspath("system"),
     os.path.abspath("system/backend"),
@@ -11,17 +11,235 @@ SYSTEM_DIRECTORIES = [
     os.path.abspath("system/frontend"),
 ]
 
-# Define any additional paths that should be protected
+# Define any additional paths that should be protected (system paths only)
 PROTECTED_ROOT_PATHS = [
     "/bin",
     "/sbin",
     "/usr",
     "/etc",
     "/var",
-    "/System",
-    "/Library",
+    "/system",
+    "/library",
     # Add any other system paths that should be protected
 ]
+
+
+def get_common_exclusion_patterns() -> List[str]:
+    """
+    Returns a list of common directories and files that should be excluded
+    from search operations, file listings, and other file operations.
+
+    Returns:
+        List of glob patterns to exclude
+    """
+    return [
+        # Python virtual environments
+        ".venv",
+        "venv",
+        ".env",
+        "env",
+        "__pycache__",
+        "*.pyc",
+        "*.pyo",
+        "*.pyd",
+        # Node.js/JavaScript
+        "node_modules",
+        "package-lock.json",
+        "yarn.lock",
+        "npm-debug.log*",
+        "yarn-debug.log*",
+        "yarn-error.log*",
+        ".npm",
+        ".yarn",
+        # React/Next.js
+        ".next",
+        "dist",
+        "build",
+        ".nuxt",
+        ".output",
+        ".cache",
+        # Flutter/Dart
+        ".dart_tool",
+        ".flutter-plugins",
+        ".flutter-plugins-dependencies",
+        ".packages",
+        "pubspec.lock",
+        ".fvm",
+        ".idea",
+        ".vscode",
+        "android",
+        "ios",
+        "windows",
+        "macos",
+        "linux",
+        "web",
+        "build",
+        ".flutter",
+        ".metadata",
+        "*.g.dart",
+        "*.freezed.dart",
+        "*.mocks.dart",
+        "*.config.dart",
+        # Version control
+        ".git",
+        ".gitignore",
+        ".gitmodules",
+        ".svn",
+        ".hg",
+        # IDEs and editors
+        ".idea",
+        ".vscode",
+        ".vs",
+        "*.swp",
+        "*.swo",
+        "*~",
+        # OS specific
+        ".DS_Store",
+        "Thumbs.db",
+        "desktop.ini",
+        # Build artifacts
+        "*.log",
+        "coverage",
+        ".nyc_output",
+        "*.tmp",
+        "*.temp",
+    ]
+
+
+def get_directory_exclusion_patterns() -> List[str]:
+    """
+    Returns directory names that should be excluded from directory listings
+    and recursive operations.
+
+    Returns:
+        List of directory names to exclude
+    """
+    return [
+        # Python virtual environments
+        ".venv",
+        "venv",
+        ".env",
+        "env",
+        "__pycache__",
+        # Node.js/JavaScript
+        "node_modules",
+        ".npm",
+        ".yarn",
+        # React/Next.js
+        ".next",
+        "dist",
+        "build",
+        ".nuxt",
+        ".output",
+        ".cache",
+        # Flutter/Dart
+        ".dart_tool",
+        ".fvm",
+        ".idea",
+        ".vscode",
+        "android",
+        "ios",
+        "windows",
+        "macos",
+        "linux",
+        "web",
+        "build",
+        ".flutter",
+        # Version control
+        ".git",
+        ".svn",
+        ".hg",
+        # IDEs and editors
+        ".idea",
+        ".vscode",
+        ".vs",
+        # OS specific
+        ".DS_Store",
+        # Build artifacts
+        "coverage",
+        ".nyc_output",
+    ]
+
+
+def get_ripgrep_exclusion_patterns() -> List[str]:
+    """
+    Returns exclusion patterns specifically formatted for ripgrep (-g flag).
+
+    Returns:
+        List of patterns to exclude for ripgrep
+    """
+    return [
+        # Python virtual environments
+        "!.venv/",
+        "!venv/",
+        "!.env/",
+        "!env/",
+        "!__pycache__/",
+        "!*.pyc",
+        "!*.pyo",
+        "!*.pyd",
+        # Node.js/JavaScript
+        "!node_modules/",
+        "!package-lock.json",
+        "!yarn.lock",
+        "!npm-debug.log*",
+        "!yarn-debug.log*",
+        "!yarn-error.log*",
+        "!.npm/",
+        "!.yarn/",
+        # React/Next.js
+        "!.next/",
+        "!dist/",
+        "!build/",
+        "!.nuxt/",
+        "!.output/",
+        "!.cache/",
+        # Flutter/Dart
+        "!.dart_tool/",
+        "!.flutter-plugins",
+        "!.flutter-plugins-dependencies",
+        "!.packages",
+        "!pubspec.lock",
+        "!.fvm/",
+        "!.idea/",
+        "!.vscode/",
+        "!android/",
+        "!ios/",
+        "!windows/",
+        "!macos/",
+        "!linux/",
+        "!web/",
+        "!build/",
+        "!.flutter/",
+        "!.metadata",
+        "!*.g.dart",
+        "!*.freezed.dart",
+        "!*.mocks.dart",
+        "!*.config.dart",
+        # Version control
+        "!.git/",
+        "!.gitignore",
+        "!.gitmodules",
+        "!.svn/",
+        "!.hg/",
+        # IDEs and editors
+        "!.idea/",
+        "!.vscode/",
+        "!.vs/",
+        "!*.swp",
+        "!*.swo",
+        "!*~",
+        # OS specific
+        "!.DS_Store",
+        "!Thumbs.db",
+        "!desktop.ini",
+        # Build artifacts
+        "!*.log",
+        "!coverage/",
+        "!.nyc_output/",
+        "!*.tmp",
+        "!*.temp",
+    ]
 
 
 def is_safe_path(path: str) -> Tuple[bool, str]:
@@ -49,7 +267,6 @@ def is_safe_path(path: str) -> Tuple[bool, str]:
         if abs_path.startswith(protected_path):
             return False, f"Path '{path}' is in a protected system path"
 
-    # Add additional checks as needed
-
+    # Allow access to project files including artifacts directory
     # Path is considered safe if no checks failed
     return True, ""

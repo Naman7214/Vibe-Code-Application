@@ -1,21 +1,18 @@
 import json
 import os
 import subprocess
-import sys
 from typing import Any, Dict
 
 from fastapi import Depends
-
-project_root = os.path.abspath(
-    os.path.join(os.path.dirname(__file__), "../../../../..")
-)
-sys.path.insert(0, project_root)
 
 from system.backend.tools.app.models.domain.error import Error
 from system.backend.tools.app.models.schemas.grep_search_query_schema import (
     GrepSearchQueryRequest,
 )
 from system.backend.tools.app.repositories.error_repo import ErrorRepo
+from system.backend.tools.app.utils.path_validator import (
+    get_ripgrep_exclusion_patterns,
+)
 
 
 class GrepSearchUsecase:
@@ -29,11 +26,7 @@ class GrepSearchUsecase:
         Execute a grep search using ripgrep.
 
         Args:
-            query: The regex pattern to search for
-            case_sensitive: Whether the search should be case sensitive
-            include_pattern: Glob pattern for files to include
-            exclude_pattern: Glob pattern for files to exclude
-            explanation: Explanation for why the search is being performed
+            request: The grep search request containing query, options, and default_path
 
         Returns:
             A dictionary with the search results and metadata
@@ -42,6 +35,7 @@ class GrepSearchUsecase:
         case_sensitive = request.case_sensitive
         include_pattern = request.include_pattern
         exclude_pattern = request.exclude_pattern
+        default_path = request.default_path
 
         # Build the ripgrep command
         cmd = ["rg", "--json"]
@@ -49,17 +43,22 @@ class GrepSearchUsecase:
         if not case_sensitive:
             cmd.append("-i")
 
-        # Only add include/exclude patterns if they are meaningful
+        # Add default exclusion patterns to ignore common development directories and files
+        default_exclusions = get_ripgrep_exclusion_patterns()
+        for exclusion in default_exclusions:
+            cmd.extend(["-g", exclusion])
+
+        # Add user-specified include/exclude patterns
         if include_pattern:
             cmd.extend(["-g", include_pattern])
 
         if exclude_pattern:
+            # Add user exclude pattern in addition to defaults
             cmd.extend(["-g", f"!{exclude_pattern}"])
 
-            # Add the query and directory (codebase directory by default)
-        cmd.extend(
-            [query, os.path.join(project_root, "codebase")]
-        )  # i have changed here
+        # Use default_path if provided, otherwise use current working directory
+        search_path = default_path if default_path else os.getcwd()
+        cmd.extend([query, search_path])
 
         try:
             # Debug: Print the command being executed

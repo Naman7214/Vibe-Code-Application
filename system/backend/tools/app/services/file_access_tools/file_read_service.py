@@ -37,6 +37,13 @@ class FileReadService:
                     detail=f"Access denied: {error_msg}",
                 )
 
+            # Use the absolute file path directly
+            if not os.path.exists(file_path):
+                raise HTTPException(
+                    status_code=status.HTTP_404_NOT_FOUND,
+                    detail=f"File not found: {file_path}",
+                )
+
             stats = os.stat(file_path)
             file_extension = os.path.splitext(file_path)[1].lower()
 

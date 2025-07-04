@@ -6,6 +6,9 @@ from fastapi import HTTPException
 
 from system.backend.agentic_workflow.app.config.settings import settings
 from system.backend.agentic_workflow.app.utils.logger import loggers
+from system.backend.agentic_workflow.app.utils.session_context import (
+    session_state,
+)
 
 
 class IDEAgentTools:
@@ -33,7 +36,7 @@ class IDEAgentTools:
                     "properties": {
                         "file_path": {
                             "type": "string",
-                            "description": "The path to the file to read",
+                            "description": "The absolute path to the file to read",
                         },
                         "start_line": {
                             "type": "integer",
@@ -59,7 +62,7 @@ class IDEAgentTools:
                     "properties": {
                         "target_file_path": {
                             "type": "string",
-                            "description": "The path to the file to edit",
+                            "description": "The absolute path to the file to edit",
                         },
                         "code_snippet": {
                             "type": "string",
@@ -117,6 +120,10 @@ class IDEAgentTools:
                                 },
                             },
                         },
+                        "default_path": {
+                            "type": "string",
+                            "description": "The default base path to search in",
+                        },
                     },
                     "required": ["query", "replacement", "explanation"],
                 },
@@ -127,16 +134,24 @@ class IDEAgentTools:
                 "input_schema": {
                     "type": "object",
                     "properties": {
-                        "command": {
+                        "cmd": {
                             "type": "string",
                             "description": "The terminal command to execute",
+                        },
+                        "is_background": {
+                            "type": "boolean",
+                            "description": "Whether to run the command in the background",
                         },
                         "explanation": {
                             "type": "string",
                             "description": "Explanation of what this command does and why you're running it",
                         },
+                        "default_path": {
+                            "type": "string",
+                            "description": "The default working directory for the command",
+                        },
                     },
-                    "required": ["command", "explanation"],
+                    "required": ["cmd", "is_background", "explanation"],
                 },
             },
             {
@@ -147,7 +162,7 @@ class IDEAgentTools:
                     "properties": {
                         "dir_path": {
                             "type": "string",
-                            "description": "The path to the directory to list",
+                            "description": "The path to the directory to list, relative to default_path if provided",
                         },
                         "recursive": {
                             "type": "boolean",
@@ -156,6 +171,10 @@ class IDEAgentTools:
                         "explanation": {
                             "type": "string",
                             "description": "Explanation of why you're listing this directory",
+                        },
+                        "default_path": {
+                            "type": "string",
+                            "description": "The default base path to use if dir_path is relative",
                         },
                     },
                     "required": ["explanation"],
@@ -175,6 +194,10 @@ class IDEAgentTools:
                             "type": "string",
                             "description": "Explanation of what files you're looking for",
                         },
+                        "default_path": {
+                            "type": "string",
+                            "description": "The default base path to search in",
+                        },
                     },
                     "required": ["pattern", "explanation"],
                 },
@@ -187,7 +210,7 @@ class IDEAgentTools:
                     "properties": {
                         "path": {
                             "type": "string",
-                            "description": "The path to the file to delete",
+                            "description": "The absolute path to the file to delete",
                         },
                         "explanation": {
                             "type": "string",
@@ -225,9 +248,25 @@ class IDEAgentTools:
                             "type": "string",
                             "description": "The regex pattern or text to search for",
                         },
+                        "case_sensitive": {
+                            "type": "boolean",
+                            "description": "Whether to search case-sensitively",
+                        },
+                        "include_pattern": {
+                            "type": "string",
+                            "description": "The pattern to include in the search",
+                        },
+                        "exclude_pattern": {
+                            "type": "string",
+                            "description": "The pattern to exclude in the search",
+                        },
                         "explanation": {
                             "type": "string",
                             "description": "Explanation of what pattern you're searching for",
+                        },
+                        "default_path": {
+                            "type": "string",
+                            "description": "The default base path to search in",
                         },
                     },
                     "required": ["query", "explanation"],
@@ -259,6 +298,28 @@ class IDEAgentTools:
         """
         Call a specific tool with the given input parameters
         """
+        # Get the current session's codebase path from session context
+        session_id = session_state.get_session_id()
+        codebase_path = (
+            f"artifacts/{session_id}/codebase" if session_id else None
+        )
+
+        # For directory/search tools, send default codebase path (can be overridden)
+        directory_search_tools = {
+            "list_directory",
+            "grep_search",
+            "run_terminal_cmd",
+            "search_replace",
+            "search_files",
+        }
+
+        # For file-specific tools, IDE agent sends absolute paths directly
+        file_specific_tools = {"read_file", "edit_file", "delete_file"}
+
+        if tool_name in directory_search_tools and codebase_path:
+            # Set default working directory for directory/search operations
+            tool_input["default_path"] = codebase_path
+
         try:
             endpoint_map = {
                 "read_file": "/read-file",
@@ -319,8 +380,10 @@ class IDEAgentTools:
         """
         if tool_name == "run_terminal_cmd":
             return {
-                "command": tool_input.get("command"),
+                "cmd": tool_input.get("cmd"),
+                "is_background": tool_input.get("is_background"),
                 "explanation": tool_input.get("explanation"),
+                "default_path": tool_input.get("default_path"),
             }
         elif tool_name == "web_search":
             return {
@@ -335,7 +398,11 @@ class IDEAgentTools:
         elif tool_name == "grep_search":
             return {
                 "query": tool_input.get("query"),
+                "case_sensitive": tool_input.get("case_sensitive"),
+                "include_pattern": tool_input.get("include_pattern"),
+                "exclude_pattern": tool_input.get("exclude_pattern"),
                 "explanation": tool_input.get("explanation"),
+                "default_path": tool_input.get("default_path"),
             }
         else:
             # For most tools, the input can be passed directly
