@@ -1,5 +1,3 @@
-import asyncio
-
 from fastapi import Depends, status
 from fastapi.responses import JSONResponse
 
@@ -48,7 +46,11 @@ class CodeGenerationUsecase:
             await setup_react_boilerplate.create_react_boilerplate()
 
         # Skip Stage I for follow-up requests as it handles initial setup
-        stage_i_result = {"success": True, "message": "Skipped for follow-up request", "data": {}}
+        stage_i_result = {
+            "success": True,
+            "message": "Skipped for follow-up request",
+            "data": {},
+        }
         if not request.is_follow_up:
             stage_i_result = await self.stage_i_usecase.execute()
             if not stage_i_result["success"]:
@@ -62,7 +64,11 @@ class CodeGenerationUsecase:
                 )
 
         # Skip Stage II for follow-up requests as it handles component generation
-        stage_ii_result = {"success": True, "message": "Skipped for follow-up request", "data": {}}
+        stage_ii_result = {
+            "success": True,
+            "message": "Skipped for follow-up request",
+            "data": {},
+        }
         if not request.is_follow_up:
             stage_ii_result = await self.stage_ii_usecase.execute(request)
             if not stage_ii_result["success"]:

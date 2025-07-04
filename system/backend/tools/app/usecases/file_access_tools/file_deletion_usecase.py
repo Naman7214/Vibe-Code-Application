@@ -1,4 +1,4 @@
-from typing import Any, Dict, Optional
+from typing import Any, Dict
 
 from fastapi import Depends
 
@@ -11,8 +11,6 @@ class FileDeletionUseCase:
     def __init__(self, file_deletion_service: FileDeletionService = Depends()):
         self.file_deletion_service = file_deletion_service
 
-    async def execute(
-        self, path: str
-    ) -> Dict[str, Any]:
+    async def execute(self, path: str) -> Dict[str, Any]:
 
         return await self.file_deletion_service.delete_file(path)

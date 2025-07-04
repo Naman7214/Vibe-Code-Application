@@ -1,5 +1,6 @@
+import glob
 import os
-from typing import Any, Dict
+from typing import Any, Dict, List
 
 from fastapi import Depends, HTTPException
 
@@ -9,7 +10,7 @@ from system.backend.agentic_workflow.app.models.schemas.ide_agent_schema import 
 )
 from system.backend.agentic_workflow.app.prompts.ide_agent_prompts.ide_agent_prompt import (
     SYSTEM_PROMPT,
-    USER_PROMPT 
+    USER_PROMPT,
 )
 from system.backend.agentic_workflow.app.repositories.error_repo import (
     ErrorRepo,
@@ -37,6 +38,48 @@ class IDEAgentUsecase:
         self.ide_tools = IDEAgentTools()
         self.max_tool_calls = 25
 
+    def _get_absolute_path(self, relative_path: str) -> str:
+        """Convert relative path to absolute path"""
+        return os.path.abspath(relative_path)
+
+    def _get_screen_scratch_pads_paths(self, session_id: str) -> List[str]:
+        """Get list of screen scratch pad file paths"""
+        screen_scratch_pads_dir = (
+            f"artifacts/{session_id}/scratchpads/screen_scratchpads"
+        )
+        screen_scratch_pads_paths = []
+
+        if os.path.exists(screen_scratch_pads_dir):
+            # Get all .json files in the screen_scratchpads directory
+            pattern = os.path.join(screen_scratch_pads_dir, "*.json")
+            screen_scratch_pads_paths = [
+                self._get_absolute_path(path) for path in glob.glob(pattern)
+            ]
+            screen_scratch_pads_paths.sort()  # Sort for consistent ordering
+
+        return screen_scratch_pads_paths
+
+    def _read_file_structure_content(self, session_id: str) -> str:
+        """Read and return file structure content"""
+        file_structure_path = (
+            f"artifacts/{session_id}/scratchpads/file_structure.txt"
+        )
+        file_structure_content = ""
+
+        try:
+            if os.path.exists(file_structure_path):
+                with open(file_structure_path, "r", encoding="utf-8") as f:
+                    file_structure_content = f.read()
+            else:
+                file_structure_content = "File structure not available"
+        except Exception as e:
+            loggers["ide_agent"].warning(
+                f"Failed to read file structure: {str(e)}"
+            )
+            file_structure_content = f"Error reading file structure: {str(e)}"
+
+        return file_structure_content
+
     async def execute(self, request: IDEAgentRequest) -> Dict[str, Any]:
         """
         Execute IDE agent processing with tool calling loop
@@ -62,6 +105,26 @@ class IDEAgentUsecase:
                     f"No codebase found for session {session_id}. Please run code generation first."
                 )
 
+            # Get context paths and content
+            global_scratch_pad_path = self._get_absolute_path(
+                f"artifacts/{session_id}/scratchpads/global_scratch_pad.json"
+            )
+            screen_scratch_pads_paths = self._get_screen_scratch_pads_paths(
+                session_id
+            )
+            file_structure_content = self._read_file_structure_content(
+                session_id
+            )
+
+            print(f"📁 Codebase found at: {codebase_path}")
+            print(f"📝 Global scratch pad: {global_scratch_pad_path}")
+            print(
+                f"📋 Screen scratch pads: {len(screen_scratch_pads_paths)} files found"
+            )
+            print(
+                f"🗂️  File structure loaded: {len(file_structure_content)} characters"
+            )
+
             # Initialize conversation with system context
             conversation_history = []
             tool_call_count = 0
@@ -70,11 +133,17 @@ class IDEAgentUsecase:
             tools = self.ide_tools.get_tool_definitions()
             system_prompt_with_context = f"{SYSTEM_PROMPT}\n\n**Session Context:** Codebase location: {codebase_path}"
 
-            print(f"📁 Codebase found at: {codebase_path}")
             print(f"🛠️  Available tools: {len(tools)}")
 
-            # Initialize messages list for the conversation
-            user_prompt = USER_PROMPT.format(user_query=request.user_query, codebase_path=codebase_path)
+            # Initialize messages list for the conversation with enhanced context
+            user_prompt = USER_PROMPT.format(
+                user_query=request.user_query,
+                codebase_path=self._get_absolute_path(codebase_path),
+                global_scratch_pad_path=global_scratch_pad_path,
+                screen_scratch_pads_path=screen_scratch_pads_paths,
+                file_structure_content=file_structure_content,
+            )
+
             messages = [
                 {
                     "role": "user",

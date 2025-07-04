@@ -1,7 +1,7 @@
 import asyncio
 import os
 import re
-from typing import Any, Dict, List, Optional, Pattern, Set, Tuple
+from typing import Any, Dict, List, Pattern, Set, Tuple
 
 
 class RunTerminalCmdUsecase:

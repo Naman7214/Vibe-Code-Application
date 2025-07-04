@@ -40,7 +40,11 @@ class FlutterCodeGenerationUsecase:
             await setup_flutter_boilerplate.create_flutter_boilerplate()
 
         # Skip Stage I for follow-up requests as it handles initial setup
-        stage_i_result = {"success": True, "message": "Skipped for follow-up request", "data": {}}
+        stage_i_result = {
+            "success": True,
+            "message": "Skipped for follow-up request",
+            "data": {},
+        }
         if not request.is_follow_up:
             stage_i_result = await self.stage_i_usecase.execute()
             if not stage_i_result["success"]:

@@ -46,7 +46,7 @@ class IDEAgentTools:
                         "end_line": {
                             "type": "integer",
                             "description": "The line number to stop reading at",
-                        }
+                        },
                     },
                     "required": ["file_path"],
                 },
@@ -72,7 +72,7 @@ class IDEAgentTools:
                         "code_snippet": {
                             "type": "string",
                             "description": "The new code content to write to the file",
-                        }
+                        },
                     },
                     "required": [
                         "target_file_path",
@@ -115,7 +115,7 @@ class IDEAgentTools:
                                     "description": "Paths to search in",
                                 },
                             },
-                        }
+                        },
                     },
                     "required": ["query", "replacement"],
                 },
@@ -133,7 +133,7 @@ class IDEAgentTools:
                         "is_background": {
                             "type": "boolean",
                             "description": "Whether to run the command in the background",
-                        }
+                        },
                     },
                     "required": ["cmd", "is_background"],
                 },
@@ -151,7 +151,7 @@ class IDEAgentTools:
                         "recursive": {
                             "type": "boolean",
                             "description": "Whether to list subdirectories recursively",
-                        }
+                        },
                     },
                     "required": [],
                 },
@@ -205,7 +205,7 @@ class IDEAgentTools:
                         "exclude_pattern": {
                             "type": "string",
                             "description": "The pattern to exclude in the search",
-                        }
+                        },
                     },
                     "required": ["query"],
                 },
@@ -223,7 +223,7 @@ class IDEAgentTools:
                     },
                     "required": ["summary"],
                 },
-            }
+            },
         ]
 
     async def call_tool(
@@ -253,9 +253,11 @@ class IDEAgentTools:
         if tool_name in directory_search_tools and codebase_path:
             # Set default working directory for directory/search operations
             tool_input["default_path"] = codebase_path
-        
+
         if tool_name == "exit_tool":
-            tool_input["summary"] = os.path.join(codebase_path, "scratchpads/global_scratchpad.txt")
+            tool_input["summary"] = os.path.join(
+                codebase_path, "scratchpads/global_scratchpad.txt"
+            )
 
         try:
             endpoint_map = {
@@ -320,15 +322,14 @@ class IDEAgentTools:
             return {
                 "cmd": tool_input.get("cmd"),
                 "is_background": tool_input.get("is_background"),
-                "default_path": tool_input.get("default_path")
+                "default_path": tool_input.get("default_path"),
             }
         elif tool_name == "web_search":
             return {
                 "search_query": tool_input.get("query"),
             }
         elif tool_name == "code_base_search":
-            return {
-                "search_query": tool_input.get("query")            }
+            return {"search_query": tool_input.get("query")}
         elif tool_name == "grep_search":
             return {
                 "query": tool_input.get("query"),

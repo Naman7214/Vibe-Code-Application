@@ -119,10 +119,7 @@ class AnthropicService:
             # Add system prompt with caching if provided
             if system_prompt:
                 stream_params["system"] = [
-                    {
-                        "type": "text",
-                        "text": system_prompt
-                        }
+                    {"type": "text", "text": system_prompt}
                 ]
 
             # Add tools if provided

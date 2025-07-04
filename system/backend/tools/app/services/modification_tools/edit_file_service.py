@@ -32,9 +32,7 @@ class EditFileService:
             pool=30.0,
         )
 
-    async def edit_file(
-        self, target_file_path: str, code_snippet: str
-    ):
+    async def edit_file(self, target_file_path: str, code_snippet: str):
         """
         Edit a file by applying code changes using the Relace API.
         Creates the file and parent directories if they don't exist.
