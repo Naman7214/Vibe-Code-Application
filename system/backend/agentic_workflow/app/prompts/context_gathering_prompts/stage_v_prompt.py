@@ -182,7 +182,7 @@ Make sure to add the proper escape characters for the new lines and other specia
             
             "mobile_interaction_design": "Internal Mobile Navigation Strategy: [How mobile users navigate within this screen using touch interactions.]\n\nMobile Transition Patterns: [How mobile users enter and exit this screen with appropriate animations and gestures.]\n\nMobile State Management: [Screen-level state coordination and lifecycle management.]\n\nCross-Device Behavior: [Navigation adaptations across different mobile screen sizes and orientations.]\n\nMobile Accessibility Considerations: [Inclusive design requirements for mobile screen navigation including touch targets and screen readers.]\n\nFlutter Navigation Implementation: [Specific Flutter routing patterns needed for this mobile screen, including Navigator.push(), route parameters, and state passing between screens with mobile optimizations.]",
             
-            "platform_adaptivity": "Material Design Implementation: [How this screen's navigation follows Material Design patterns for Android.]\n\nCupertino Implementation: [How this screen's navigation follows Cupertino patterns for iOS.]\n\nPlatform Detection: [How the screen adapts its navigation behavior based on the platform.]\n\nCross-Platform Consistency: [Elements that remain consistent across both platforms while respecting platform conventions.]"
+            "platform_adaptivity": "Material Design Implementation: [How this screen's navigation follows Material Design patterns.]\n\nCupertino Implementation: [How this screen's navigation follows Cupertino patterns.]\n\nPlatform Detection: [How the screen adapts its navigation behavior based on the platform.]\n\nCross-Platform Consistency: [Elements that remain consistent across both platforms.]"
         }
     }
 }
@@ -194,8 +194,7 @@ Generate organized, professional mobile navigation descriptions with:
 1. Your pure focus is on the flutter app, Exclude out web, desktop, or non Flutter concerns
 2. make sure to use smooth transitions and offline capabilities
 3. Only suggest mobile navigation systems that work with mock or static data. Exclude authentication, role-based menus, live API data, or session management. Focus on mobile UI widgets that demonstrate navigation patterns, visual states, and touch interactions using mock data only.
-4. Use swipe for back and forward navigation
-Implement pull to refresh where needed
+4. Use swipe for back and forward navigation, implement pull to refresh where needed
 5. **Clear Mobile Section Headings**: Use consistent formatting like "Mobile Screen Purpose Analysis:", "Mobile Navigation Patterns:"
 6. **Concise Mobile Explanations**: Focused, specific guidance for mobile navigation without repetitive verbose text
 7. **Strategic Mobile Justification**: Explain WHY mobile navigation decisions were made considering platform conventions

@@ -163,7 +163,7 @@ You will receive a comprehensive JSON context object containing:
 
 <FLUTTER_DATA_STRUCTURE_REQUIREMENTS>
 - ALL widget parameters must specify initial state with proper Flutter data types
-- ALL List parameters must be defined as Lists ([]) with proper mock data structures
+- Limit mock data arrays to 2-3 representative examples per widget
 - ALL Map parameters must specify complete object schemas with all required properties
 - ALL scalar parameters (String, int, double, bool) must have explicit default values
 - Consider StatefulWidget vs StatelessWidget based on data management needs
@@ -178,7 +178,7 @@ You will receive a comprehensive JSON context object containing:
 - Ensure mock data structures exactly match widget parameter expectations
 - Include validation rules for form inputs and data transformation requirements
 - Document required vs optional parameters with clear default value specifications
-- Consider platform-specific parameter variations (Material vs Cupertino)
+- Platform adaptivity follows unified Material 3 + Cupertino strategy from design system
 </WIDGET_PARAMETER_SAFETY_SPECIFICATIONS>
 
 <NATURAL_LANGUAGE_DESCRIPTIONS>
@@ -197,13 +197,13 @@ Each mobile screen specification must comprehensively define its purpose within 
 
 <WIDGET_SPECIFICATION_REQUIREMENTS>
 - For each custom widget, specify exact parameter interfaces with Flutter data types and default values
-- Include mock data that exactly matches the expected parameter structure for mobile context
+- Limit mock data to 2-3 representative examples that match the expected parameter structure
 - Define form field initial states with proper Flutter TextEditingController handling
-- Specify List parameters with realistic mobile-appropriate mock data arrays
+- Specify List parameters with concise mobile-appropriate mock data arrays
 - Document widget size/variant options as explicit enum values optimized for mobile screens
 - Ensure all Map parameters include complete property definitions with proper mobile data nesting
 - Consider StatefulWidget state management requirements and lifecycle methods
-- Account for platform-adaptive behavior (Material Design vs Cupertino)
+- Platform adaptivity references the unified Material 3 + Cupertino strategy
 - Maintain Mobile Grid Systems with flexible layouts for various screen sizes
 </WIDGET_SPECIFICATION_REQUIREMENTS>
 
@@ -225,10 +225,10 @@ Generate a JSON object where each mobile screen name is a top-level key containi
 
 2. **Flexible structured mobile context**: Any additional keys and nested objects needed to fully specify the mobile screen implementation, such as:
     - `widgets`: Custom widget specifications and usage for mobile
-    - `content`: Mock data and mobile-optimized content requirements
+    - `content`: Mock data and mobile-optimized content requirements (limit to 2-3 examples per section)
     - `interactions`: Mobile user flows and touch-based interactive behaviors
     - `responsive`: Mobile device-specific considerations and orientations
-    - `platform_adaptivity`: Material Design vs Cupertino considerations
+    - `platform_adaptivity`: References unified Material 3 + Cupertino strategy
     - Any other keys needed for complete mobile implementation context
 
 The structure should be flexible and adapted to each mobile screen's specific needs while maintaining consistency in mobile UX quality.

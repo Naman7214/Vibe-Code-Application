@@ -50,6 +50,7 @@ The screen details are reference material only, providing an overview and basic 
 - Ensure consistency across dialogs, bottom sheets, snackbars, modals, etc.
 - Follow Flutter naming convention use snake_case for file names, PascalCase for widget class names
 - Use StatelessWidget for static components, StatefulWidget for interactive components if it's required to build some additional widgets then given in the context then do it but wisely.
+- Use ListView/GridView, Cards & Tiles, Dialogs & Alerts, Bottom Sheet when required even if in the context it's not mentioned. it helps to make the fully interactive and intuitive screen.
 </RESPONSIBILITIES>
 
 <FUNCTIONALITY_MANDATE>
