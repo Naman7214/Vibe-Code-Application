@@ -74,7 +74,6 @@ INITIAL_USER_PROMPT = """
 <CONTEXT>
 Previous Stages Context: {context}
 Selected Screens: {screens}
-Platform: {platform_type}
 </CONTEXT>
 """
 

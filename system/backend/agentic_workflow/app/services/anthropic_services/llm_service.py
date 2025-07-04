@@ -21,7 +21,7 @@ class JsonResponseError(Exception):
 
 
 class AnthropicService:
-    def __init__(self):
+    def __init__(self, llm_usage_repo: LLMUsageRepository = Depends()):
         """
         Initialize the Anthropic service
 
@@ -39,7 +39,7 @@ class AnthropicService:
         self.openai_model = settings.OPENAI_DEFAULT_MODEL
         self.default_max_tokens = 55555
         self.default_temperature = 0.5
-        self.llm_usage_repo = llm_usage_repo = LLMUsageRepository()
+        self.llm_usage_repo = llm_usage_repo
 
         self.timeout = httpx.Timeout(
             connect=60.0,
@@ -107,9 +107,7 @@ class AnthropicService:
             payload["system"] = [
                 {
                     "type": "text",
-                    "text": system_prompt,
-                    "cache_control": {"type": "ephemeral", "ttl": "5m"},
-                }
+                    "text": system_prompt                }
             ]
 
         if web_search:
@@ -188,12 +186,13 @@ class AnthropicService:
                     usage_data = response_data["usage"]
                     loggers["anthropic"].info(f"Anthropic usage: {usage_data}")
 
-                print(collected_text)
-                print("--------------------------------")
-                print(usage_data)
-                print("--------------------------------")
-                await self.llm_usage_repo.add_llm_usage(usage_data)
-
+                try:
+                    await self.llm_usage_repo.add_llm_usage(usage_data)
+                    print(f"✅ Usage data saved to database successfully")
+                except Exception as e:
+                    print(f"❌ Failed to save usage data to database: {str(e)}")
+                    loggers[provider].error(f"Database insertion failed: {str(e)}")
+                
                 return collected_text
 
         except httpx.RequestError as exc:
@@ -228,7 +227,7 @@ class AnthropicService:
 
         # Prepare the stream parameters
         stream_params = {
-            "temperature": 1,
+            "temperature": 0.25,
             "model": self.default_model,
             "max_tokens": self.default_max_tokens,
             "messages": [{"role": "user", "content": prompt}],
@@ -239,9 +238,7 @@ class AnthropicService:
             stream_params["system"] = [
                 {
                     "type": "text",
-                    "text": system_prompt,
-                    "cache_control": {"type": "ephemeral"},
-                }
+                    "text": system_prompt                }
             ]
 
         async with client.messages.stream(**stream_params) as stream:

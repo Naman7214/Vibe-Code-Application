@@ -48,6 +48,7 @@ Make sure to use proper escape characters for the new lines and other special ch
 {
     "domain": "clear domain identifier (e.g., 'fintech', 'healthtech', 'edtech')",
     "industry_patterns": ["3-5 proven patterns specific to this domain with short description"],
+    "project_context": "a detailed description of the project context",
     "screens": {
         "name_of_screen_1": "concise description focusing on core purpose",
         "name_of_screen_2": "concise description focusing on core purpose",
@@ -60,6 +61,18 @@ Make sure to use proper escape characters for the new lines and other special ch
     }
 }
 </OUTPUT>
+
+<PROJECT_CONTEXT_REQUIREMENTS>
+Generate a detailed description of the project context based on the following points:
+- Provide a concise 1-2 sentence description of what type of application this is
+- Mention key distinguishing characteristics
+- Core purpose of the application, fundamental problem it solves, primary value proposition for users
+- List of features and capabilities that are unique to this application (include both feature and supporting functionalities)
+- Cover user management, data handling, UI/UX features, integrations, and technical capabilities
+- Be specific about functionality
+- Consider primary user demographics with age ranges and their needs
+- General localisation and internationalisation requirements
+</PROJECT_CONTEXT_REQUIREMENTS>
 </ANALYSIS_FRAMEWORK>
 
 <QUALITY_CHECKLIST>
@@ -72,6 +85,8 @@ Before finalizing:
 - Every screen must enable users to complete a full task/goal?
 - Can we reduce back-and-forth navigation?
 </QUALITY_CHECKLIST>
+
+Don't hold back. Give it your all.
 """
 
 REACT_USER_PROMPT = """

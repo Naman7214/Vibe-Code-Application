@@ -16,6 +16,7 @@ Analyze the provided domain context and selected screens to generate actionable 
 
 <INSTRUCTIONS>
 1. For each selected screen, analyze its primary purpose and role in the user journey
+2. Always think from user centric perspective.
 2. Determine data requirements for each screen (what data it needs to display/collect)
 3. Map interaction patterns and user actions available on each screen
 4. Consider responsive design needs and mobile-first approach
@@ -39,7 +40,7 @@ Make sure to use proper escape characters for the new lines and other special ch
 <OUTPUT>
 {
     "screen_name": {
-        "primary_purpose": "clear purpose statement with deeper reasoning (about 5-6 sentences)",
+        "primary_purpose": "a detailed purpose statement of the screen (about 5-6 sentences)",
         "data_needs": {
             "display_data": ["data_type1", "data_type2"],
             "user_input": ["input_type1", "input_type2"],

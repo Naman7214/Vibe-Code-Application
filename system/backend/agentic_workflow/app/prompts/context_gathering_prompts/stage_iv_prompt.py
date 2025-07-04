@@ -78,13 +78,13 @@ EXAMPLE OUTPUT STRUCTURE:
 <OUTPUT>
 {
   "screen_name": {
-    "description": "natural language description of the screen",
+    "description": "natural language description of the screen (detailed one)",
     "components": {
       "component_name": {
         "type": "global|screen_specific|hybrid"
         "global_component_base": "global_component_base_name" (if global),
         "customizations": "specific modifications needed",
-        "functionality": "specific functionality of the component"
+        "description": "detailed description of the component, along with its functionality and placement"
         "interactions": "interaction pattern of the component",
       },
       "component_name": {
@@ -92,7 +92,7 @@ EXAMPLE OUTPUT STRUCTURE:
         "screen_specific_component": "CourseCard" (if screen specific),
         "layout": "layout requirement of the component",
         "interactions": "interaction pattern of the component",
-        "functionality": "specific functionality of the component"
+        "description": "detailed description of the component, along with its functionality and placement"
       }
     },
     "content": {
