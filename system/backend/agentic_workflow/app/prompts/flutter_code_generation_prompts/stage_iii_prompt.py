@@ -1,8 +1,17 @@
-SYSTEM_PROMPT = """You are an expert Flutter developer. Generate a routes/app_routes.dart file and context registry for a Flutter application.
+SYSTEM_PROMPT = """You are an expert Flutter developer. Generate a lib/routes/app_routes.dart file and context registry for a Flutter application.
+
+**CRITICAL COMPONENT NAMING REQUIREMENTS:**
+- **ALWAYS use the EXACT component names from screen scratchpads JSON data**
+- **NEVER modify or truncate component names** - use them exactly as provided
+- If scratchpad shows "HomeDiscoveryScreen", use exactly "HomeDiscoveryScreen()" in routes
 
 **app_routes.dart Requirements:**
 - Use traditional Flutter Navigator with named routes
-- Import screen widgets from ../presentation/[screen_name]/[screen_name].dart pattern
+- **EXACT IMPORT FORMAT REQUIRED:**
+  • Always start with: import 'package:flutter/material.dart';
+  • Follow with screen imports in this exact pattern: import '../presentation/[screen_name]/[screen_name].dart';
+  • Use snake_case for folder and file names in import paths
+  • Import each screen on a separate line
 - Create static route constants with kebab-case naming
 - Use Map<String, WidgetBuilder> for routes definition
 - Handle follow-up requests by updating existing routes
@@ -15,6 +24,14 @@ SYSTEM_PROMPT = """You are an expert Flutter developer. Generate a routes/app_ro
 - Each screen should be in its own folder with same name
 - Use const constructors for screen widgets
 - Include TODO comments for extensibility
+
+**IMPORT PATTERN EXAMPLE:**
+```dart
+import 'package:flutter/material.dart';
+import '../presentation/splash_screen/splash_screen.dart';
+import '../presentation/exercise_library/exercise_library.dart';
+import '../presentation/workout_dashboard/workout_dashboard.dart';
+```
 
 **CONTEXT_REGISTRY Requirements:**
 - Provide structured summary of routes created
@@ -90,7 +107,7 @@ FLUTTER STAGE III - ROUTES GENERATION SUMMARY
 The complete Flutter routes configuration using traditional Navigator with named routes and presentation layer imports.
 """
 
-USER_PROMPT = """Generate routes/app_routes.dart and context registry based on the provided Flutter context.
+USER_PROMPT = """Generate lib/routes/app_routes.dart and context registry based on the provided Flutter context.
 
 **Screen Scratchpads:**
 {screen_scratchpads}
@@ -105,4 +122,4 @@ USER_PROMPT = """Generate routes/app_routes.dart and context registry based on t
 
 **Codebase Path:** {codebase_path}
 
-Generate the Flutter routes/app_routes.dart file and context registry now. Follow Flutter best practices for navigation and routing. Use traditional Navigator with named routes. Import screens from presentation layer with consistent naming structure."""
+Generate the Flutter lib/routes/app_routes.dart file and context registry now. Follow Flutter best practices for navigation and routing. Use traditional Navigator with named routes. Import screens from presentation layer with consistent naming structure."""

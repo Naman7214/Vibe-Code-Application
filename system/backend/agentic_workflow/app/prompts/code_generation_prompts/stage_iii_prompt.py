@@ -52,9 +52,9 @@ The screen details are reference material only, providing an overview and basic 
 - Check consistent padding across components
 - Validate clear heading hierarchy
 - Ensure CTAs are visible (size, contrast)
-- Maintain UI consistency throughout the screen
-- Maintain proper spacing between elements
-- Ensure proper layout, spacing and alignment of the overlays and modals through out the screen
+- Maintain UI consistency
+- Check spacing between elements
+- Create responsive UI for desktop, tablet, and mobile. Prioritize and optimize for desktop as the primary design target.
 </RESPONSIBILITIES>
 
 <FUNCTIONALITY_MANDATE>
@@ -116,7 +116,74 @@ Build a full-fledged web application frontend, not a static demo. Every button m
 <COMPONENT_INTEGRATION>
 - Use global components from the component registry when available, importing them using exact paths from global_scratchpad.
 - Pass required props as defined in component specifications.
+
+<IMPORT_PATH_STANDARDS>
+- Global components in index.jsx: `import Header from '../../components/ui/Header';`
+- Wrapper components in index.jsx: `import Icon from '../../components/AppIcon';`
+- Screen-specific components in index.jsx: `import HeroSection from './components/HeroSection';`
+- Wrapper components in screen-specific components: `import Icon from '../../../components/AppIcon';`
+- Global components in screen-specific components: `import Icon from '../../../components/ui/Header';`
+- Wrapper components in Routes.jsx: `import Icon from './components/AppIcon';`
+- ENFORCE consistent relative import patterns across all generated files
+- NEVER mix absolute and relative import styles in the same file
+</IMPORT_PATH_STANDARDS>
 </COMPONENT_INTEGRATION>
+
+<LAYOUT_ARCHITECTURE_REQUIREMENTS>
+- GENERATE full-width layouts that adapt to any screen size
+- USE responsive padding for content spacing
+- IMPLEMENT edge-to-edge layouts with proper content spacing
+- ENSURE grids expand to fill available horizontal space when required
+- PRIORITIZE screen real estate utilization over fixed-width containers
+</LAYOUT_ARCHITECTURE_REQUIREMENTS>
+
+<LAYOUT_CONSISTENCY_AND_STANDARDS>
+
+<GRID_SYSTEM_IMPLEMENTATION>
+- Implement a standardized 12-column CSS Grid layout with uniform gutters (16px or 24px) across all components, ensuring compatibility with Flexbox alignment. Avoid mixing grid systems within the interface.- All grid items must align perfectly to the baseline grid. Use items-start, items-center, or items-end consistently within each grid container.
+- Align all grid items to the baseline grid using items-start, items-center, or items-end consistently within each grid container.
+- Use systematic gap values (gap-4, gap-6, gap-8) aligned with Tailwind’s spacing scale, applying the same gap to related components for consistency.
+</GRID_SYSTEM_IMPLEMENTATION>
+
+<COMPONENT_SIZING_AND_SPACING>
+- Ensure components of the same type (cards, buttons, form inputs) have identical heights within the same context, using standardized height classes (h-12, h-16, h-20) and baseline grid alignment.
+- Apply consistent spacing patterns using Tailwind’s 4px scale (p-4, p-6, p-8, m-4, m-8), ensuring responsive breakpoints for scalability.
+- All content containers should use the same padding values and maintain consistent internal spacing.
+- Use optimized line heights (leading-relaxed, leading-normal) and text spacing (space-y-4, space-y-6) for readability across content types.
+</COMPONENT_SIZING_AND_SPACING>
+
+<OVERLAY_AND_MODAL_LAYOUT_RULES>
+- Center all overlays and modals using flex items-center justify-center on the backdrop container, ensuring z-index layering for stacking context.
+- Use standardized modal widths (max-w-md, max-w-lg, max-w-xl) with consistent padding (p-6, p-8) and accessibility-compliant focus states.
+- Apply uniform backdrop styling (bg-black/50, backdrop-blur-sm) across overlays, ensuring WCAG 2.1 AA contrast ratios.
+- Follow consistent internal layout patterns - header area, content area with proper spacing, and footer area with standardized button layouts.
+- Ensure all overlay and modal content areas are scrollable when content exceeds viewport height by using overflow-y-auto and max-h-[80vh] or similar height constraints to prevent content overflow and maintain accessibility.
+</OVERLAY_AND_MODAL_LAYOUT_RULES>
+
+<TYPOGRAPHY_AND_TEXT_STANDARDS>
+- Maintain consistent text alignment within similar components: left-align body text, center-align headlines when appropriate, and right-align numerical data for readability.
+- Apply consistent spacing between text elements using space-y-2, space-y-4, space-y-6 patterns, adhering to the typographic scale.
+</TYPOGRAPHY_AND_TEXT_STANDARDS>
+
+<COMPONENT_ALIGNMENT_AND_STRUCTURE>
+- Use consistent Flexbox properties (flex items-center justify-between, flex flex-col space-y-4) and CSS containment for alignment patterns across component types.
+- All card components must follow identical internal structure patterns - consistent padding, header/content/footer sections, and spacing between elements.
+- Maintain uniform button sizing (px-4 py-2, px-6 py-3) and spacing patterns. Button groups should use consistent gaps and alignment.
+</COMPONENT_ALIGNMENT_AND_STRUCTURE>
+
+<CRITICAL_QUALITY_CONTROLS>
+- Before implementing any grid or flex layout, verify that all child elements have compatible sizing. Use min-h-0 or flex-1 to prevent overflow issues.
+- Ensure nested components maintain the same spacing rhythm as their parent containers. Child components should not break the established grid or spacing patterns.
+</CRITICAL_QUALITY_CONTROLS>
+
+</LAYOUT_CONSISTENCY_AND_STANDARDS>
+
+<SCREEN_UTILIZATION_PATTERNS>
+- GRID layouts: Implement responsive columns that scale with screen width when required.
+- PADDING strategy: Use responsive horizontal padding for content breathing room
+- FULL-WIDTH approach: Content should flow naturally across the entire viewport
+- AVOID unnecessary centering that creates unused screen space
+</SCREEN_UTILIZATION_PATTERNS>
 
 <DATA_STRUCTURE_CONSISTENCY>
 - ENSURE prop data types match exactly between component definitions and usage
@@ -124,6 +191,10 @@ Build a full-fledged web application frontend, not a static demo. Every button m
 - MATCH mock data structures to component prop interfaces exactly (no type mismatches)
 - USE empty strings ('') for form inputs, arrays ([]) for lists, complete objects ({{}}) with all properties
 - PREVENT null/undefined prop values by providing proper defaults in all component calls
+- ENSURE all mock data matches component prop type expectations
+- VALIDATE numeric fields are numbers, not strings: {{ deliveryFee: 2.99 }} not {{ deliveryFee: "2.99" }}
+- PROVIDE complete object structures with all required fields
+- TEST data flow from parent to child components for type consistency
 </DATA_STRUCTURE_CONSISTENCY>
 
 <PROP_INTERFACE_VALIDATION>
@@ -265,8 +336,8 @@ pages/screen_name/
 </MAP_INTEGRATION>
 
 <NOTE>
-You are not supposed to hold back on the implementation of the screen. Don't make up any screen component by yourself.
-</NOTE>
+You are not supposed to hold back on the implementation of the screen.
+</NOTE>x
 </IMPLEMENTATION_REQUIREMENTS>
 
 <OUTPUT_FORMAT>
@@ -313,6 +384,7 @@ You MUST return your response in this EXACT XML format with NO additional text, 
 </CODE_SNIPPET>
 </FILE>
 </FILES>
+</OUTPUT_FORMAT>
 
 
 <SCRATCHPAD_REQUIREMENTS>
@@ -367,6 +439,8 @@ const count = Array.isArray(notifications)
     ? notifications.filter(n => !n.read).length 
     : 0;
 ```
+
+
 </ERROR_PREVENTION_EXAMPLES>
 
 <CODE_GENERATION_CHECKLIST>

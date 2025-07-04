@@ -159,12 +159,18 @@ class AIReactBoilerplateSetup:
         }
 
         package_data["devDependencies"] = {
+            "@eslint/js": "^9.9.0",
             "@tailwindcss/aspect-ratio": "^0.4.2",
             "@tailwindcss/container-queries": "^0.1.1",
             "@tailwindcss/line-clamp": "^0.1.0",
             "@tailwindcss/typography": "^0.5.16",
             "@vitejs/plugin-react": "4.3.4",
             "autoprefixer": "10.4.2",
+            "eslint": "^9.9.0",
+            "eslint-plugin-react": "^7.35.0",
+            "eslint-plugin-react-hooks": "^5.1.0-rc.0",
+            "eslint-plugin-react-refresh": "^0.4.9",
+            "globals": "^15.9.0",
             "postcss": "8.4.8",
             "tailwindcss": "3.4.6",
             "vite": "5.0.0",
@@ -213,6 +219,45 @@ export default defineConfig({
 }
 """
 
+        # eslint.config.js - ESLint v9 flat config
+        eslint_config = """import js from '@eslint/js'
+import globals from 'globals'
+import reactHooks from 'eslint-plugin-react-hooks'
+import reactRefresh from 'eslint-plugin-react-refresh'
+
+export default [
+  { ignores: ['dist'] },
+  {
+    files: ['**/*.{js,jsx}'],
+    ...js.configs.recommended,
+    languageOptions: {
+      ecmaVersion: 2020,
+      globals: globals.browser,
+      parserOptions: {
+        ecmaVersion: 'latest',
+        ecmaFeatures: { jsx: true },
+        sourceType: 'module',
+      },
+    },
+    plugins: {
+      'react-hooks': reactHooks,
+      'react-refresh': reactRefresh,
+    },
+    rules: {
+      ...reactHooks.configs.recommended.rules,
+      'react-refresh/only-export-components': [
+        'warn',
+        { allowConstantExport: true },
+      ],
+      'no-unused-vars': ['error', { 
+        varsIgnorePattern: '^[A-Z_]',
+        argsIgnorePattern: '^_'
+      }],
+    },
+  },
+]
+"""
+
         # jsconfig.json for better import resolution
         jsconfig = """{
   "compilerOptions": {
@@ -234,6 +279,9 @@ export default defineConfig({
 
         with open(self.base_path / "postcss.config.js", "w") as f:
             f.write(postcss_config)
+
+        with open(self.base_path / "eslint.config.js", "w") as f:
+            f.write(eslint_config)
 
         with open(self.base_path / "jsconfig.json", "w") as f:
             f.write(jsconfig)

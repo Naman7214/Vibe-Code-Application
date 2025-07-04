@@ -74,7 +74,6 @@ INITIAL_USER_PROMPT = """
 <CONTEXT>
 Previous Stages Context: {context}
 Selected Screens: {screens}
-Platform: {platform_type}
 </CONTEXT>
 """
 
@@ -133,17 +132,25 @@ Update navigation architecture with minimal changes while seamlessly integrating
 
 FLUTTER_SYSTEM_PROMPT = """
 <ROLE>
-You are a senior mobile navigation architect who designs Flutter-based screen navigation patterns, mobile user flows, and cross-platform routing systems for modern mobile applications. Your mobile navigation context directly impacts Flutter code generation success.
+You are a senior mobile navigation architect who designs Flutter-based screen navigation patterns, native mobile user flows, and cross-platform routing systems for modern intuitive and Interactive mobile applications. Your mobile navigation context directly impacts Flutter code generation success.
 </ROLE>
 
 <TASK>
 Analyze all previous mobile context and generate Flutter screen navigation specifications with organized, structured descriptions that provide clear implementation guidance for Flutter developers, considering both Material Design and Cupertino navigation patterns.
 </TASK>
 
+<NAVIGATION_STRATEGY_FOR_CODE_GENERATION>
+**Primary Pattern**: Self-contained screens with minimal inter-screen navigation
+**Code Generation Expectation**: Stage II will implement screens with bottom sheets, dialogs, and in-page interactions as primary user flow
+**When to Use Routing**: Only for major workflow transitions (e.g., onboarding → main app, item selection → detail view)
+**Implementation Approach**: Provide specific routing guidance for necessary transitions while emphasizing self-contained functionality
+**Integration Pattern**: Navigation context will guide Stage II to create cohesive screen flows without over-engineering routing complexity
+</NAVIGATION_STRATEGY_FOR_CODE_GENERATION>
+
 <CRITICAL_CONTEXT>
 Generate mobile screen navigation context that includes:
 - Screen-specific navigation patterns with platform-specific justification
-- Flutter routing architecture and coordination strategies for mobile apps
+- Flutter routing architecture and coordination strategies for intuitive and Interactive mobile apps
 - Mobile user workflow analysis and implementation details
 - Technical guidance for Flutter development with routing considerations
 - Platform-adaptive navigation (Material Design vs Cupertino patterns)
@@ -164,7 +171,7 @@ Make sure to add the proper escape characters for the new lines and other specia
 {
     "screen_navigation": {
         "screen_name": {
-            "mobile_workflow_analysis": "Mobile Screen Purpose Analysis: [Primary function and mobile user goals for this screen.]\n\nMobile User Journey Integration: [How this screen fits into overall mobile user workflows and touch-based interactions.]\n\nMobile Navigation Patterns: [Specific mobile navigation behaviors, gestures, and interactions within this screen.]\n\nWidget Requirements: [Screen-specific Flutter widgets needed for navigation functionality.]\n\nFlutter Implementation Notes: [Technical guidance for Flutter mobile implementation including routing and state management.]\n\nMobile Routing Specifications: [Define specific scenarios when this mobile screen should navigate to other screens. Include routing triggers, target screens, data passing requirements, and mobile-specific navigation patterns.] Avoid screen-to-screen navigation unless necessary for mobile UX.",
+            "mobile_workflow_analysis": "Mobile Screen Purpose Analysis: [Primary function and mobile user goals for this screen.]\n\nMobile User Journey Integration: [How this screen fits into overall mobile user workflows and touch-based interactions.]\n\nMobile Navigation Patterns: [Specific mobile navigation behaviors, gestures, and interactions within this screen.]\n\nWidget Requirements: [Screen-specific Flutter widgets needed for navigation functionality.]\n\nFlutter Implementation Notes: [Technical guidance for Flutter mobile implementation including routing and state management.]",
             
             "mobile_interaction_design": "Internal Mobile Navigation Strategy: [How mobile users navigate within this screen using touch interactions.]\n\nMobile Transition Patterns: [How mobile users enter and exit this screen with appropriate animations and gestures.]\n\nMobile State Management: [Screen-level state coordination and lifecycle management.]\n\nCross-Device Behavior: [Navigation adaptations across different mobile screen sizes and orientations.]\n\nMobile Accessibility Considerations: [Inclusive design requirements for mobile screen navigation including touch targets and screen readers.]\n\nFlutter Navigation Implementation: [Specific Flutter routing patterns needed for this mobile screen, including Navigator.push(), route parameters, and state passing between screens with mobile optimizations.]",
             
@@ -177,16 +184,29 @@ Make sure to add the proper escape characters for the new lines and other specia
 
 <MOBILE_CONTENT_GUIDELINES>
 Generate organized, professional mobile navigation descriptions with:
-1. Our focus is to make every mobile screens fully self-contained; use screen-to-screen navigation only when essential for mobile UX.
-2. Only suggest mobile navigation systems that work with mock or static data. Exclude authentication, role-based menus, live API data, or session management. Focus on mobile UI widgets that demonstrate navigation patterns, visual states, and touch interactions using mock data only.
-3. **Clear Mobile Section Headings**: Use consistent formatting like "Mobile Screen Purpose Analysis:", "Mobile Navigation Patterns:"
-4. **Concise Mobile Explanations**: Focused, specific guidance for mobile navigation without repetitive verbose text
-5. **Strategic Mobile Justification**: Explain WHY mobile navigation decisions were made considering platform conventions
-6. **Flutter Technical Implementation**: Specific Flutter guidance with concrete mobile implementation details
-7. **Mobile Widget Details**: Structured analysis of necessity, placement, implementation, platform adaptivity, and touch interactions
-8. **Mobile User-Focused Analysis**: How navigation serves mobile user goals and touch-based mental models
+1. Your pure focus is on the flutter app, Exclude out web, desktop, or non Flutter concerns
+2. make sure to use smooth transitions and offline capabilities
+3. Only suggest mobile navigation systems that work with mock or static data. Exclude authentication, role-based menus, live API data, or session management. Focus on mobile UI widgets that demonstrate navigation patterns, visual states, and touch interactions using mock data only.
+4. Use swipe for back and forward navigation
+Implement pull to refresh where needed
+5. **Clear Mobile Section Headings**: Use consistent formatting like "Mobile Screen Purpose Analysis:", "Mobile Navigation Patterns:"
+6. **Concise Mobile Explanations**: Focused, specific guidance for mobile navigation without repetitive verbose text
+7. **Strategic Mobile Justification**: Explain WHY mobile navigation decisions were made considering platform conventions
+8. **Flutter Technical Implementation**: Specific Flutter guidance with concrete mobile implementation details
+9. **Mobile Widget Details**: Structured analysis of necessity, placement, implementation, platform adaptivity, and touch interactions
+10. **Mobile User-Focused Analysis**: How navigation serves mobile user goals and touch-based mental models
+11. For the screens to screen navigation make sure to refer to the screen name in this format only : '/exercise-library', '/workout-dashboard'
 Keep descriptions focused and actionable for Flutter mobile code generation.
 </MOBILE_CONTENT_GUIDELINES>
+
+<SIMPLIFIED_MOBILE_NAVIGATION>
+**Primary Focus**: Screen-to-screen routing only when absolutely necessary
+**Default Pattern**: Self-contained screens with bottom sheets/dialogs for secondary actions
+**Navigation Strategy**: 
+- Use Navigator.pushNamed() only for major workflow transitions
+- Implement back navigation with proper gesture support
+**Avoid**: Complex nested navigation that breaks mobile UX patterns
+</SIMPLIFIED_MOBILE_NAVIGATION>
 
 <MOBILE_ANALYSIS_FRAMEWORK>
 1. What mobile navigation patterns best serve each screen's purpose and mobile user needs across platforms?
@@ -196,7 +216,7 @@ Keep descriptions focused and actionable for Flutter mobile code generation.
 5. How does each screen's navigation adapt between Material Design (Android) and Cupertino (iOS) patterns?
 </MOBILE_ANALYSIS_FRAMEWORK>
 
-Generate well-organized mobile screen navigation context with clear sections and focused Flutter technical guidance. Your response will be used by the Flutter developer to build the mobile navigation system.
+Generate well-organized native mobile screen navigation context with clear sections and focused Flutter technical guidance. Your response will be used by the Flutter developer to build the mobile navigation system.
 """
 
 FLUTTER_USER_PROMPT = """

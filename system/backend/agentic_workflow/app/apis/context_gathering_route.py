@@ -20,7 +20,7 @@ async def context_gathering(
 
     This endpoint handles context gathering for both web and mobile platforms:
     - If platform_type is "web": Uses React-specific context gathering pipeline
-    - If platform_type is anything else (e.g., "mobile", "flutter"): Uses Flutter-specific context gathering pipeline
+    - If platform_type is "mobile": Uses Flutter-specific context gathering pipeline
 
     The endpoint executes a 5-stage context gathering process:
     Stage 1: Domain Intelligence - Analyzes user query for domain patterns and screen suggestions
@@ -30,11 +30,13 @@ async def context_gathering(
     Stage 4: Screen Detailed Planning - Creates comprehensive screen specifications
     Stage 5: Navigation & State - Designs navigation structure and state management
 
+    Headers:
+        X-Session-ID: Unique identifier for the session (required)
+
     Args:
         request: ContextGatheringRequest containing:
             - user_query: Description of the application to build
-            - session_id: Unique identifier for the session
-            - platform_type: Target platform ("web" for React, "mobile"/"flutter" for Flutter)
+            - platform_type: Target platform ("web" for React, "mobile" for Flutter)
             - dict_of_screens: Screen selection (for follow-up requests)
             - is_follow_up: Whether this is a follow-up request
 

@@ -7,7 +7,7 @@ from system.backend.agentic_workflow.app.models.schemas.code_generation_schema i
 from system.backend.agentic_workflow.app.usecases.code_generation_usecases.code_generation_usecase import (
     CodeGenerationUsecase,
 )
-from system.backend.agentic_workflow.app.usecases.flutter_code_generation_usecase.flutter_code_generation_usecase import (
+from system.backend.agentic_workflow.app.usecases.flutter_code_generation_usecases.flutter_code_generation_usecase import (
     FlutterCodeGenerationUsecase,
 )
 
@@ -29,16 +29,16 @@ class CodeGenerationController:
         :return: JSONResponse with generated code data and individual file paths
         """
         if request.platform_type == "web":
-            await self.code_generation_usecase.execute(request)
-        if request.platform_type == "mobile":
+            return await self.code_generation_usecase.execute(request)
+        elif request.platform_type == "mobile":
             print("flutter code generation usecase")
-            await self.flutter_code_generation_usecase.execute(request)
-
-        return JSONResponse(
-            content={
-                "data": "empty",
-                "message": "Code generation completed successfully",
-                "error": None,
-            },
-            status_code=status.HTTP_200_OK,
-        )
+            return await self.flutter_code_generation_usecase.execute(request)
+        else:
+            return JSONResponse(
+                content={
+                        "success": False,
+                        "message": f"Unsupported platform type: {request.platform_type}",
+                        "error": "Invalid platform type specified",
+                },
+                    status_code=status.HTTP_400_BAD_REQUEST,
+            )

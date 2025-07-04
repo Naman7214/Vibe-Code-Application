@@ -107,9 +107,7 @@ class AnthropicService:
             payload["system"] = [
                 {
                     "type": "text",
-                    "text": system_prompt,
-                    "cache_control": {"type": "ephemeral", "ttl": "5m"},
-                }
+                    "text": system_prompt                }
             ]
 
         if web_search:
@@ -188,9 +186,13 @@ class AnthropicService:
                     usage_data = response_data["usage"]
                     loggers["anthropic"].info(f"Anthropic usage: {usage_data}")
 
-                print(collected_text)
-                await self.llm_usage_repo.add_llm_usage(usage_data)
-
+                try:
+                    await self.llm_usage_repo.add_llm_usage(usage_data)
+                    print(f"✅ Usage data saved to database successfully")
+                except Exception as e:
+                    print(f"❌ Failed to save usage data to database: {str(e)}")
+                    loggers[provider].error(f"Database insertion failed: {str(e)}")
+                
                 return collected_text
 
         except httpx.RequestError as exc:
@@ -225,7 +227,7 @@ class AnthropicService:
 
         # Prepare the stream parameters
         stream_params = {
-            "temperature": 1,
+            "temperature": 0.25,
             "model": self.default_model,
             "max_tokens": self.default_max_tokens,
             "messages": [{"role": "user", "content": prompt}],
@@ -236,12 +238,8 @@ class AnthropicService:
             stream_params["system"] = [
                 {
                     "type": "text",
-                    "text": system_prompt,
-                    "cache_control": {"type": "ephemeral"},
-                }
+                    "text": system_prompt                }
             ]
-
-        print(stream_params)
 
         async with client.messages.stream(**stream_params) as stream:
 
@@ -250,9 +248,16 @@ class AnthropicService:
                 # print(text, end="", flush=True)
 
             final_message = await stream.get_final_message()
+            
+            usage_data = {
+                "input_tokens": final_message.usage.input_tokens,
+                "output_tokens": final_message.usage.output_tokens,
+                "cache_creation_input_tokens": final_message.usage.cache_creation_input_tokens,
+                "cache_read_input_tokens": final_message.usage.cache_read_input_tokens
+            }
 
-            loggers["anthropic"].info(f"Anthropic usage: {final_message.usage}")
+            loggers["anthropic"].info(f"Anthropic usage: {usage_data}")
 
-            await self.llm_usage_repo.add_llm_usage(final_message.usage)
+            await self.llm_usage_repo.add_llm_usage(usage_data)
 
         return collected_text

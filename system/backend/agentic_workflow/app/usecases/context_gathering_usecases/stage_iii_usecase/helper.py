@@ -18,6 +18,9 @@ from system.backend.agentic_workflow.app.services.anthropic_services.llm_service
     AnthropicService,
 )
 from system.backend.agentic_workflow.app.utils.parser import parse_model_output
+from system.backend.agentic_workflow.app.utils.session_context import (
+    session_state,
+)
 
 
 class Helper:
@@ -26,21 +29,22 @@ class Helper:
 
     async def run_stage_3_pipeline(self, request: ContextGatheringRequest):
         """
-        Processes the input for Stage 3 to define screen requirements.
+        Processes the input for Stage 3 to define theme strategy and component strategy.
         """
+        # Get session_id from context (set by middleware)
+        session_id = session_state.get()
+        if not session_id:
+            raise ValueError("No session_id available in context")
+
         if request.is_follow_up:
-            result = await self._generate_global_and_screen_components_details(
-                request
-            )
+            result = await self._generate_components_details(request, session_id)
 
             if not result.get("success"):
                 return result
 
         else:
-            global_theme_task = self._global_theme_generation(request)
-            components_task = (
-                self._generate_global_and_screen_components_details(request)
-            )
+            global_theme_task = self._global_theme_generation(request, session_id)
+            components_task = self._generate_components_details(request, session_id)
 
             results = await asyncio.gather(global_theme_task, components_task)
 
@@ -53,7 +57,9 @@ class Helper:
             "message": "Stage 3 pipeline completed successfully",
         }
 
-    async def _global_theme_generation(self, request: ContextGatheringRequest):
+    async def _global_theme_generation(
+        self, request: ContextGatheringRequest, session_id: str
+    ):
         """
         Generates the global theme for the project.
         """
@@ -61,12 +67,12 @@ class Helper:
         print("entered global theme generation")
 
         with open(
-            f"artifacts/{request.session_id}/project_context/stage_i.json", "r"
+            f"artifacts/{session_id}/project_context/stage_i.json", "r"
         ) as f:
             first_stage_output = json.load(f)
 
         with open(
-            f"artifacts/{request.session_id}/project_context/stage_ii.json", "r"
+            f"artifacts/{session_id}/project_context/stage_ii.json", "r"
         ) as f:
             second_stage_output = json.load(f)
 
@@ -83,7 +89,7 @@ class Helper:
         parsed_response = parse_model_output(response)
 
         await self._save_output(
-            request.session_id, parsed_response, "stage_iii_a.json"
+            session_id, parsed_response, "stage_iii_a.json"
         )
 
         return {
@@ -91,15 +97,15 @@ class Helper:
             "message": "Global theme generation completed successfully",
         }
 
-    async def _generate_global_and_screen_components_details(
-        self, request: ContextGatheringRequest
+    async def _generate_components_details(
+        self, request: ContextGatheringRequest, session_id: str
     ):
         """
-        Generates the global and screen components details.
+        Generates the component architecture and screen-specific component details.
         """
 
         with open(
-            f"artifacts/{request.session_id}/project_context/stage_ii.json", "r"
+            f"artifacts/{session_id}/project_context/stage_ii.json", "r"
         ) as f:
             second_stage_output = json.load(f)
 
@@ -114,7 +120,7 @@ class Helper:
             second_stage_output = filtered_output
 
             with open(
-                f"artifacts/{request.session_id}/project_context/stage_iii_b.json",
+                f"artifacts/{session_id}/project_context/stage_iii_b.json",
                 "r",
             ) as f:
                 previous_output = json.load(f)
@@ -132,12 +138,12 @@ class Helper:
         parsed_response = parse_model_output(response)
 
         await self._save_output(
-            request.session_id, parsed_response, "stage_iii_b.json"
+            session_id, parsed_response, "stage_iii_b.json"
         )
 
         return {
             "success": True,
-            "message": "Global and screen components details generation completed successfully",
+            "message": "Components architecture generation completed successfully",
         }
 
     async def _save_output(

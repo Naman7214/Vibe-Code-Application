@@ -42,7 +42,7 @@ Create a global design theme strategy that will serve as the foundation referenc
 Make sure to use proper escape characters for the new lines and other special characters such that it'll not cause any error in the upcoming parsing of the output.
 <OUTPUT>
 {
-    "design_philosophy": "brief statement of overall design approach (about 2-3 sentences)",
+    "design_psychology": "brief statement of overall design approach (about 2-3 sentences)",
     "color_palette": {
         "primary": {"color": "hex_code", "description": "reason behind choosing this color"},
         "secondary": {"color": "hex_code", "description": "reason behind choosing this color"},
@@ -216,7 +216,7 @@ Analyze the screen requirements to identify and categorize components into globa
 
 <INSTRUCTIONS>
 1. Identify components that will be used across multiple screens (global components)
-2. Only suggest components that work with mock or static data. Exclude authentication, role-based menus, live API data, or session management. Focus on UI components that demonstrate navigation patterns, visual states, and interactions using mock data only.
+2. Only suggest components that work with mock or static data. Exclude authentication, role-based menus, live API data, or session management.
 2. Group global components into logical clusters based on their functionality (e.g., "navigation", "ui_elements", "data_display", "forms", "auth", "layout", etc.)
 3. Create a "miscellaneous" cluster for components that don't fit into specific groups
 4. For the global components make sure to give the comprehensive details.
@@ -311,7 +311,7 @@ Create a global mobile design theme strategy that will serve as the foundation r
 <INSTRUCTIONS>
 1. Develop a cohesive color palette that reflects the brand personality, domain, and works well on mobile devices
 2. Select typography hierarchy optimized for mobile readability and various screen sizes
-3. Define the overall visual mood and design philosophy for mobile users
+3. Define the overall visual mood and design psychology for mobile users
 4. Balance ideal design with practical Flutter development constraints and performance
 5. Consider Flutter widget implementation implications for each design decision
 6. Create spacing and layout principles for mobile-first consistency
@@ -325,6 +325,21 @@ Create a global mobile design theme strategy that will serve as the foundation r
 14. Account for mobile-specific interactions (gestures, touch feedback, haptics)
 
 🚨 CRITICAL: ALWAYS include semantic colors (success, warning, error, info) in the color palette even if not explicitly mentioned in the domain context. These are essential for mobile UI components and will cause errors if missing. Ensure colors meet mobile accessibility standards for various lighting conditions.
+13. Consider device capabilities (screen sizes, pixel densities)
+14. Creates a native mobile experience, not a web experience
+15. Balances innovation/creativity with usability and practicality
+
+<UNIFIED_PLATFORM_STRATEGY>
+**Foundation Approach**: Material 3 as primary design system with Cupertino adaptations only for critical UX differences
+**Color System**: Use Material 3 ColorScheme.fromSeed() as base, semantic colors work across both platforms
+**Typography**: Google Fonts with Material 3 typography scale, optimized for both platforms
+**Component Strategy**: 
+- Default: Material 3 widgets (Cards, FAB, Snackbars) work well on both platforms
+- iOS-specific: Only use Cupertino widgets for navigation patterns where user expectation differs significantly
+- Implementation: Minimal Platform.isIOS conditionals - favor unified Material 3 experience
+**Decision Rule**: Use Material 3 by default, add Cupertino elements only when iOS users expect fundamentally different interactions
+</UNIFIED_PLATFORM_STRATEGY>
+
 </INSTRUCTIONS>
 
 <OUTPUT_REQUIREMENTS>
@@ -341,7 +356,8 @@ Make sure to use proper escape characters for the new lines and other special ch
 
 <OUTPUT>
 {
-    "design_philosophy": "brief statement of overall mobile design approach considering user context and device constraints (about 2-3 sentences)",
+    "design_psychology": "brief statement of overall mobile design approach considering user context and device constraints (about 2-3 sentences)",
+    "design_philosophy": "brief statement of overall mobile design approach considering user context and device constraints (about 3-4 sentences) this should reflect the deep design psychology and the potential success in the user engagement. This should be a deep and comprehensive description that will be used to build the mobile design system.",
     "color_palette": {
         "primary": {"color": "hex_code", "description": "reason behind choosing this color for mobile interfaces"},
         "secondary": {"color": "hex_code", "description": "reason behind choosing this color for mobile interfaces"},
@@ -426,6 +442,12 @@ Analyze the mobile screen requirements to identify and categorize custom Flutter
 4. Consider widget composition patterns and how widgets nest within each other
 5. Define widget responsibilities and mobile data flow patterns
 6. Consider Flutter widget tree optimization and mobile performance
+1. Focus on screen-specific custom widgets that build upon Flutter's built-in widget ecosystem
+2. Suggest widgets that work with mock or static data. Exclude authentication, role-based menus, live API data, or session management. Focus on mobile UI widgets that demonstrate navigation patterns, visual states, and mobile interactions using mock data only
+3. Your pure focus is on the flutter app, Exclude out web, desktop, or non Flutter concerns
+4. Identify custom widgets needed for each screen's unique functionality and layout that cannot be achieved with built-in widgets alone
+5. Consider widget composition patterns and how custom widgets enhance built-in Flutter widgets
+6. Define widget responsibilities and mobile data flow patterns
 7. Focus on functional mobile widget architecture rather than visual details by considering mobile users' UX and UI needs
 8. Consider platform-adaptive widgets (Material vs Cupertino)
 9. Account for mobile-specific interactions (swipe, pinch, pull-to-refresh, etc.)
@@ -435,6 +457,13 @@ Analyze the mobile screen requirements to identify and categorize custom Flutter
 13. Consider mobile performance implications and widget rebuilding optimization
 14. Leverage Flutter's built-in widgets (AppBar, Scaffold, ListView, etc.) and only create custom widgets when necessary
 15. Focus on StatefulWidget vs StatelessWidget decisions based on screen requirements
+8. Consider platform-adaptive widgets (Material vs Cupertino) when built-in widgets are insufficient
+9. BE SELECTIVE: Only identify custom widgets that are truly essential for mobile screens and provide clear value beyond built-in widgets
+10. AVOID MICRO-WIDGETS: Don't create separate widgets for simple mobile elements that can use built-in Flutter widgets
+11. Screen specific widgets will integrate with global design system and be used to build self-contained mobile screens
+12. Leverage Flutter's built-in widgets as the foundation and only create custom widgets when necessary for specific functionality
+13. Focus on StatefulWidget vs StatelessWidget decisions based on screen requirements
+14. Your technical context will be used to build the flutter app that runs entirely without any backend dependencies. Uses mock data, hardcoded values, and simulated responses instead of real API calls, database connections, or external services. For features requiring permissions (camera, location, etc.) or third-party integrations (payments, GPS, social login), create mock implementations that demonstrate the UI/UX flow without actual functionality. Focus on creating a complete, interactive frontend experience that showcases the app's design and user interface rather than implementing real-world integrations.
 </INSTRUCTIONS>
 
 <OUTPUT_REQUIREMENTS>
@@ -469,7 +498,7 @@ Make sure to use proper escape characters for the new lines and other special ch
         "common_patterns": ["pattern1", "pattern2", "pattern3"],
         "description": "Common widget composition patterns used across screens"
     },
-    "mobile_architecture_notes": "Overall mobile app widget architecture considerations, state management patterns, and performance optimizations"
+    "mobile_architecture_notes": "Overall mobile app widget architecture considerations, state management patterns"
 }
 </OUTPUT>
 
