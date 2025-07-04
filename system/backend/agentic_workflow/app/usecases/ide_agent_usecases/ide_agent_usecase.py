@@ -50,8 +50,8 @@ class IDEAgentUsecase:
         screen_scratch_pads_paths = []
 
         if os.path.exists(screen_scratch_pads_dir):
-            # Get all .json files in the screen_scratchpads directory
-            pattern = os.path.join(screen_scratch_pads_dir, "*.json")
+            # Get all .txt files in the screen_scratchpads directory
+            pattern = os.path.join(screen_scratch_pads_dir, "*.txt")
             screen_scratch_pads_paths = [
                 self._get_absolute_path(path) for path in glob.glob(pattern)
             ]
@@ -80,12 +80,54 @@ class IDEAgentUsecase:
 
         return file_structure_content
 
+    def _extract_summary_from_exit_tool_result(
+        self, tool_result: Dict[str, Any], tool_input: Dict[str, Any]
+    ) -> str:
+        """Extract summary from exit tool result and input"""
+        try:
+            # First try to get the summary directly from the tool input
+            if tool_input and "summary" in tool_input:
+                summary = tool_input["summary"]
+                if summary and summary.strip():
+                    return summary.strip()
+
+            # Fallback: try to extract from the file if it was written
+            if tool_result.get("success") and "data" in tool_result:
+                data = tool_result["data"]
+                if isinstance(data, dict) and "details" in data:
+                    file_path = data["details"].get("file_path")
+                    if file_path and os.path.exists(file_path):
+                        with open(file_path, "r", encoding="utf-8") as f:
+                            content = f.read()
+                            # Extract the last summary from the file
+                            lines = content.strip().split("\n")
+                            summary_start = -1
+                            for i in range(len(lines) - 1, -1, -1):
+                                if "Summary:" in lines[i]:
+                                    summary_start = i + 1
+                                    break
+
+                            if summary_start > 0:
+                                summary_lines = []
+                                for i in range(summary_start, len(lines)):
+                                    if lines[i].startswith("="):
+                                        break
+                                    summary_lines.append(lines[i])
+                                return "\n".join(summary_lines).strip()
+
+            return "Agent completed the task using exit tool."
+        except Exception as e:
+            loggers["ide_agent"].warning(
+                f"Failed to extract summary from exit tool: {str(e)}"
+            )
+            return "Agent completed the task using exit tool."
+
     async def execute(self, request: IDEAgentRequest) -> Dict[str, Any]:
         """
         Execute IDE agent processing with tool calling loop
 
         :param request: IDEAgentRequest containing user query
-        :return: Dict with success status, message, and conversation history
+        :return: Dict with success status, final message, and metadata
         """
         try:
             # Get session_id from context (set by middleware)
@@ -107,7 +149,7 @@ class IDEAgentUsecase:
 
             # Get context paths and content
             global_scratch_pad_path = self._get_absolute_path(
-                f"artifacts/{session_id}/scratchpads/global_scratch_pad.json"
+                f"artifacts/{session_id}/scratchpads/global_scratchpad.txt"
             )
             screen_scratch_pads_paths = self._get_screen_scratch_pads_paths(
                 session_id
@@ -125,9 +167,11 @@ class IDEAgentUsecase:
                 f"🗂️  File structure loaded: {len(file_structure_content)} characters"
             )
 
-            # Initialize conversation with system context
-            conversation_history = []
+            # Initialize conversation tracking
             tool_call_count = 0
+            final_message = ""
+            exit_summary = ""
+            completion_reason = "completed"
 
             # Get tool definitions and system prompt
             tools = self.ide_tools.get_tool_definitions()
@@ -171,17 +215,9 @@ class IDEAgentUsecase:
                     )
                 )
 
-                # Add assistant's response to conversation history
-                conversation_history.append(
-                    {
-                        "role": "assistant",
-                        "content": response["content"],
-                        "tool_calls": response["tool_calls"],
-                    }
-                )
-
-                # Show agent's response if there's text content
+                # Store the current response content as potential final message
                 if response["content"] and response["content"].strip():
+                    final_message = response["content"]
                     print(
                         f"🤖 Agent says: {response['content'][:200]}{'...' if len(response['content']) > 200 else ''}"
                     )
@@ -189,6 +225,7 @@ class IDEAgentUsecase:
                 # If no tool calls, we're done
                 if not response["tool_calls"]:
                     print("✅ Agent completed - no more tool calls needed")
+                    completion_reason = "natural_completion"
                     loggers["ide_agent"].info(
                         f"IDE agent completed without tool calls. Total tool calls used: {tool_call_count}"
                     )
@@ -200,11 +237,14 @@ class IDEAgentUsecase:
 
                 # Execute tool calls
                 tool_results = []
+                exit_tool_called = False
+
                 for tool_call in response["tool_calls"]:
                     if tool_call_count >= self.max_tool_calls:
                         loggers["ide_agent"].warning(
                             f"Maximum tool calls ({self.max_tool_calls}) reached"
                         )
+                        completion_reason = "max_tool_calls"
                         break
 
                     tool_call_count += 1
@@ -226,6 +266,20 @@ class IDEAgentUsecase:
                             tool_name, tool_result
                         )
 
+                        # Check if exit_tool was called
+                        if tool_name == "exit_tool":
+                            exit_tool_called = True
+                            completion_reason = "exit_tool"
+                            exit_summary = (
+                                self._extract_summary_from_exit_tool_result(
+                                    tool_result, tool_input
+                                )
+                            )
+                            print(f"🚪 Exit tool called - stopping execution")
+                            loggers["ide_agent"].info(
+                                "Exit tool called - stopping agent loop"
+                            )
+
                         # Show tool result (truncated for readability)
                         result_preview = (
                             formatted_result[:300]
@@ -243,16 +297,6 @@ class IDEAgentUsecase:
                             }
                         )
 
-                        # Add tool result to conversation history
-                        conversation_history.append(
-                            {
-                                "role": "tool",
-                                "tool_call_id": tool_call["id"],
-                                "name": tool_name,
-                                "content": formatted_result,
-                            }
-                        )
-
                     except Exception as e:
                         error_msg = f"Error calling tool {tool_name}: {str(e)}"
                         loggers["ide_agent"].error(error_msg)
@@ -266,15 +310,9 @@ class IDEAgentUsecase:
                             }
                         )
 
-                        # Add error to conversation history
-                        conversation_history.append(
-                            {
-                                "role": "tool",
-                                "tool_call_id": tool_call["id"],
-                                "name": tool_name,
-                                "content": f"❌ Error: {error_msg}",
-                            }
-                        )
+                    # Break if exit tool was called
+                    if exit_tool_called:
+                        break
 
                 # Add assistant message with tool calls to messages
                 assistant_message = {"role": "assistant", "content": []}
@@ -314,19 +352,23 @@ class IDEAgentUsecase:
                         }
                     )
 
-                # If we've reached the maximum tool calls, break
+                # Break if exit tool was called or max tool calls reached
+                if exit_tool_called:
+                    break
+
                 if tool_call_count >= self.max_tool_calls:
                     print(
                         f"⚠️  Maximum tool calls ({self.max_tool_calls}) reached - stopping execution"
                     )
+                    completion_reason = "max_tool_calls"
                     loggers["ide_agent"].warning(
                         f"Maximum tool calls ({self.max_tool_calls}) reached"
                     )
                     break
 
-            # Get final response if we stopped due to tool limit
-            if tool_call_count >= self.max_tool_calls:
-                print("📝 Generating final summary...")
+            # Handle final response based on completion reason
+            if completion_reason == "max_tool_calls":
+                print("📝 Generating final summary due to tool limit...")
                 # Add a final message asking for summary
                 messages.append(
                     {
@@ -348,19 +390,24 @@ class IDEAgentUsecase:
                     )
                 )
 
-                # Show final summary
                 if final_response["content"]:
+                    final_message = final_response["content"]
                     print(
                         f"📋 Summary: {final_response['content'][:400]}{'...' if len(final_response['content']) > 400 else ''}"
                     )
 
-                conversation_history.append(
-                    {
-                        "role": "assistant",
-                        "content": final_response["content"],
-                        "tool_calls": [],
-                    }
-                )
+            elif completion_reason == "exit_tool":
+                # Use the exit summary as the final message
+                if exit_summary:
+                    final_message = exit_summary
+                elif not final_message:
+                    final_message = (
+                        "Task completed successfully using exit tool."
+                    )
+
+            # Ensure we have a final message
+            if not final_message:
+                final_message = "IDE agent completed successfully."
 
             print(
                 f"🎯 IDE Agent completed! Total tool calls: {tool_call_count}"
@@ -368,9 +415,9 @@ class IDEAgentUsecase:
 
             return {
                 "success": True,
-                "message": f"IDE agent completed successfully. Used {tool_call_count} tool calls.",
-                "conversation_history": conversation_history,
+                "message": final_message,
                 "tool_calls_used": tool_call_count,
+                "completion_reason": completion_reason,
                 "session_id": session_id,
                 "error": None,
             }
@@ -388,8 +435,8 @@ class IDEAgentUsecase:
                 "success": False,
                 "message": f"HTTP error in IDE agent usecase: {str(e.detail)}",
                 "error": e.detail,
-                "conversation_history": [],
                 "tool_calls_used": 0,
+                "completion_reason": "error",
             }
 
         except Exception as e:
@@ -405,6 +452,6 @@ class IDEAgentUsecase:
                 "success": False,
                 "message": f"Error in IDE agent usecase: {str(e)}",
                 "error": str(e),
-                "conversation_history": [],
                 "tool_calls_used": 0,
+                "completion_reason": "error",
             }

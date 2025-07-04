@@ -27,10 +27,10 @@ class IDEAgentController:
                 return JSONResponse(
                     content={
                         "data": {
-                            "conversation_history": result[
-                                "conversation_history"
-                            ],
                             "tool_calls_used": result["tool_calls_used"],
+                            "completion_reason": result.get(
+                                "completion_reason", "completed"
+                            ),
                             "session_id": result["session_id"],
                         },
                         "message": result["message"],
@@ -42,10 +42,10 @@ class IDEAgentController:
                 return JSONResponse(
                     content={
                         "data": {
-                            "conversation_history": result[
-                                "conversation_history"
-                            ],
-                            "tool_calls_used": result["tool_calls_used"],
+                            "tool_calls_used": result.get("tool_calls_used", 0),
+                            "completion_reason": result.get(
+                                "completion_reason", "error"
+                            ),
                         },
                         "message": result["message"],
                         "error": result["error"],
@@ -57,8 +57,8 @@ class IDEAgentController:
             return JSONResponse(
                 content={
                     "data": {
-                        "conversation_history": [],
                         "tool_calls_used": 0,
+                        "completion_reason": "error",
                     },
                     "message": "IDE agent execution failed",
                     "error": str(e),

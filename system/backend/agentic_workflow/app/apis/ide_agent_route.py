@@ -48,10 +48,10 @@ async def ide_agent(
 
     Returns:
         JSONResponse with:
-            - conversation_history: Complete interaction log between agent and tools
+            - message: Final agent response or summary
             - tool_calls_used: Number of tool calls executed
+            - completion_reason: How the agent completed ("natural_completion", "exit_tool", "max_tool_calls", "error")
             - session_id: Session identifier
-            - message: Success/failure message
             - error: Error details if any issues occurred
 
     Example Usage:

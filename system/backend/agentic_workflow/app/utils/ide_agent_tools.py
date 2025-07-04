@@ -233,7 +233,7 @@ class IDEAgentTools:
         Call a specific tool with the given input parameters
         """
         # Get the current session's codebase path from session context
-        session_id = session_state.get_session_id()
+        session_id = session_state.get()
         codebase_path = (
             f"artifacts/{session_id}/codebase" if session_id else None
         )
@@ -255,9 +255,11 @@ class IDEAgentTools:
             tool_input["default_path"] = codebase_path
 
         if tool_name == "exit_tool":
-            tool_input["summary"] = os.path.join(
+            # Keep the original summary from the agent, just set the file path
+            tool_input["file_path"] = os.path.join(
                 codebase_path, "scratchpads/global_scratchpad.txt"
             )
+            tool_input["explanation"] = "IDE Agent task completion summary"
 
         try:
             endpoint_map = {
@@ -338,6 +340,12 @@ class IDEAgentTools:
                 "exclude_pattern": tool_input.get("exclude_pattern"),
                 "default_path": tool_input.get("default_path"),
             }
+        elif tool_name == "exit_tool":
+            return {
+                "file_path": tool_input.get("file_path"),
+                "summary": tool_input.get("summary"),
+                "explanation": tool_input.get("explanation"),
+            }
         else:
             # For most tools, the input can be passed directly
             return tool_input
@@ -386,6 +394,8 @@ class IDEAgentTools:
                     )
                 else:
                     return "✅ Web search completed successfully. No results found."
+            elif tool_name == "exit_tool":
+                return f"✅ Exit tool executed successfully. Summary saved to file."
             else:
                 return f"✅ {tool_name} completed successfully.\n\nResult:\n{json.dumps(result.get('data', {}), indent=2)}"
         else:
