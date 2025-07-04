@@ -92,28 +92,34 @@ class Helper:
         """
         Processes the input for Stage 3 to generate the code for the screens.
         """
-        self.logger.info("Starting stage 3 pipeline to generate code for screens")
-        
+        self.logger.info(
+            "Starting stage 3 pipeline to generate code for screens"
+        )
+
         stage_iv_data, screen_navigation, global_scratchpad, file_structure = (
             self.read_context_files(request)
         )
-        
+
         self.logger.info(f"successfully read the context files...")
 
         screen_names = list(stage_iv_data.keys())
         batch_size = 5
         total_screens = len(screen_names)
         total_batches = (total_screens + batch_size - 1) // batch_size
-        
-        self.logger.info(f"Processing {total_screens} screens in {total_batches} batches (batch size: {batch_size})")
-        
+
+        self.logger.info(
+            f"Processing {total_screens} screens in {total_batches} batches (batch size: {batch_size})"
+        )
+
         all_code_files = []
 
         for i in range(0, len(screen_names), batch_size):
             batch_number = (i // batch_size) + 1
             batch_screens = screen_names[i : i + batch_size]
 
-            self.logger.info(f"Starting batch {batch_number}/{total_batches} with screens: {batch_screens}")
+            self.logger.info(
+                f"Starting batch {batch_number}/{total_batches} with screens: {batch_screens}"
+            )
 
             loggers["screen_generation"].info(
                 f"Processing batch of screens: {batch_screens}"
@@ -134,10 +140,14 @@ class Helper:
                 file_structure,
             )
 
-            self.logger.info(f"Completed batch {batch_number}/{total_batches}, generated {len(batch_code_files)} code files")
+            self.logger.info(
+                f"Completed batch {batch_number}/{total_batches}, generated {len(batch_code_files)} code files"
+            )
             all_code_files.extend(batch_code_files)
 
-        self.logger.info(f"All batches completed. Total code files generated: {len(all_code_files)}")
+        self.logger.info(
+            f"All batches completed. Total code files generated: {len(all_code_files)}"
+        )
         self.logger.info("Writing code files to filesystem")
         write_code_files(all_code_files, base_dir="")
 
@@ -148,7 +158,9 @@ class Helper:
         )
 
         structure_file_path = f"{get_project_root()}/artifacts/{session_state.get()}/scratchpads/file_structure.txt"
-        self.logger.info(f"Writing directory structure to {structure_file_path}")
+        self.logger.info(
+            f"Writing directory structure to {structure_file_path}"
+        )
         with open(structure_file_path, "w") as f:
             f.write(structure)
 
@@ -165,8 +177,10 @@ class Helper:
         Process a batch of screens (up to 5) in parallel using asyncio.
         """
         batch_screens = list(batch_stage_iv.keys())
-        self.logger.info(f"Starting parallel processing of {len(batch_screens)} screens: {batch_screens}")
-        
+        self.logger.info(
+            f"Starting parallel processing of {len(batch_screens)} screens: {batch_screens}"
+        )
+
         loggers["screen_generation"].info(
             f"Processing batch of screens: {batch_stage_iv.keys()}"
         )
@@ -182,16 +196,22 @@ class Helper:
             )
             tasks.append(task)
 
-        self.logger.info(f"Executing {len(tasks)} screen processing tasks in parallel")
+        self.logger.info(
+            f"Executing {len(tasks)} screen processing tasks in parallel"
+        )
         screen_results = await asyncio.gather(*tasks)
 
         all_code_files = []
         for i, code_files in enumerate(screen_results):
             screen_name = batch_screens[i]
-            self.logger.info(f"Screen '{screen_name}' generated {len(code_files)} code files")
+            self.logger.info(
+                f"Screen '{screen_name}' generated {len(code_files)} code files"
+            )
             all_code_files.extend(code_files)
 
-        self.logger.info(f"Batch processing completed. Total files from batch: {len(all_code_files)}")
+        self.logger.info(
+            f"Batch processing completed. Total files from batch: {len(all_code_files)}"
+        )
         return all_code_files
 
     async def process_single_screen(
@@ -226,7 +246,7 @@ class Helper:
         response = await self.anthropic_service.anthropic_client_request(
             system_prompt=system_prompt, prompt=user_prompt
         )
-        
+
         self.logger.info(f"screen generated successfully... {screen_name}")
 
         code_files = parse_xml_to_dict(response)

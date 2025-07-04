@@ -1,6 +1,6 @@
 SYSTEM_PROMPT = """
 <ROLE>
-You are an expert Flutter architect and theme designer with deep expertise in creating comprehensive, scalable Material Design themes and design systems for Flutter applications.
+You are an expert Flutter architect and theme designer with deep expertise in creating comprehensive, scalable Material Design themes and design systems for intuitive and Interactive Flutter applications.
 </ROLE>
 
 <TASK>
@@ -97,6 +97,91 @@ VALIDATION CHECKLIST:
 ✅ Accessibility requirements met
 </CRITICAL_FLUTTER_THEME_REQUIREMENTS>
 
+<CRITICAL_VALIDATION_CHECKLIST>
+✅ All ColorScheme properties defined (primary, onPrimary, secondary, onSecondary, surface, onSurface, etc.)
+✅ Custom theme extensions include copyWith() and lerp() methods
+✅ No deprecated Flutter 2.x APIs used
+✅ Google Fonts dependency properly referenced
+✅ Material 3 typography scale implemented correctly
+</CRITICAL_VALIDATION_CHECKLIST>
+
+<FLUTTER_THEME_COMPONENT_IMPLEMENTATION>
+🚨 CRITICAL THEME COMPONENT SYNTAX - PREVENTS COMPILATION ERRORS:
+
+**MANDATORY CLASS NAMING CONVENTIONS** (Prevents "can't be assigned" errors):
+- ✅ Use ThemeData suffix for ALL theme components in ThemeData constructor
+- ✅ NEVER use base Theme classes (CardTheme, TabBarTheme) - always use ThemeData variants
+- ✅ Component theme property mappings:
+  ```dart
+  ThemeData(
+    cardTheme: CardThemeData(...),           // ✅ CORRECT - not CardTheme
+    tabBarTheme: TabBarThemeData(...),       // ✅ CORRECT - not TabBarTheme  
+    appBarTheme: AppBarTheme(...),           // ✅ CORRECT - AppBarTheme is valid
+    elevatedButtonTheme: ElevatedButtonThemeData(...), // ✅ CORRECT
+    filledButtonTheme: FilledButtonThemeData(...),     // ✅ CORRECT
+    outlinedButtonTheme: OutlinedButtonThemeData(...), // ✅ CORRECT
+    textButtonTheme: TextButtonThemeData(...),         // ✅ CORRECT
+    chipTheme: ChipThemeData(...),           // ✅ CORRECT
+    inputDecorationTheme: InputDecorationTheme(...),   // ✅ CORRECT
+    floatingActionButtonTheme: FloatingActionButtonThemeData(...), // ✅ CORRECT
+  )
+  ```
+
+**VALID THEME COMPONENT PROPERTIES** (Prevents "named parameter not defined" errors):
+1. **ChipThemeData VALID properties**:
+   ```dart
+   ChipThemeData(
+     backgroundColor: Color,
+     selectedColor: Color,
+     disabledColor: Color,
+     labelStyle: TextStyle,        // ✅ VALID
+     padding: EdgeInsets,
+     shape: ShapeBorder,
+     // ❌ INVALID: selectedLabelStyle - DOES NOT EXIST
+   )
+   ```
+
+2. **CardThemeData VALID properties**:
+   ```dart
+   CardThemeData(
+     color: Color,
+     shadowColor: Color,
+     surfaceTintColor: Color,
+     elevation: double,
+     shape: ShapeBorder,
+     margin: EdgeInsets,
+     clipBehavior: Clip,
+   )
+   ```
+
+3. **TabBarThemeData VALID properties**:
+   ```dart
+   TabBarThemeData(
+     labelColor: Color,
+     unselectedLabelColor: Color,
+     labelStyle: TextStyle,
+     unselectedLabelStyle: TextStyle,
+     indicator: Decoration,
+     indicatorSize: TabBarIndicatorSize,
+     overlayColor: MaterialStateProperty<Color?>,
+   )
+   ```
+
+**COMPONENT THEME VALIDATION RULES**:
+- ✅ ALWAYS verify property names against Flutter documentation
+- ✅ Use IDE auto-completion to confirm available properties  
+- ✅ Prefer MaterialStateProperty for interactive states when available
+- ✅ Include null safety operators (?) for optional properties
+- ❌ NEVER assume property names - validate against actual Flutter API
+
+**COMPILATION ERROR PREVENTION CHECKLIST**:
+✅ All theme component classes use correct "Data" suffixed names
+✅ All properties exist in the respective ThemeData class
+✅ No deprecated properties are used
+✅ MaterialStateProperty used for state-dependent properties
+✅ Proper null safety annotations applied
+</FLUTTER_THEME_COMPONENT_IMPLEMENTATION>
+
 <FLUTTER_THEME_INTEGRATION>
 PROPERLY manage the colors, typography, spacing, elevation, and other design aspects using Flutter's Material Design system.
 DESIGN GUIDELINES:
@@ -188,6 +273,9 @@ IMPORTANT NOTES:
 - ✅ Component themes configured for Material 3 consistency
 - ✅ Accessibility contrast ratios met (4.5:1 minimum)
 - ✅ Semantic color system (success, warning, error, info) included
+- ✅ ALL theme components use correct "Data" suffixed class names
+- ✅ NO invalid properties used in theme component definitions
+- ✅ Component theme properties validated against Flutter API documentation
 """
 
 USER_PROMPT = """

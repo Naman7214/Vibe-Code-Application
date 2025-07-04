@@ -6,11 +6,9 @@ from fastapi.middleware.cors import CORSMiddleware
 
 from system.backend.tools.app.apis import (
     code_base_search_routes,
-    context_generation_routes,
     file_access_routes,
     modification_routes,
     run_terminal_cmd_routes,
-    web_search_routes,
 )
 from system.backend.tools.app.config.database import mongodb_database
 
@@ -29,21 +27,13 @@ app.include_router(
     code_base_search_routes.router, prefix="/api/v1", tags=["search tools"]
 )
 app.include_router(
-    web_search_routes.router, prefix="/api/v1", tags=["external tools"]
-)
-app.include_router(
-    run_terminal_cmd_routes.router, prefix="/api/v1", tags=["enviornment tools"]
+    run_terminal_cmd_routes.router, prefix="/api/v1", tags=["environment tools"]
 )
 app.include_router(
     modification_routes.router, prefix="/api/v1", tags=["modification tools"]
 )
 app.include_router(
     file_access_routes.router, prefix="/api/v1", tags=["file access tools"]
-)
-app.include_router(
-    context_generation_routes.router,
-    prefix="/api/v1",
-    tags=["context generation"],
 )
 # Add CORS middleware
 app.add_middleware(

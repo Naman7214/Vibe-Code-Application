@@ -86,6 +86,7 @@ class FlutterStageIVUsecase:
                 tasks = []
                 for screen_name in batch_screens:
                     task = self._process_single_flutter_screen(
+                        all_screens=input_data,
                         screen_name=screen_name,
                         screen_requirements=screen_requirements.get(
                             screen_name, {}
@@ -140,6 +141,7 @@ class FlutterStageIVUsecase:
 
     async def _process_single_flutter_screen(
         self,
+        all_screens: Dict[str, str],
         screen_name: str,
         screen_requirements: Dict[str, Any],
         design_system: Dict[str, Any],
@@ -152,6 +154,7 @@ class FlutterStageIVUsecase:
         try:
             # Construct user message with all mobile context
             user_message = {
+                "other screens in the app": all_screens,
                 "screen_requirements": {screen_name: screen_requirements},
                 "design_system": design_system,
                 "global_widgets": global_widgets,

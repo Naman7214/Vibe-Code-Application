@@ -4,8 +4,9 @@ from fastapi.responses import JSONResponse
 from system.backend.agentic_workflow.app.models.schemas.context_gathering_schema import (
     ContextGatheringRequest,
 )
-
-from system.backend.agentic_workflow.app.usecases.context_gathering_usecases.stage_i_usecase.stage_i_usecase import StageIUsecase
+from system.backend.agentic_workflow.app.usecases.context_gathering_usecases.stage_i_usecase.stage_i_usecase import (
+    StageIUsecase,
+)
 from system.backend.agentic_workflow.app.usecases.flutter_context_gathering_usecases.stage_ii_usecase.flutter_stage_ii_usecase import (
     FlutterStageIIUsecase,
 )

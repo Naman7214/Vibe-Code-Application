@@ -150,7 +150,7 @@ class FlutterStageIIIHelper:
 
     async def update_file_structure(self, session_id: str, codebase_path: str):
         """
-        Update flutter_file_structure.txt with current codebase directory structure
+        Update file_structure.txt with current codebase directory structure
 
         Args:
             session_id: The session ID for file paths
@@ -163,14 +163,14 @@ class FlutterStageIIIHelper:
         absolute_codebase_path = os.path.abspath(codebase_path)
         file_structure = generate_directory_structure(absolute_codebase_path)
         file_structure_path = os.path.join(
-            scratchpads_dir, "flutter_file_structure.txt"
+            scratchpads_dir, "file_structure.txt"
         )
 
         with open(file_structure_path, "w", encoding="utf-8") as f:
             f.write(file_structure)
 
         self.logger.info(
-            f"Updated flutter_file_structure.txt with current codebase state at {file_structure_path}"
+            f"Updated file_structure.txt with current codebase state at {file_structure_path}"
         )
 
     async def update_scratchpads(
@@ -227,14 +227,14 @@ class FlutterStageIIIHelper:
 
         # Append to Flutter-specific scratchpad
         flutter_scratchpad_path = os.path.join(
-            scratchpads_dir, "flutter_global_scratchpad.txt"
+            scratchpads_dir, "global_scratchpad.txt"
         )
 
         with open(flutter_scratchpad_path, "a", encoding="utf-8") as f:
             f.write(formatted_output)
 
         self.logger.info(
-            f"Updated flutter_global_scratchpad.txt at {flutter_scratchpad_path}"
+            f"Updated global_scratchpad.txt at {flutter_scratchpad_path}"
         )
 
     def _get_timestamp(self) -> str:

@@ -1,8 +1,17 @@
 SYSTEM_PROMPT = """You are an expert Flutter developer. Generate a lib/routes/app_routes.dart file and context registry for a Flutter application.
 
+**CRITICAL COMPONENT NAMING REQUIREMENTS:**
+- **ALWAYS use the EXACT component names from screen scratchpads JSON data**
+- **NEVER modify or truncate component names** - use them exactly as provided
+- If scratchpad shows "HomeDiscoveryScreen", use exactly "HomeDiscoveryScreen()" in routes
+
 **app_routes.dart Requirements:**
 - Use traditional Flutter Navigator with named routes
-- Import screen widgets from ../presentation/[screen_name]/[screen_name].dart pattern
+- **EXACT IMPORT FORMAT REQUIRED:**
+  • Always start with: import 'package:flutter/material.dart';
+  • Follow with screen imports in this exact pattern: import '../presentation/[screen_name]/[screen_name].dart';
+  • Use snake_case for folder and file names in import paths
+  • Import each screen on a separate line
 - Create static route constants with kebab-case naming
 - Use Map<String, WidgetBuilder> for routes definition
 - Handle follow-up requests by updating existing routes
@@ -15,6 +24,14 @@ SYSTEM_PROMPT = """You are an expert Flutter developer. Generate a lib/routes/ap
 - Each screen should be in its own folder with same name
 - Use const constructors for screen widgets
 - Include TODO comments for extensibility
+
+**IMPORT PATTERN EXAMPLE:**
+```dart
+import 'package:flutter/material.dart';
+import '../presentation/splash_screen/splash_screen.dart';
+import '../presentation/exercise_library/exercise_library.dart';
+import '../presentation/workout_dashboard/workout_dashboard.dart';
+```
 
 **CONTEXT_REGISTRY Requirements:**
 - Provide structured summary of routes created
