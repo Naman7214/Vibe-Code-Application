@@ -93,7 +93,7 @@ class CodeGenerationUsecase:
             )
 
         stage_v_result = await self.stage_v_usecase.execute(request)
-        
+
         if not stage_v_result["success"]:
             return JSONResponse(
                 content={
@@ -111,7 +111,7 @@ class CodeGenerationUsecase:
                 "message": "Code generation and validation completed successfully across all stages",
                 "data": {
                     "stage_i": stage_i_result,
-                    "stage_ii": stage_ii_result, 
+                    "stage_ii": stage_ii_result,
                     "stage_iii": stage_iii_result,
                     "stage_iv": stage_iv_result,
                     "stage_v": stage_v_result,

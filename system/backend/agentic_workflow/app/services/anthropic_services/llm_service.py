@@ -104,11 +104,7 @@ class AnthropicService:
         }
 
         if system_prompt:
-            payload["system"] = [
-                {
-                    "type": "text",
-                    "text": system_prompt                }
-            ]
+            payload["system"] = [{"type": "text", "text": system_prompt}]
 
         if web_search:
             payload["tools"] = [
@@ -191,8 +187,10 @@ class AnthropicService:
                     print(f"✅ Usage data saved to database successfully")
                 except Exception as e:
                     print(f"❌ Failed to save usage data to database: {str(e)}")
-                    loggers[provider].error(f"Database insertion failed: {str(e)}")
-                
+                    loggers[provider].error(
+                        f"Database insertion failed: {str(e)}"
+                    )
+
                 return collected_text
 
         except httpx.RequestError as exc:
@@ -235,11 +233,7 @@ class AnthropicService:
 
         # Add system prompt with caching if provided
         if system_prompt:
-            stream_params["system"] = [
-                {
-                    "type": "text",
-                    "text": system_prompt                }
-            ]
+            stream_params["system"] = [{"type": "text", "text": system_prompt}]
 
         async with client.messages.stream(**stream_params) as stream:
 
@@ -248,12 +242,12 @@ class AnthropicService:
                 # print(text, end="", flush=True)
 
             final_message = await stream.get_final_message()
-            
+
             usage_data = {
                 "input_tokens": final_message.usage.input_tokens,
                 "output_tokens": final_message.usage.output_tokens,
                 "cache_creation_input_tokens": final_message.usage.cache_creation_input_tokens,
-                "cache_read_input_tokens": final_message.usage.cache_read_input_tokens
+                "cache_read_input_tokens": final_message.usage.cache_read_input_tokens,
             }
 
             loggers["anthropic"].info(f"Anthropic usage: {usage_data}")

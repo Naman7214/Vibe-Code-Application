@@ -36,9 +36,9 @@ class CodeGenerationController:
         else:
             return JSONResponse(
                 content={
-                        "success": False,
-                        "message": f"Unsupported platform type: {request.platform_type}",
-                        "error": "Invalid platform type specified",
+                    "success": False,
+                    "message": f"Unsupported platform type: {request.platform_type}",
+                    "error": "Invalid platform type specified",
                 },
-                    status_code=status.HTTP_400_BAD_REQUEST,
+                status_code=status.HTTP_400_BAD_REQUEST,
             )

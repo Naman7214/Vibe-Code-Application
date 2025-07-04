@@ -39,14 +39,20 @@ class FlutterHelper:
             raise ValueError("No session_id available in context")
 
         if request.is_follow_up:
-            result = await self._generate_flutter_widgets_details(request, session_id)
+            result = await self._generate_flutter_widgets_details(
+                request, session_id
+            )
 
             if not result.get("success"):
                 return result
 
         else:
-            global_theme_task = self._flutter_global_theme_generation(request, session_id)
-            widgets_task = self._generate_flutter_widgets_details(request, session_id)
+            global_theme_task = self._flutter_global_theme_generation(
+                request, session_id
+            )
+            widgets_task = self._generate_flutter_widgets_details(
+                request, session_id
+            )
 
             results = await asyncio.gather(global_theme_task, widgets_task)
 
@@ -90,9 +96,7 @@ class FlutterHelper:
 
         parsed_response = parse_model_output(response)
 
-        await self._save_output(
-            session_id, parsed_response, "stage_iii_a.json"
-        )
+        await self._save_output(session_id, parsed_response, "stage_iii_a.json")
 
         return {
             "success": True,
@@ -139,9 +143,7 @@ class FlutterHelper:
 
         parsed_response = parse_model_output(response)
 
-        await self._save_output(
-            session_id, parsed_response, "stage_iii_b.json"
-        )
+        await self._save_output(session_id, parsed_response, "stage_iii_b.json")
 
         return {
             "success": True,
