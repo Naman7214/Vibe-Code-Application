@@ -35,19 +35,23 @@ class FlutterCodeGenerationUsecase:
         self.stage_v_usecase = stage_v_usecase
 
     async def execute(self, request: CodeGenerationRequest) -> JSONResponse:
-        # Wait for Flutter boilerplate setup to complete before proceeding
-        await setup_flutter_boilerplate.create_flutter_boilerplate()
+        # Run Flutter boilerplate setup only if it's not a follow-up request
+        if not request.is_follow_up:
+            await setup_flutter_boilerplate.create_flutter_boilerplate()
 
-        stage_i_result = await self.stage_i_usecase.execute()
-        if not stage_i_result["success"]:
-            return JSONResponse(
-                content={
-                    "success": False,
-                    "message": stage_i_result["message"],
-                    "error": stage_i_result["error"],
-                },
-                status_code=status.HTTP_400_BAD_REQUEST,
-            )
+        # Skip Stage I for follow-up requests as it handles initial setup
+        stage_i_result = {"success": True, "message": "Skipped for follow-up request", "data": {}}
+        if not request.is_follow_up:
+            stage_i_result = await self.stage_i_usecase.execute()
+            if not stage_i_result["success"]:
+                return JSONResponse(
+                    content={
+                        "success": False,
+                        "message": stage_i_result["message"],
+                        "error": stage_i_result["error"],
+                    },
+                    status_code=status.HTTP_400_BAD_REQUEST,
+                )
 
         stage_ii_result = await self.stage_ii_usecase.execute(request)
         if not stage_ii_result["success"]:
