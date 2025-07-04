@@ -9,6 +9,7 @@ from system.backend.agentic_workflow.app.models.schemas.ide_agent_schema import 
 )
 from system.backend.agentic_workflow.app.prompts.ide_agent_prompts.ide_agent_prompt import (
     SYSTEM_PROMPT,
+    USER_PROMPT 
 )
 from system.backend.agentic_workflow.app.repositories.error_repo import (
     ErrorRepo,
@@ -67,19 +68,20 @@ class IDEAgentUsecase:
 
             # Get tool definitions and system prompt
             tools = self.ide_tools.get_tool_definitions()
-            system_prompt_with_context = f"{SYSTEM_PROMPT}\n\n**Session Context:**\n- Session ID: {session_id}\n- Codebase location: {codebase_path}\n- You are working on the codebase generated for this session."
+            system_prompt_with_context = f"{SYSTEM_PROMPT}\n\n**Session Context:** Codebase location: {codebase_path}"
 
             print(f"📁 Codebase found at: {codebase_path}")
             print(f"🛠️  Available tools: {len(tools)}")
 
             # Initialize messages list for the conversation
+            user_prompt = USER_PROMPT.format(user_query=request.user_query, codebase_path=codebase_path)
             messages = [
                 {
                     "role": "user",
                     "content": [
                         {
                             "type": "text",
-                            "text": f"<USER_QUERY>\n{request.user_query}\n</USER_QUERY>\n\nPlease help me with this request. The codebase is located at {codebase_path}.",
+                            "text": user_prompt,
                         }
                     ],
                 }
