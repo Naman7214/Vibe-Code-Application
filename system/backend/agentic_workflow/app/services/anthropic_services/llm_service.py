@@ -1,4 +1,4 @@
-from typing import Any, Dict, Optional
+from typing import Any, Dict, List, Optional
 
 import httpx
 from anthropic import AsyncAnthropic
@@ -88,6 +88,85 @@ class AnthropicService:
             return await self._make_anthropic_request(
                 prompt, system_prompt, web_search
             )
+
+    async def generate_text_with_tools(
+        self,
+        messages: List[Dict[str, Any]],
+        system_prompt: Optional[str] = None,
+        tools: Optional[List[Dict[str, Any]]] = None,
+    ) -> Dict[str, Any]:
+        """
+        Generate text response from Claude with tool calling support
+
+        :param messages: List of messages in the conversation
+        :param system_prompt: Optional system prompt
+        :param tools: List of tool definitions in Anthropic format
+        :return: Full API response including tool calls and usage data
+        """
+        try:
+            client = AsyncAnthropic(
+                api_key=self.anthropic_api_key, http_client=self.http_client
+            )
+
+            # Prepare the stream parameters
+            stream_params = {
+                "temperature": self.default_temperature,
+                "model": self.default_model,
+                "max_tokens": self.default_max_tokens,
+                "messages": messages,
+            }
+
+            # Add system prompt with caching if provided
+            if system_prompt:
+                stream_params["system"] = [
+                    {
+                        "type": "text",
+                        "text": system_prompt,
+                        "cache_control": {"type": "ephemeral"},
+                    }
+                ]
+
+            # Add tools if provided
+            if tools:
+                stream_params["tools"] = tools
+
+            collected_text = ""
+            tool_calls = []
+
+            async with client.messages.stream(**stream_params) as stream:
+                async for text in stream.text_stream:
+                    collected_text += text
+
+                final_message = await stream.get_final_message()
+
+                # Extract tool calls if any
+                for content_block in final_message.content:
+                    if content_block.type == "tool_use":
+                        tool_calls.append(
+                            {
+                                "id": content_block.id,
+                                "name": content_block.name,
+                                "input": content_block.input,
+                            }
+                        )
+
+                loggers["anthropic"].info(
+                    f"Anthropic usage: {final_message.usage}"
+                )
+                await self.llm_usage_repo.add_llm_usage(final_message.usage)
+
+                return {
+                    "content": collected_text,
+                    "tool_calls": tool_calls,
+                    "usage": final_message.usage,
+                    "stop_reason": final_message.stop_reason,
+                    "final_message": final_message,
+                }
+
+        except Exception as exc:
+            error_msg = f"Error in tool calling: {str(exc)}"
+            loggers["anthropic"].error(error_msg)
+            raise JsonResponseError(status_code=500, detail=error_msg)
 
     async def _make_anthropic_request(
         self,

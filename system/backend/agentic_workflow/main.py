@@ -10,6 +10,9 @@ from system.backend.agentic_workflow.app.apis.code_generation_route import (
 from system.backend.agentic_workflow.app.apis.context_gathering_route import (
     router as context_gathering_router,
 )
+from system.backend.agentic_workflow.app.apis.ide_agent_route import (
+    router as ide_agent_router,
+)
 from system.backend.agentic_workflow.app.apis.initial_processing_route import (
     router as initial_processing_router,
 )
@@ -38,6 +41,7 @@ app.include_router(
 app.include_router(
     code_generation_router, prefix="/api/v1", tags=["code-generation"]
 )
+app.include_router(ide_agent_router, prefix="/api/v1", tags=["ide-agent"])
 
 # app.add_middleware(
 #     CORSMiddleware,
