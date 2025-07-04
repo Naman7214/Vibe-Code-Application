@@ -44,7 +44,7 @@ class CodeGenerationUsecase:
     async def execute(self, request: CodeGenerationRequest) -> JSONResponse:
 
         # Run React boilerplate setup in background without blocking
-        asyncio.create_task(setup_react_boilerplate.create_react_boilerplate())
+        await setup_react_boilerplate.create_react_boilerplate()
 
         stage_i_result = await self.stage_i_usecase.execute()
         if not stage_i_result["success"]:

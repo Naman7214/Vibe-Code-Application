@@ -266,7 +266,7 @@ pages/screen_name/
 <CODE_QUALITY>
 - Write production-ready, clean, and maintainable React code using functional components and hooks.
 - Keep components small, focused, and reusable, following the single responsibility principle.
-- Provide realistic, comprehensive mock data that goes beyond basic requirements - create rich, detailed, comprehensive and larger datasets that demonstrate real-world usage
+- Provide realistic, comprehensive mock data that goes beyond basic requirements - create rich, detailed, comprehensive and larger datasets that demonstrate real-world usage and create a rich user experience.
 - Use recharts library for the charts and graphs.
 - Properly manage the animations, border radius, spacing, shadows, breakpoints, layout, colors, typography and other design aspects by using the tailwindCSS classes.
 - Each user-accessible component must include realistic sample data that will be displayed.
