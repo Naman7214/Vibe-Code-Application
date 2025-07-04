@@ -216,3 +216,4 @@ linters.sh
 artifacts/
 struct_logs/
 todo.md
+token_calculation.py

@@ -14,6 +14,9 @@ class Settings(BaseSettings):
     OPENAI_API_KEY: str
     OPENAI_DEFAULT_MODEL: str = "o3-2025-04-16"
 
+    # Tools API settings for IDE agent
+    TOOLS_API_BASE_URL: str = "http://localhost:8001/api/v1"
+
     class Config:
         backend_dir = Path(__file__).parent.parent.parent
         env_file = backend_dir / ".env"
