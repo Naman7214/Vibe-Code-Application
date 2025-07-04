@@ -19,6 +19,7 @@ class EditFileController:
         response = await self.edit_file_usecase.execute(
             request.target_file_path, request.code_snippet
         )
+        print(response)
 
         status_code = status.HTTP_200_OK
         if not response.get("success", True):

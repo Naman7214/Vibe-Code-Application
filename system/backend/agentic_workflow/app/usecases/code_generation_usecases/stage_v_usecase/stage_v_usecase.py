@@ -25,6 +25,54 @@ class StageVUsecase:
         self.error_repo = error_repo
         self.helper = StageVHelper()
 
+    def _create_simple_error_message(self, validation_results):
+        """
+        Create a simple error message containing only the command and error
+        
+        Args:
+            validation_results: List of validation command results
+            
+        Returns:
+            Simple error string with command and error details
+        """
+        error_commands = []
+        for result in validation_results:
+            if result["has_errors"]:
+                command = result["command"]
+                error_message = result["error_details"]["message"]
+                raw_output = result["error_details"].get("raw_output", "")
+                
+                # If the error message is generic and we have raw output, try to extract better details
+                if (error_message in ["error during build:", "No specific error message found"] or 
+                    len(error_message.strip()) < 20) and raw_output:
+                    
+                    # Look for more specific error information in raw output
+                    lines = raw_output.split("\n")
+                    better_error = None
+                    
+                    for i, line in enumerate(lines):
+                        line = line.strip()
+                        # Look for vite/webpack/build tool specific errors
+                        if any(pattern in line for pattern in [
+                            "Error: [vite]", "Error: [webpack]", "Failed to resolve", 
+                            "Cannot resolve", "Module not found", "Rollup failed"
+                        ]):
+                            # Include this line and next few lines for context
+                            error_lines = [line]
+                            for j in range(i + 1, min(i + 3, len(lines))):
+                                next_line = lines[j].strip()
+                                if next_line and not next_line.startswith("at ") and len(next_line) > 5:
+                                    error_lines.append(next_line)
+                            better_error = "\n".join(error_lines)
+                            break
+                    
+                    if better_error:
+                        error_message = better_error
+                
+                error_commands.append(f"Command: {command}\nError: {error_message}")
+        
+        return "\n\n".join(error_commands) if error_commands else "Validation errors detected"
+
     async def execute(self, request: CodeGenerationRequest) -> Dict[str, Any]:
         """
         Execute Stage V processing for code generation validation
@@ -103,27 +151,17 @@ class StageVUsecase:
             )
 
             if has_errors:
+                # Return simplified error format
+                simple_error = self._create_simple_error_message(validation_results)
                 return {
                     "success": False,
                     "message": "Code validation failed with errors",
-                    "data": {
-                        "validation_results": validation_results,
-                        "summary": summary,
-                        "codebase_path": codebase_path,
-                        "platform_type": platform_type,
-                    },
-                    "error": "Validation errors detected in generated code",
+                    "error": simple_error,
                 }
             else:
                 return {
                     "success": True,
                     "message": "Code validation completed successfully - no errors found",
-                    "data": {
-                        "validation_results": validation_results,
-                        "summary": summary,
-                        "codebase_path": codebase_path,
-                        "platform_type": platform_type,
-                    },
                     "error": None,
                 }
 
@@ -140,7 +178,7 @@ class StageVUsecase:
                 "success": False,
                 "message": "Error in Stage V code validation usecase: "
                 + str(e.detail),
-                "error": e.detail,
+                "error": str(e.detail),
             }
         except Exception as e:
             await self.error_repo.insert_error(

@@ -129,7 +129,6 @@ class EditFileService:
                 # Log LLM usage
                 await self._log_llm_usage(
                     tool_name="EditFileService",
-                    explanation=explanation,
                     file_path=target_file_path,
                     usage_data=usage_data,
                     file_existed=file_existed,
@@ -283,7 +282,6 @@ class EditFileService:
     async def _log_llm_usage(
         self,
         tool_name: str,
-        explanation: str,
         file_path: str,
         usage_data: dict,
         file_existed: bool,
@@ -303,7 +301,6 @@ class EditFileService:
         try:
             llm_usage_entry = {
                 "tool_name": tool_name,
-                "explanation": explanation,
                 "file_path": file_path,
                 "timestamp": datetime.now().isoformat(),
                 "api_provider": "relace",

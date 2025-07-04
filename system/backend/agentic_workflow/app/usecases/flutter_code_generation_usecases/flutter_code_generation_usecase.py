@@ -90,9 +90,8 @@ class FlutterCodeGenerationUsecase:
                     "success": False,
                     "message": stage_v_result["message"],
                     "error": stage_v_result["error"],
-                    "validation_details": stage_v_result.get("data", {}),
                 },
-                status_code=status.HTTP_400_BAD_REQUEST,
+                status_code=status.HTTP_200_OK,  # Changed from 400 to 200 for validation errors
             )
 
         return JSONResponse(

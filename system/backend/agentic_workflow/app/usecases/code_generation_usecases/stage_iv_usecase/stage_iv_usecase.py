@@ -1,4 +1,5 @@
 import json
+import logging
 from typing import Any, Dict
 
 from fastapi import Depends, HTTPException
@@ -36,6 +37,17 @@ class StageIVUsecase:
         self.anthropic_service = anthropic_service
         self.error_repo = error_repo
         self.helper = StageIVHelper()
+        
+        # Set up logger for debugging
+        self.logger = logging.getLogger("code_generation_stage_iv")
+        if not self.logger.handlers:
+            handler = logging.StreamHandler()
+            formatter = logging.Formatter(
+                "%(asctime)s - %(name)s - %(levelname)s - %(message)s"
+            )
+            handler.setFormatter(formatter)
+            self.logger.addHandler(handler)
+            self.logger.setLevel(logging.INFO)
 
     async def execute(
         self, screen_dict: Dict[str, str], is_follow_up: bool = False
@@ -52,6 +64,16 @@ class StageIVUsecase:
             Dict with success status and message
         """
         try:
+            # Debug: Log what we received
+            self.logger.info(f"Stage IV received screen_dict type: {type(screen_dict)}")
+            self.logger.info(f"Stage IV received is_follow_up: {is_follow_up}")
+            
+            # Debug: Check each item in screen_dict
+            for key, value in screen_dict.items():
+                self.logger.info(f"screen_dict['{key}'] = {type(value)}: {str(value)[:100]}...")
+                if hasattr(value, '__dict__'):
+                    self.logger.error(f"Non-serializable object found in screen_dict['{key}']: {type(value)}")
+
             # Get session ID from context variable
             session_id = session_state.get()
             if not session_id:
@@ -62,10 +84,29 @@ class StageIVUsecase:
                 session_id, screen_dict, is_follow_up
             )
 
+            # Debug: Try JSON serialization before using it in prompt
+            try:
+                screen_descriptions_json = json.dumps(screen_dict, indent=2)
+                self.logger.info("JSON serialization of screen_dict successful")
+            except TypeError as e:
+                self.logger.error(f"JSON serialization failed: {e}")
+                # Create a safe version for JSON serialization
+                safe_screen_dict = {}
+                for key, value in screen_dict.items():
+                    if isinstance(value, (str, int, float, bool, list, dict, type(None))):
+                        safe_screen_dict[key] = value
+                    else:
+                        safe_screen_dict[key] = str(value)
+                screen_descriptions_json = json.dumps(safe_screen_dict, indent=2)
+                self.logger.info("Using safe version of screen_dict for JSON serialization")
+
             # Format user prompt with context
             user_prompt = USER_PROMPT.format(
-                screen_scratchpads=context_data["screen_scratchpads"],                file_structure=context_data["file_structure"],
+                screen_scratchpads=context_data["screen_scratchpads"],
+                global_scratchpad=context_data["global_scratchpad"],
+                file_structure=context_data["file_structure"],
                 existing_routes=context_data.get("existing_routes", ""),
+                screen_descriptions=screen_descriptions_json,
                 is_follow_up=str(is_follow_up).lower(),
                 codebase_path=context_data["codebase_path"],
             )

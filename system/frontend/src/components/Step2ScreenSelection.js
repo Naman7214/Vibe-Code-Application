@@ -43,13 +43,13 @@ const Step2ScreenSelection = ({
                 </div>
                 <div>
                   <span className="font-medium text-blue-800">Business Type:</span>{' '}
-                  <span className="text-blue-700">{initialData.business_context?.business_type}</span>
+                  <span className="text-blue-700">{initialData.business_type || 'Not specified'}</span>
                 </div>
               </div>
-              {initialData.business_context?.target_audience && (
+              {initialData.project_context && (
                 <div className="mt-2 text-sm">
-                  <span className="font-medium text-blue-800">Target Audience:</span>{' '}
-                  <span className="text-blue-700">{initialData.business_context.target_audience}</span>
+                  <span className="font-medium text-blue-800">Project Description:</span>{' '}
+                  <span className="text-blue-700">{initialData.project_context.substring(0, 200)}...</span>
                 </div>
               )}
             </div>

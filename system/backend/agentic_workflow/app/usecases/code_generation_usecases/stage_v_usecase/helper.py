@@ -333,20 +333,75 @@ class StageVHelper:
     def _extract_error_message(
         self, output: str, parsed_errors: List[Dict[str, Any]]
     ) -> str:
-        """Extract a concise error message from output"""
-        if not parsed_errors:
-            # Try to extract first error-like line
-            lines = output.split("\n")
-            for line in lines:
-                if any(
-                    keyword in line.lower()
-                    for keyword in ["error", "fail", "exception"]
-                ):
-                    return line.strip()
-            return "No specific error message found"
-
-        # Use the first parsed error
-        return parsed_errors[0].get("error_line", "Unknown error")
+        """Extract a detailed error message from output"""
+        # First, try to use parsed errors if they contain meaningful information
+        if parsed_errors:
+            for error in parsed_errors:
+                error_line = error.get("error_line", "")
+                if error_line and error_line != "error during build:" and len(error_line.strip()) > 10:
+                    return error_line.strip()
+        
+        # If no good parsed errors, extract from raw output
+        lines = output.split("\n")
+        error_lines = []
+        
+        # Look for specific error patterns with more context
+        error_patterns = [
+            r"Error: \[vite\].*",
+            r"Error: .*",
+            r"Failed to resolve.*",
+            r"Cannot resolve.*",
+            r"Module not found.*",
+            r"Compilation failed.*",
+            r"Build failed.*",
+            r"TypeError.*",
+            r"ReferenceError.*",
+            r"SyntaxError.*",
+            r"npm ERR!.*"
+        ]
+        
+        # Find lines matching error patterns
+        for i, line in enumerate(lines):
+            line = line.strip()
+            if not line:
+                continue
+                
+            # Check for specific error patterns
+            for pattern in error_patterns:
+                if re.search(pattern, line, re.IGNORECASE):
+                    error_lines.append(line)
+                    # Include next few lines for context if they seem relevant
+                    for j in range(i + 1, min(i + 4, len(lines))):
+                        next_line = lines[j].strip()
+                        if next_line and not next_line.startswith("at ") and len(next_line) < 200:
+                            # Include lines that provide context but aren't stack traces
+                            if any(keyword in next_line.lower() for keyword in [
+                                "this is most likely", "unintended", "because", 
+                                "runtime", "application", "module", "import", "file"
+                            ]):
+                                error_lines.append(next_line)
+                            elif re.match(r".*\.(js|jsx|ts|tsx|dart).*", next_line):
+                                error_lines.append(next_line)
+                    break
+        
+        if error_lines:
+            return "\n".join(error_lines)
+        
+        # Fallback: look for any line with error-related keywords
+        for line in lines:
+            line = line.strip()
+            if line and any(keyword in line.lower() for keyword in ["error", "fail", "exception"]):
+                if len(line) > 10 and line != "error during build:":
+                    # Get a few lines of context
+                    line_index = lines.index(line)
+                    context_lines = [line]
+                    for j in range(line_index + 1, min(line_index + 3, len(lines))):
+                        next_line = lines[j].strip()
+                        if next_line and len(next_line) > 5:
+                            context_lines.append(next_line)
+                    return "\n".join(context_lines)
+        
+        return "No specific error message found"
 
     async def create_validation_summary(
         self, validation_results: List[Dict[str, Any]], has_errors: bool

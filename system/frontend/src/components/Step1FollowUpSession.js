@@ -54,9 +54,9 @@ const Step1FollowUpSession = ({
         <div className="inline-flex items-center justify-center w-16 h-16 bg-blue-100 rounded-full mb-4">
           <Plus className="w-8 h-8 text-blue-600" />
         </div>
-        <h2 className="text-3xl font-bold text-gray-900 mb-2">Add Screens to Existing Project</h2>
+        <h2 className="text-3xl font-bold text-gray-900 mb-2">Project Context Setup</h2>
         <p className="text-gray-600">
-          Continue working on an existing project by adding new screens
+          Provide your project details to begin context gathering
         </p>
       </div>
 
@@ -156,15 +156,15 @@ notifications`}
           <div className="flex items-start">
             <FileText className="w-5 h-5 text-blue-600 mt-0.5 mr-3 flex-shrink-0" />
             <div className="text-sm">
-              <h3 className="font-semibold text-blue-900 mb-1">Follow-up Workflow</h3>
+              <h3 className="font-semibold text-blue-900 mb-1">Context Gathering Process</h3>
               <p className="text-blue-800">
-                This will add new screens to your existing project. The workflow will:
+                This will start the context gathering process for your existing project. We will:
               </p>
               <ul className="list-disc list-inside text-blue-700 mt-2 space-y-1">
-                <li>Skip initial processing (uses existing project context)</li>
-                <li>Gather context for the new screens</li>
-                <li>Generate code for the additional screens</li>
-                <li>Integrate with your existing codebase</li>
+                <li>Load your existing project context</li>
+                <li>Analyze requirements for the new screens</li>
+                <li>Gather context for seamless integration</li>
+                <li>Prepare for code generation</li>
               </ul>
             </div>
           </div>
@@ -191,7 +191,7 @@ notifications`}
           ) : (
             <>
               <Play className="w-5 h-5 mr-2" />
-              Add Screens to Project
+              Start Context Gathering
             </>
           )}
         </button>

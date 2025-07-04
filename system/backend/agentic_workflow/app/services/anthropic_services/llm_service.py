@@ -126,23 +126,6 @@ class AnthropicService:
             if tools:
                 stream_params["tools"] = tools
 
-            # Print payload being sent
-            print("🔍 ANTHROPIC API PAYLOAD:")
-            for key, value in stream_params.items():
-                if isinstance(value, list):
-                    print(f"  {key.capitalize()} Count: {len(value)}")
-                    if key == "messages":
-                        for i, message in enumerate(value):
-                            print(f"    Message {i+1}: {message}")
-                    elif key == "tools":
-                        for i, tool in enumerate(value):
-                            print(
-                                f"    Tool {i+1}: {tool.get('name', 'Unknown')} ({tool.get('type', 'Unknown type')})"
-                            )
-                else:
-                    print(f"  {key.capitalize()}: {value}")
-            print("=" * 50)
-
             collected_text = ""
             tool_calls = []
 

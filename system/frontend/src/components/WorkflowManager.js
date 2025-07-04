@@ -9,6 +9,7 @@ import Step2IdeAgentCompletion from './Step2IdeAgentCompletion';
 import Step3CodeGeneration from './Step3CodeGeneration';
 import Step4ErrorFixing from './Step4ErrorFixing';
 import Step5Completion from './Step5Completion';
+import { Plus } from 'lucide-react';
 
 const WorkflowManager = () => {
   const {
@@ -90,10 +91,9 @@ const WorkflowManager = () => {
       ];
     } else if (workflowMode === 'followup') {
       return [
-        { number: 1, label: 'Session Setup', completed: currentStep > 1 },
-        { number: 2, label: 'Context Gathering', completed: currentStep > 3 },
-        { number: 3, label: 'Code Generation & Auto-fix', completed: currentStep > 4 },
-        { number: 4, label: 'Complete', completed: currentStep >= 6 },
+        { number: 1, label: 'Context Gathering', completed: currentStep > 3 },
+        { number: 2, label: 'Code Generation & Auto-fix', completed: currentStep > 4 },
+        { number: 3, label: 'Complete', completed: currentStep >= 6 },
       ];
     } else if (workflowMode === 'ide') {
       return [
@@ -172,10 +172,9 @@ const WorkflowManager = () => {
     } else if (workflowMode === 'followup') {
       // Follow-up workflow mapping
       const stepMapping = {
-        1: 1, // Session Setup
-        2: 3, // Context Gathering (step 3 in hook)
-        3: 4, // Code Generation & Auto-fix (step 4 in hook)
-        4: 6, // Complete (step 6 in hook)
+        1: 3, // Context Gathering (step 3 in hook)
+        2: 4, // Code Generation & Auto-fix (step 4 in hook)
+        3: 6, // Complete (step 6 in hook)
       };
       return currentStep === stepMapping[stepNumber];
     } else if (workflowMode === 'ide') {
@@ -261,7 +260,36 @@ const WorkflowManager = () => {
             />
           );
         case 3:
-          // Context gathering step (no UI, just processing)
+          // Context gathering step - show session setup form if data not available
+          if (!sessionId.trim() || Object.keys(dictOfScreens).length === 0) {
+            return (
+              <div className="max-w-2xl mx-auto p-6">
+                <div className="text-center mb-8">
+                  <div className="inline-flex items-center justify-center w-16 h-16 bg-blue-100 rounded-full mb-4">
+                    <Plus className="w-8 h-8 text-blue-600" />
+                  </div>
+                  <h2 className="text-3xl font-bold text-gray-900 mb-2">Context Gathering Portal</h2>
+                  <p className="text-gray-600">
+                    Add screens to your existing project by providing session details
+                  </p>
+                </div>
+                
+                <Step1FollowUpSession
+                  sessionId={sessionId}
+                  setSessionId={setSessionId}
+                  dictOfScreens={dictOfScreens}
+                  setDictOfScreens={setDictOfScreens}
+                  platformType={platformType}
+                  setPlatformType={setPlatformType}
+                  onNext={handleStep1Next}
+                  loading={loading}
+                  error={error}
+                />
+              </div>
+            );
+          }
+          
+          // Show context gathering loading screen when data is available
           return (
             <div className="max-w-2xl mx-auto p-6 text-center">
               <div className="inline-flex items-center justify-center w-16 h-16 bg-blue-100 rounded-full mb-4">
