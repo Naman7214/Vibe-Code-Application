@@ -54,3 +54,16 @@ class FileSearchRequest(BaseModel):
     default_path: Optional[str] = Field(
         default=None, description="The default base path to search in"
     )
+
+
+class ExitToolRequest(BaseModel):
+    file_path: str = Field(
+        ...,
+        description="The absolute path to the .txt file to append content to",
+    )
+    summary: str = Field(
+        ..., description="The summary of what was done by the AI agent"
+    )
+    explanation: str = Field(
+        ..., description="The explanation for the exit tool request"
+    )

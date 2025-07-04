@@ -1,27 +1,54 @@
 import os
 from datetime import datetime
-from typing import Optional
+from pathlib import Path
+from typing import Tuple
 
-from dotenv import load_dotenv
-from fastapi import HTTPException, status
-from openai import OpenAI
+import httpx
+from fastapi import Depends, HTTPException, status
 
 from system.backend.tools.app.config.settings import settings
 from system.backend.tools.app.models.domain.error import Error
+from system.backend.tools.app.repositories.error_repo import ErrorRepo
+from system.backend.tools.app.repositories.llm_usage_repo import (
+    LLMUsageRepository,
+)
 from system.backend.tools.app.utils.path_validator import is_safe_path
 
 
 class EditFileService:
-    def __init__(self):
-        self.HF_API_KEY = settings.HUGGINGFACE_API_KEY
-        self.BASE_URL = settings.HUGGINGFACE_API_URL
-        self.client = OpenAI(base_url=self.BASE_URL, api_key=self.HF_API_KEY)
+    def __init__(
+        self,
+        error_repo: ErrorRepo = Depends(),
+        llm_usage_repo: LLMUsageRepository = Depends(),
+    ):
+        self.error_repo = error_repo
+        self.llm_usage_repo = llm_usage_repo
+        self.relace_api_key = settings.RELACE_API_KEY
+        self.relace_api_url = settings.RELACE_API_URL
+        self.timeout = httpx.Timeout(
+            connect=30.0,
+            read=120.0,
+            write=60.0,
+            pool=30.0,
+        )
 
     async def edit_file(
         self, target_file_path: str, code_snippet: str, explanation: str
     ):
-        try:
+        """
+        Edit a file by applying code changes using the Relace API.
+        Creates the file and parent directories if they don't exist.
 
+        Args:
+            target_file_path: Absolute path to the target file
+            code_snippet: The code changes to apply
+            explanation: Explanation of what changes are being made
+
+        Returns:
+            Dictionary with success status and operation details
+        """
+        try:
+            # Check if path is safe
             is_safe, error_msg = is_safe_path(target_file_path)
             if not is_safe:
                 await self.error_repo.insert_error(
@@ -36,58 +63,146 @@ class EditFileService:
                     detail=f"Access denied: {error_msg}",
                 )
 
-            if not os.path.exists(target_file_path):
-                return {
-                    "success": False,
-                    "error": "Target file does not exist",
-                    "details": {
-                        "file_path": target_file_path,
-                        "timestamp": datetime.now().isoformat(),
-                    },
-                }
+            # Create parent directories if they don't exist
+            parent_dir = os.path.dirname(target_file_path)
+            directories_created = False
 
-            with open(target_file_path, "r", encoding="utf-8") as file:
-                original_content = file.read()
+            if parent_dir and not os.path.exists(parent_dir):
+                try:
+                    Path(parent_dir).mkdir(parents=True, exist_ok=True)
+                    directories_created = True
+                    print(f"Created parent directories: {parent_dir}")
+                except Exception as e:
+                    await self.error_repo.insert_error(
+                        Error(
+                            tool_name="EditFileService",
+                            error_message=f"Failed to create parent directories: {str(e)}",
+                            timestamp=datetime.now().isoformat(),
+                        )
+                    )
+                    raise HTTPException(
+                        status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
+                        detail=f"Failed to create parent directories: {str(e)}",
+                    )
 
+            # Read existing content or use empty string for new files
+            original_content = ""
+            file_existed = os.path.exists(target_file_path)
+
+            if file_existed:
+                try:
+                    with open(target_file_path, "r", encoding="utf-8") as file:
+                        original_content = file.read()
+                    print(
+                        f"Read existing file: {target_file_path} ({len(original_content)} characters)"
+                    )
+                except Exception as e:
+                    await self.error_repo.insert_error(
+                        Error(
+                            tool_name="EditFileService",
+                            error_message=f"Failed to read existing file: {str(e)}",
+                            timestamp=datetime.now().isoformat(),
+                        )
+                    )
+                    raise HTTPException(
+                        status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
+                        detail=f"Failed to read existing file: {str(e)}",
+                    )
+            else:
+                print(
+                    f"File does not exist, will create new file: {target_file_path}"
+                )
+
+            # Apply code changes using Relace API
             try:
-                edited_content = await self._apply_code_changes(
+                merged_code, usage_data = await self._apply_code_changes_relace(
                     original_content, code_snippet
                 )
 
-                if edited_content is None:
-                    raise ValueError("Failed to apply code changes")
+                if merged_code is None:
+                    raise ValueError(
+                        "Failed to apply code changes - no merged code returned"
+                    )
 
-                if not isinstance(edited_content, str):
-                    raise ValueError("Edited content must be a string")
+                print(
+                    f"Successfully merged code using Relace API ({len(merged_code)} characters)"
+                )
 
-                if not edited_content:
-                    raise ValueError("Edited content cannot be empty")
+                # Log LLM usage
+                await self._log_llm_usage(
+                    tool_name="EditFileService",
+                    explanation=explanation,
+                    file_path=target_file_path,
+                    usage_data=usage_data,
+                    file_existed=file_existed,
+                    directories_created=directories_created,
+                )
 
             except Exception as api_error:
+                await self.error_repo.insert_error(
+                    Error(
+                        tool_name="EditFileService",
+                        error_message=f"Relace API error: {str(api_error)}",
+                        timestamp=datetime.now().isoformat(),
+                    )
+                )
                 return {
                     "success": False,
-                    "error": f"FastApply model API error: {str(api_error)}",
+                    "error": f"Relace API error: {str(api_error)}",
                     "details": {
                         "file_path": target_file_path,
+                        "file_existed": file_existed,
+                        "directories_created": directories_created,
                         "timestamp": datetime.now().isoformat(),
                     },
                 }
 
-            # Write the complete edited content to file
-            with open(target_file_path, "w", encoding="utf-8") as file:
-                file.write(edited_content)
+            # Write the merged content to file
+            try:
+                with open(target_file_path, "w", encoding="utf-8") as file:
+                    file.write(merged_code)
+                print(
+                    f"Successfully wrote merged content to file: {target_file_path}"
+                )
+            except Exception as e:
+                await self.error_repo.insert_error(
+                    Error(
+                        tool_name="EditFileService",
+                        error_message=f"Failed to write file: {str(e)}",
+                        timestamp=datetime.now().isoformat(),
+                    )
+                )
+                raise HTTPException(
+                    status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
+                    detail=f"Failed to write file: {str(e)}",
+                )
 
             return {
                 "success": True,
                 "details": {
                     "file_path": target_file_path,
+                    "file_existed": file_existed,
                     "original_size": len(original_content),
-                    "new_size": len(edited_content),
+                    "new_size": len(merged_code),
+                    "directories_created": directories_created,
+                    "parent_directory": (
+                        parent_dir if directories_created else None
+                    ),
                     "timestamp": datetime.now().isoformat(),
                 },
             }
 
+        except HTTPException:
+            # Re-raise HTTP exceptions to preserve their status codes
+            raise
         except Exception as e:
+            await self.error_repo.insert_error(
+                Error(
+                    tool_name="EditFileService",
+                    error_message=f"Unexpected error: {str(e)}",
+                    timestamp=datetime.now().isoformat(),
+                )
+            )
             return {
                 "success": False,
                 "error": str(e),
@@ -97,71 +212,126 @@ class EditFileService:
                 },
             }
 
-    async def _apply_code_changes(
-        self, original_code: str, code_snippet: str
-    ) -> Optional[str]:
+    async def _apply_code_changes_relace(
+        self, initial_code: str, edit_snippet: str
+    ) -> Tuple[str, dict]:
         """
-        Apply code changes to the original code using the TGI model.
+        Apply code changes using the Relace API.
 
         Args:
-            original_code (str): The original code content
-            code_snippet (str): The code snippet to apply
+            initial_code (str): The original code content (empty string for new files)
+            edit_snippet (str): The code snippet to apply
 
         Returns:
-            Optional[str]: The updated code content, or None if failed
+            Tuple[str, dict]: The merged code and usage data
+
+        Raises:
+            Exception: If the API call fails or returns invalid data
         """
         try:
-            load_dotenv()
+            payload = {
+                "initialCode": initial_code,
+                "editSnippet": edit_snippet,
+                "stream": False,
+                "relace-metadata": {
+                    "tool": "EditFileService",
+                    "timestamp": datetime.now().isoformat(),
+                    "initial_code_length": len(initial_code),
+                    "edit_snippet_length": len(edit_snippet),
+                },
+            }
 
-            TGI_USER_PROMPT_TEMPLATE = f"""<|im_start|>system
-                You are a coding assistant that helps merge code updates, ensuring every modification is fully integrated.<|im_end|>
-                <|im_start|>user
-                Merge all changes from the <update> snippet into the <code> below.
-                - Preserve the code's structure, order, comments, and indentation exactly.
-                - Output only the updated code, enclosed within <updated-code> and </updated-code> tags.
-                - Do not include any additional text, explanations, placeholders, ellipses, or code fences.
+            headers = {
+                "Authorization": f"Bearer {self.relace_api_key}",
+                "Content-Type": "application/json",
+            }
 
-                <code>{original_code}</code>
-
-                <update>{code_snippet}</update>
-
-                Provide the complete updated code.<|im_end|>
-                <|im_start|>assistant
-            """
-
-            user_query = TGI_USER_PROMPT_TEMPLATE
-
-            chat_completion = self.client.chat.completions.create(
-                model="tgi",
-                messages=[{"role": "user", "content": user_query}],
-                max_tokens=20000,
-                stream=True,
+            print(
+                f"Calling Relace API with payload: initial_code_length={len(initial_code)}, edit_snippet_length={len(edit_snippet)}"
             )
 
-            edited_content = ""
-            for message in chat_completion:
-                content = message.choices[0].delta.content
-                if content:
-                    edited_content += content
+            async with httpx.AsyncClient(
+                timeout=self.timeout, verify=False
+            ) as client:
+                response = await client.post(
+                    self.relace_api_url, json=payload, headers=headers
+                )
+                response.raise_for_status()
 
-            if (
-                "<updated-code>" in edited_content
-                and "</updated-code>" in edited_content
-            ):
-                start_tag = "<updated-code>"
-                end_tag = "</updated-code>"
-                start_pos = edited_content.find(start_tag) + len(start_tag)
-                end_pos = edited_content.find(end_tag)
-                edited_content = edited_content[start_pos:end_pos].strip()
+                result = response.json()
+                merged_code = result.get("mergedCode")
+                usage_data = result.get("usage", {})
 
-            if not isinstance(edited_content, str):
-                raise ValueError("Edited content must be a string")
+                if not merged_code:
+                    raise ValueError("No merged code returned from Relace API")
 
-            if not edited_content:
-                raise ValueError("Edited content cannot be empty")
+                print(
+                    f"Relace API response: merged_code_length={len(merged_code)}, usage={usage_data}"
+                )
+                return merged_code, usage_data
 
-            return edited_content
+        except httpx.RequestError as e:
+            raise Exception(f"Request error calling Relace API: {str(e)}")
+        except httpx.HTTPStatusError as e:
+            error_detail = ""
+            try:
+                error_detail = e.response.text
+            except:
+                error_detail = f"Status code: {e.response.status_code}"
+            raise Exception(f"HTTP error calling Relace API: {error_detail}")
+        except Exception as e:
+            raise Exception(f"Unexpected error calling Relace API: {str(e)}")
+
+    async def _log_llm_usage(
+        self,
+        tool_name: str,
+        explanation: str,
+        file_path: str,
+        usage_data: dict,
+        file_existed: bool,
+        directories_created: bool,
+    ):
+        """
+        Log LLM usage data to the repository.
+
+        Args:
+            tool_name: Name of the tool making the request
+            explanation: User-provided explanation
+            file_path: Path to the file being edited
+            usage_data: Usage statistics from Relace API
+            file_existed: Whether the file existed before editing
+            directories_created: Whether parent directories were created
+        """
+        try:
+            llm_usage_entry = {
+                "tool_name": tool_name,
+                "explanation": explanation,
+                "file_path": file_path,
+                "timestamp": datetime.now().isoformat(),
+                "api_provider": "relace",
+                "endpoint": "instantapply",
+                "operation_type": "file_edit",
+                "file_existed": file_existed,
+                "directories_created": directories_created,
+                "usage": usage_data,
+                "prompt_tokens": usage_data.get("prompt_tokens", 0),
+                "completion_tokens": usage_data.get("completion_tokens", 0),
+                "total_tokens": usage_data.get("total_tokens", 0),
+                "api_url": self.relace_api_url,
+            }
+
+            await self.llm_usage_repo.add_llm_usage(llm_usage_entry)
+            print(
+                f"Logged LLM usage: {usage_data.get('total_tokens', 0)} total tokens"
+            )
 
         except Exception as e:
-            print(f"FastApply error: {str(e)}")
-            return None
+            # Log error but don't fail the main operation
+            await self.error_repo.insert_error(
+                Error(
+                    tool_name="EditFileService",
+                    error_message=f"Failed to log LLM usage: {str(e)}",
+                    timestamp=datetime.now().isoformat(),
+                )
+            )
+            print(f"Warning: Failed to log LLM usage: {str(e)}")
