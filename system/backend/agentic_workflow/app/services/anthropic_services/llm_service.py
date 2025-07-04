@@ -126,6 +126,21 @@ class AnthropicService:
             if tools:
                 stream_params["tools"] = tools
 
+            # Print payload being sent
+            print("🔍 ANTHROPIC API PAYLOAD:")
+            for key, value in stream_params.items():
+                if isinstance(value, list):
+                    print(f"  {key.capitalize()} Count: {len(value)}")
+                    if key == "messages":
+                        for i, message in enumerate(value):
+                            print(f"    Message {i+1}: {message}")
+                    elif key == "tools":
+                        for i, tool in enumerate(value):
+                            print(f"    Tool {i+1}: {tool.get('name', 'Unknown')} ({tool.get('type', 'Unknown type')})")
+                else:
+                    print(f"  {key.capitalize()}: {value}")
+            print("=" * 50)
+
             collected_text = ""
             tool_calls = []
 
@@ -138,13 +153,27 @@ class AnthropicService:
                 # Extract tool calls if any
                 for content_block in final_message.content:
                     if content_block.type == "tool_use":
-                        tool_calls.append(
-                            {
-                                "id": content_block.id,
-                                "name": content_block.name,
-                                "input": content_block.input,
-                            }
-                        )
+                        tool_call_data = {
+                            "id": content_block.id,
+                            "name": content_block.name,
+                            "input": content_block.input,
+                        }
+                        tool_calls.append(tool_call_data)
+                        
+                        # Print tool call details
+                        print(f"🔧 TOOL CALL DETECTED:")
+                        print(f"  ID: {content_block.id}")
+                        print(f"  Name: {content_block.name}")
+                        print(f"  Arguments: {content_block.input}")
+                        print("-" * 30)
+
+                # Print summary
+                print(f"📊 RESPONSE SUMMARY:")
+                print(f"  Content Length: {len(collected_text)} characters")
+                print(f"  Tool Calls: {len(tool_calls)}")
+                print(f"  Stop Reason: {final_message.stop_reason}")
+                print(f"  Usage: Input={final_message.usage.input_tokens}, Output={final_message.usage.output_tokens}")
+                print("=" * 50)
 
                 loggers["anthropic"].info(
                     f"Anthropic usage: {final_message.usage}"

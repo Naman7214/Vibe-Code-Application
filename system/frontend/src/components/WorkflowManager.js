@@ -42,7 +42,7 @@ const WorkflowManager = () => {
     toggleScreenSelection,
   } = useWorkflow();
 
-  const [buildErrors, setBuildErrors] = useState('');
+
 
   // Step handlers
   const handleWorkflowSelection = (mode) => {
@@ -70,21 +70,13 @@ const WorkflowManager = () => {
   };
 
   const handleStep3Next = async () => {
-    const result = await runCodeGeneration();
-    
-    // Check if there were build errors
-    if (result && result.error) {
-      setBuildErrors(result.error);
-      // Step will automatically move to error fixing via useWorkflow
-    }
-  };
-
-  const handleStep4Next = async (errors) => {
-    await runIdeAgent(errors);
+    // Code generation now handles build errors automatically
+    // If errors occur, the IDE agent will fix them automatically
+    // The step progression is handled within the useWorkflow hook
+    await runCodeGeneration();
   };
 
   const handleReset = () => {
-    setBuildErrors('');
     resetWorkflow();
   };
 
@@ -93,17 +85,15 @@ const WorkflowManager = () => {
       return [
         { number: 1, label: 'Initial Processing', completed: currentStep > 1 },
         { number: 2, label: 'Screen Selection', completed: currentStep > 2 },
-        { number: 3, label: 'Code Generation', completed: currentStep > 3 },
-        { number: 4, label: 'Error Fixing', completed: currentStep > 4, optional: true },
-        { number: 5, label: 'Complete', completed: currentStep >= 5 },
+        { number: 3, label: 'Code Generation & Auto-fix', completed: currentStep > 3 },
+        { number: 4, label: 'Complete', completed: currentStep >= 5 },
       ];
     } else if (workflowMode === 'followup') {
       return [
         { number: 1, label: 'Session Setup', completed: currentStep > 1 },
         { number: 2, label: 'Context Gathering', completed: currentStep > 3 },
-        { number: 3, label: 'Code Generation', completed: currentStep > 4 },
-        { number: 4, label: 'Error Fixing', completed: currentStep > 5, optional: true },
-        { number: 5, label: 'Complete', completed: currentStep >= 6 },
+        { number: 3, label: 'Code Generation & Auto-fix', completed: currentStep > 4 },
+        { number: 4, label: 'Complete', completed: currentStep >= 6 },
       ];
     } else if (workflowMode === 'ide') {
       return [
@@ -184,9 +174,8 @@ const WorkflowManager = () => {
       const stepMapping = {
         1: 1, // Session Setup
         2: 3, // Context Gathering (step 3 in hook)
-        3: 4, // Code Generation (step 4 in hook)
-        4: 5, // Error Fixing (step 5 in hook)
-        5: 6, // Complete (step 6 in hook)
+        3: 4, // Code Generation & Auto-fix (step 4 in hook)
+        4: 6, // Complete (step 6 in hook)
       };
       return currentStep === stepMapping[stepNumber];
     } else if (workflowMode === 'ide') {
@@ -237,15 +226,6 @@ const WorkflowManager = () => {
               selectedScreens={selectedScreens}
               platformType={platformType}
               onNext={handleStep3Next}
-              loading={loading}
-              error={error}
-            />
-          );
-        case 4:
-          return (
-            <Step4ErrorFixing
-              buildErrors={buildErrors}
-              onNext={handleStep4Next}
               loading={loading}
               error={error}
             />
@@ -312,15 +292,6 @@ const WorkflowManager = () => {
               selectedScreens={dictOfScreens}
               platformType={platformType}
               onNext={handleStep3Next}
-              loading={loading}
-              error={error}
-            />
-          );
-        case 5:
-          return (
-            <Step4ErrorFixing
-              buildErrors={buildErrors}
-              onNext={handleStep4Next}
               loading={loading}
               error={error}
             />

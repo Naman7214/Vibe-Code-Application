@@ -8,10 +8,10 @@ class FileReadRequest(BaseModel):
         ..., description="The absolute path to the file to read"
     )
     start_line: int = Field(
-        default=None, description="The line number to start reading from"
+        default=0, description="The line number to start reading from"
     )
     end_line: int = Field(
-        default=None, description="The line number to stop reading at"
+        default=1500, description="The line number to stop reading at"
     )
 
 

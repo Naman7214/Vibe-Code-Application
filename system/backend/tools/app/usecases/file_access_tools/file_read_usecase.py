@@ -1,4 +1,4 @@
-from typing import Any, Dict, Optional
+from typing import Any, Dict
 
 from fastapi import Depends
 
@@ -14,8 +14,8 @@ class FileReadUseCase:
     async def execute(
         self,
         file_path: str,
-        start_line: Optional[int] = None,
-        end_line: Optional[int] = None,
+        start_line: int = 0,
+        end_line: int = 1500,
     ) -> Dict[str, Any]:
 
         return await self.file_read_service.read_file(

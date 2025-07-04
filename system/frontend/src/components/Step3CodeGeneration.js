@@ -68,9 +68,20 @@ const Step3CodeGeneration = ({
           <li>• Context gathering will be completed for your selected screens</li>
           <li>• Code generation will begin for your {platformType} application</li>
           <li>• Build validation will check for any compilation errors</li>
-          <li>• If errors are found, our IDE agent will automatically fix them</li>
+          <li>• If errors are found, our IDE agent will <strong>automatically</strong> fix them</li>
           <li>• You'll get the path to your generated codebase</li>
         </ul>
+        
+        {loading && (
+          <div className="mt-4 p-3 bg-yellow-50 border border-yellow-200 rounded">
+            <div className="flex items-center">
+              <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-yellow-600 mr-2"></div>
+              <span className="text-sm text-yellow-800 font-medium">
+                Auto-fixing build errors with IDE agent...
+              </span>
+            </div>
+          </div>
+        )}
       </div>
 
       <form onSubmit={handleSubmit}>
@@ -90,7 +101,7 @@ const Step3CodeGeneration = ({
           {loading ? (
             <>
               <div className="animate-spin rounded-full h-5 w-5 border-b-2 border-white mr-2"></div>
-              Generating Code...
+              Generating & Auto-fixing...
             </>
           ) : (
             <>
@@ -105,10 +116,13 @@ const Step3CodeGeneration = ({
       {loading && (
         <div className="mt-6">
           <div className="bg-gray-200 rounded-full h-2">
-            <div className="bg-primary-600 h-2 rounded-full animate-pulse" style={{width: '45%'}}></div>
+            <div className="bg-primary-600 h-2 rounded-full animate-pulse" style={{width: '60%'}}></div>
           </div>
           <p className="text-center text-sm text-gray-600 mt-2">
-            This may take a few minutes...
+            Generating code and automatically fixing any build errors...
+          </p>
+          <p className="text-center text-xs text-gray-500 mt-1">
+            This may take a few minutes
           </p>
         </div>
       )}
