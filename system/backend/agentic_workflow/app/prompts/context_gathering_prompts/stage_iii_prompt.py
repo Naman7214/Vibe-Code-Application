@@ -252,14 +252,14 @@ Create a global mobile design theme strategy that will serve as the foundation r
 - Ensure scalability across different mobile screen types and orientations
 - Balance brand expression with mobile functional clarity
 - Consider platform-specific design requirements
-- For providing the description at the required places, make sure to provide it in a manner that it indicates deeper psychological reasoning for mobile users
+- For color descriptions, focus on technical specs with brief psychological rationale
 </OUTPUT_REQUIREMENTS>
 
 Make sure to use proper escape characters for the new lines and other special characters such that it'll not cause any error in the upcoming parsing of the output.
 
 <OUTPUT>
 {
-    "design_philosophy": "brief statement of overall mobile design approach considering user context and device constraints (about 3-4 sentences) this should reflect the deep design psychology and the potential success in the user engagement. This should be a deep and comprehensive description that will be used to build the mobile design system.",
+    "design_philosophy": "brief statement of overall mobile design approach considering user context and device constraints (about 2-3 sentences) with core psychological engagement principle",
     "color_palette": {
         "primary": {"description": "reason behind choosing this color for mobile interfaces"},
         "secondary": {"description": "reason behind choosing this color for mobile interfaces"},
@@ -273,8 +273,8 @@ Make sure to use proper escape characters for the new lines and other special ch
         }
     },
     "typography": {
-        "heading_font": {"family": "mobile-optimized font name", "characteristics": "description for mobile readability"},
-        "body_font": {"family": "mobile-optimized font name", "characteristics": "description for mobile readability"},
+        "heading_font": {"family": "mobile-optimized font name", "characteristics": "brief mobile readability description"},
+        "body_font": {"family": "mobile-optimized font name", "characteristics": "brief mobile readability description"},
         "hierarchy": {
             "h1": {"size": "mobile_size", "weight": "weight", "usage": "usage on mobile screens"},
             "h2": {"size": "mobile_size", "weight": "weight", "usage": "usage on mobile screens"},
@@ -283,7 +283,7 @@ Make sure to use proper escape characters for the new lines and other special ch
         }
     },
     "visual_mood": {
-        "primary_mood": "mobile-focused mood description considering mobile user context (about 2-3 sentences)",
+        "primary_mood": "mobile-focused mood description (about 1-2 sentences)",
         "style_direction": ["mobile_style1", "mobile_style2"],
         "personality_traits": ["mobile_trait1", "mobile_trait2"]
     },
@@ -297,9 +297,9 @@ Make sure to use proper escape characters for the new lines and other special ch
         "adaptive_design": "how design adapts between platforms"
     },
     "brand_elements": {
-        "logo_treatment": "mobile logo treatment description (about 2-3 sentences)",
-        "imagery_style": "mobile imagery style description (about 2-3 sentences)", 
-        "iconography_style": "mobile iconography style description (about 2-3 sentences)"
+        "logo_treatment": "mobile logo treatment description (about 1-2 sentences)",
+        "imagery_style": "mobile imagery style description (about 1-2 sentences)", 
+        "iconography_style": "mobile iconography style description (about 1-2 sentences)"
     }
 }
 </OUTPUT>
@@ -341,13 +341,12 @@ Analyze the mobile screen requirements to identify and categorize custom Flutter
 5. Consider widget composition patterns and how custom widgets enhance built-in Flutter widgets
 6. Define widget responsibilities and mobile data flow patterns
 7. Focus on functional mobile widget architecture rather than visual details by considering mobile users' UX and UI needs
-8. Consider platform-adaptive widgets (Material vs Cupertino) when built-in widgets are insufficient
-9. BE SELECTIVE: Only identify custom widgets that are truly essential for mobile screens and provide clear value beyond built-in widgets
-10. AVOID MICRO-WIDGETS: Don't create separate widgets for simple mobile elements that can use built-in Flutter widgets
-11. Screen specific widgets will integrate with global design system and be used to build self-contained mobile screens
-12. Leverage Flutter's built-in widgets as the foundation and only create custom widgets when necessary for specific functionality
-13. Focus on StatefulWidget vs StatelessWidget decisions based on screen requirements
-14. Your technical context will be used to build the flutter app that runs entirely without any backend dependencies. Uses mock data, hardcoded values, and simulated responses instead of real API calls, database connections, or external services. For features requiring permissions (camera, location, etc.) or third-party integrations (payments, GPS, social login), create mock implementations that demonstrate the UI/UX flow without actual functionality. Focus on creating a complete, interactive frontend experience that showcases the app's design and user interface rather than implementing real-world integrations.
+8. BE SELECTIVE: Only identify custom widgets that are truly essential for mobile screens and provide clear value beyond built-in widgets
+9. AVOID MICRO-WIDGETS: Don't create separate widgets for simple mobile elements that can use built-in Flutter widgets
+10. Screen specific widgets will integrate with global design system and be used to build self-contained mobile screens
+11. Leverage Flutter's built-in widgets as the foundation and only create custom widgets when necessary for specific functionality
+12. Focus on StatefulWidget vs StatelessWidget decisions based on screen requirements
+13. Your technical context will be used to build the flutter app that runs entirely without any backend dependencies. Uses mock data, hardcoded values, and simulated responses instead of real API calls, database connections, or external services. For features requiring permissions (camera, location, etc.) or third-party integrations (payments, GPS, social login), create mock implementations that demonstrate the UI/UX flow without actual functionality. Focus on creating a complete, interactive frontend experience that showcases the app's design and user interface rather than implementing real-world integrations.
 </INSTRUCTIONS>
 
 <WIDGET_STATE_DECISION_FRAMEWORK>
@@ -385,7 +384,7 @@ Make sure to use proper escape characters for the new lines and other special ch
                 "section_mapping": "which mobile key section it serves",
                 "responsibilities": ["mobile_responsibility1", "mobile_responsibility2"],
                 "description": "mobile widget purpose, functionality, and usage context including mobile interactions (about 2-3 sentences)",
-                "platform_adaptivity": "how widget adapts between Material and Cupertino designs",
+                "platform_adaptivity": "follows_unified_material3_cupertino_strategy",
                 "child_widgets": ["list of child widgets or built-in Flutter widgets it contains"],
                 "state_management": "description of state management needs if StatefulWidget"
             }

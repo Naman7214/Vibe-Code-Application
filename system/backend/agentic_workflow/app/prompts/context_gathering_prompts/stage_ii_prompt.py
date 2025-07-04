@@ -32,7 +32,7 @@ Analyze the provided domain context, project context, industry patterns and sele
 - Ensure data requirements are realistic and actionable, since the upcoming stages will be using this data requirements to generate the realistic mock data.
 - If the previous output of the SECOND stage is present then just extend it by adding the new screens and their requirements and provide the extended output in the <OUTPUT> tags
 - For providing the description at the required places, make sure to provide it in a manner that it indicates deeper reasoning and understanding of the users needs.
-- Add 3-4 user stories for each screen. Must think from the user's perspective and provide the user stories in a manner such that a real user can complete the task/goal with the help of the screen.
+- Add 2-3 concise user stories per screen focused on core use cases
 - Make sure to add the proper escape characters for the new lines and other special characters such that it'll not cause any error in the upcoming parsing of the output.
 </OUTPUT_REQUIREMENTS>
 
@@ -47,7 +47,7 @@ Analyze the provided domain context, project context, industry patterns and sele
         },
         "user_actions": ["action1", "action2"],
         "responsive_considerations": ["consideration1", "consideration2"]
-        "user_stories": ["description of the user story1 (about 4-5 sentences)", "description of the user story2 (about 4-5 sentences)"],
+        "user_stories": ["description of the user story1 (about 4-5 sentences)", "description of the user story2 (about 3-4 sentences)"],
     },
     "global_data_requirements": ["shared_data1", "shared_data2"]
 }
@@ -104,7 +104,7 @@ cross-platform considerations (iOS/Android)
 - Ensure data requirements are realistic and actionable for mobile environments
 - If the previous output of the SECOND stage is present then just extend it by adding the new screens and their requirements and provide the extended output in the <OUTPUT> tags
 - For providing the description at the required places, make sure to provide it in a manner that it indicates deeper reasoning and understanding of mobile users' needs
-- Add 3-4 user stories for each screen. Must think from the mobile user's perspective and provide the user stories in a manner that it indicates deeper reasoning and understanding of mobile usage patterns
+- Add 2-3 concise user stories per screen focused on unique mobile use cases
 - Consider mobile-specific interaction patterns (swipe, pinch, long-press, pull-to-refresh)
 - Account for different screen sizes and orientations (phone, tablet, landscape/portrait)
 - Include considerations for offline functionality and data synchronization
@@ -124,7 +124,7 @@ Make sure to use proper escape characters for the new lines and other special ch
         "interaction_patterns": ["mobile_pattern1", "gesture_pattern2", "platform_specific_pattern3"],
         "user_actions": ["mobile_action1", "gesture_action2", "navigation_action3"],
         "responsive_considerations": ["phone_consideration1", "tablet_consideration2", "orientation_consideration3"],
-        "user_stories": ["description of the mobile user story1 focusing on mobile usage patterns (about 2-3 sentences)", "description of the mobile user story2 considering mobile context (about 3-4 sentences)"]
+        "user_stories": ["concise mobile user story 1 (1-2 sentences)", "concise mobile user story 2 (1-2 sentences)"]
     },
     "global_data_requirements": ["shared_mobile_data1", "cached_data2", "sync_data3"],
     "mobile_architecture_notes": "Overall mobile app architecture considerations and cross-screen patterns"
