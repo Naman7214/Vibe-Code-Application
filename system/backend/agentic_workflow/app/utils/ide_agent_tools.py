@@ -269,6 +269,7 @@ class IDEAgentTools:
                 "code_base_search": "/code-base-search",
                 "grep_search": "/grep-search",
                 "web_search": "/web-search",
+                "exit_tool": "/exit-tool",
             }
 
             if tool_name not in endpoint_map:
@@ -319,26 +320,21 @@ class IDEAgentTools:
             return {
                 "cmd": tool_input.get("cmd"),
                 "is_background": tool_input.get("is_background"),
-                "explanation": tool_input.get("explanation"),
-                "default_path": tool_input.get("default_path"),
+                "default_path": tool_input.get("default_path")
             }
         elif tool_name == "web_search":
             return {
                 "search_query": tool_input.get("query"),
-                "explanation": tool_input.get("explanation"),
             }
         elif tool_name == "code_base_search":
             return {
-                "search_query": tool_input.get("query"),
-                "explanation": tool_input.get("explanation"),
-            }
+                "search_query": tool_input.get("query")            }
         elif tool_name == "grep_search":
             return {
                 "query": tool_input.get("query"),
                 "case_sensitive": tool_input.get("case_sensitive"),
                 "include_pattern": tool_input.get("include_pattern"),
                 "exclude_pattern": tool_input.get("exclude_pattern"),
-                "explanation": tool_input.get("explanation"),
                 "default_path": tool_input.get("default_path"),
             }
         else:
