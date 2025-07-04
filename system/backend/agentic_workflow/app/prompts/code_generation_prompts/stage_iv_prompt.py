@@ -86,14 +86,10 @@ USER_PROMPT = """Generate Routes.jsx and context registry based on the provided 
 **Screen Scratchpads:**
 {screen_scratchpads}
 
-**Global Scratchpad:**
-{global_scratchpad}
 
 **File Structure:**
 {file_structure}
 
-**Screen Descriptions:**
-{screen_descriptions}
 
 **Is Follow-up Request:** {is_follow_up}
 

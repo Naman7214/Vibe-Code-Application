@@ -123,8 +123,7 @@ Make sure to use proper escape characters for the new lines and other special ch
         },
         "interaction_patterns": ["mobile_pattern1", "gesture_pattern2", "platform_specific_pattern3"],
         "user_actions": ["mobile_action1", "gesture_action2", "navigation_action3"],
-        "responsive_considerations": ["phone_consideration1", "tablet_consideration2", "orientation_consideration3"],
-        "user_stories": ["concise mobile user story 1 (1-2 sentences)", "concise mobile user story 2 (1-2 sentences)"]
+        "user_stories": ["concise yet effective mobile user story 1 (1-2 sentences)", "concise yet effective mobile user story 2 (1-2 sentences)"]
     },
     "global_data_requirements": ["shared_mobile_data1", "cached_data2", "sync_data3"],
     "mobile_architecture_notes": "Overall mobile app architecture considerations and cross-screen patterns"

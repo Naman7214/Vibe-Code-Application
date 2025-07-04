@@ -32,6 +32,7 @@ import '../presentation/splash_screen/splash_screen.dart';
 import '../presentation/exercise_library/exercise_library.dart';
 import '../presentation/workout_dashboard/workout_dashboard.dart';
 ```
+IMPORTANT: Use the exact screen names from the screen scratchpads. NO exceptions. screen scratchpads are your only source of truth for the import pattern so obey them.
 
 **CONTEXT_REGISTRY Requirements:**
 - Provide structured summary of routes created
@@ -111,9 +112,6 @@ USER_PROMPT = """Generate lib/routes/app_routes.dart and context registry based 
 
 **Screen Scratchpads:**
 {screen_scratchpads}
-
-**Screen Descriptions:**
-{screen_descriptions}
 
 **Is Follow-up Request:** {is_follow_up}
 

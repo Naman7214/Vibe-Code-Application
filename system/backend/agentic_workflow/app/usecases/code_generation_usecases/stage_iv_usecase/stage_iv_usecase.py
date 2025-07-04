@@ -64,11 +64,8 @@ class StageIVUsecase:
 
             # Format user prompt with context
             user_prompt = USER_PROMPT.format(
-                screen_scratchpads=context_data["screen_scratchpads"],
-                global_scratchpad=context_data["global_scratchpad"],
-                file_structure=context_data["file_structure"],
+                screen_scratchpads=context_data["screen_scratchpads"],                file_structure=context_data["file_structure"],
                 existing_routes=context_data.get("existing_routes", ""),
-                screen_descriptions=json.dumps(screen_dict, indent=2),
                 is_follow_up=str(is_follow_up).lower(),
                 codebase_path=context_data["codebase_path"],
             )

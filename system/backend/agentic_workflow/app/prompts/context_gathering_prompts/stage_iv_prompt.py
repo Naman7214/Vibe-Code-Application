@@ -273,9 +273,6 @@ EXAMPLE OUTPUT STRUCTURE:
     "responsive": {
       "description": "description of responsive behavior across mobile screen sizes and orientations"
     },
-    "platform_adaptivity": {
-      "description": "how screen adapts between Material Design (Android) and Cupertino (iOS) patterns"
-    },
     "design": {
       "description": "description of mobile-optimized design considering touch targets, readability, and native mobile UX patterns"
     }

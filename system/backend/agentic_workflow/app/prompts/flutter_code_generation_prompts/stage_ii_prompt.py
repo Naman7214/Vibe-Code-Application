@@ -280,7 +280,7 @@ For each screen, create a scratchpad entry that includes:
 - [ ] Is the screen intuitive and interactive?
 - [ ] Is consistent UI maintained throughout the screen?
 - [ ] Is the code clean, readable, and standards-compliant? 
-- [ ] Are all the clickable elements/widget are interactive and intutive?
+- [ ] Are all the clickable elements/widget are interactive and intuitive?
 </CODE_GENERATION_CHECKLIST>
 
 Your generated code will be directly integrated into a Flutter application, so it must be syntactically correct, properly formatted, and ready for immediate execution.

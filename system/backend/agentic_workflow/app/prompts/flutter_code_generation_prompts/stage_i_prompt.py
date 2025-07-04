@@ -22,7 +22,6 @@ You will receive:
 2. Theme configuration requirements:
    - Use Material 3 (Material You) design system
    - Include proper ColorScheme definitions
-   - Configure AppBarTheme, ButtonTheme, CardTheme, etc.
    - Implement custom theme extensions for brand colors
    - Support dynamic color generation when available
 
@@ -76,7 +75,6 @@ You will receive:
 4. **TYPOGRAPHY SYSTEM** (Prevents text styling errors):
    - Use TextTheme with Material 3 naming convention
    - Include proper font weights, sizes, and letter spacing
-   - Support both English and international text rendering
    - Configure proper text scaling for accessibility
 
 5. **COMPONENT THEME CONSISTENCY** (Prevents UI inconsistencies):
@@ -90,6 +88,7 @@ You will receive:
    - Configure appropriate touch target sizes
 
 VALIDATION CHECKLIST:
+* Use professional, polished design patterns
 ✅ All ColorScheme properties defined (primary, onPrimary, secondary, etc.)
 ✅ Material 3 typography scale implemented
 ✅ Theme extensions properly structured with copyWith() and lerp()
@@ -141,38 +140,10 @@ VALIDATION CHECKLIST:
    )
    ```
 
-2. **CardThemeData VALID properties**:
-   ```dart
-   CardThemeData(
-     color: Color,
-     shadowColor: Color,
-     surfaceTintColor: Color,
-     elevation: double,
-     shape: ShapeBorder,
-     margin: EdgeInsets,
-     clipBehavior: Clip,
-   )
-   ```
-
-3. **TabBarThemeData VALID properties**:
-   ```dart
-   TabBarThemeData(
-     labelColor: Color,
-     unselectedLabelColor: Color,
-     labelStyle: TextStyle,
-     unselectedLabelStyle: TextStyle,
-     indicator: Decoration,
-     indicatorSize: TabBarIndicatorSize,
-     overlayColor: MaterialStateProperty<Color?>,
-   )
-   ```
-
-**COMPONENT THEME VALIDATION RULES**:
-- ✅ ALWAYS verify property names against Flutter documentation
-- ✅ Use IDE auto-completion to confirm available properties  
-- ✅ Prefer MaterialStateProperty for interactive states when available
-- ✅ Include null safety operators (?) for optional properties
-- ❌ NEVER assume property names - validate against actual Flutter API
+ 
+Prefer MaterialStateProperty for interactive states when available
+Include null safety operators (?) for optional properties
+NEVER assume property names - validate against actual Flutter API
 
 **COMPILATION ERROR PREVENTION CHECKLIST**:
 ✅ All theme component classes use correct "Data" suffixed names
@@ -182,16 +153,6 @@ VALIDATION CHECKLIST:
 ✅ Proper null safety annotations applied
 </FLUTTER_THEME_COMPONENT_IMPLEMENTATION>
 
-<FLUTTER_THEME_INTEGRATION>
-PROPERLY manage the colors, typography, spacing, elevation, and other design aspects using Flutter's Material Design system.
-DESIGN GUIDELINES:
-* Follow Material Design 3 specifications and guidelines
-* Implement proper semantic color usage
-* Support dynamic theming capabilities
-* Ensure cross-platform consistency
-* Prioritize accessibility and usability
-* Use professional, polished design patterns
-</FLUTTER_THEME_INTEGRATION>
 
 <PROFESSIONAL_FLUTTER_PATTERNS>
 🚨 ENTERPRISE-GRADE FLUTTER THEME ARCHITECTURE:
@@ -265,17 +226,6 @@ IMPORTANT NOTES:
 - MUST use uppercase XML tags: FILES, FILE, FILE_PATH, CODE_SNIPPET
 - Replace placeholder colors with actual values from the design system context
 
-🚨 CRITICAL FLUTTER VALIDATION CHECKLIST:
-- ✅ ALL ColorScheme properties defined (no missing colors)
-- ✅ Material 3 typography scale implemented with proper naming
-- ✅ Theme extensions properly structured with copyWith() and lerp()
-- ✅ Google Fonts integration included in pubspec.yaml dependencies
-- ✅ Component themes configured for Material 3 consistency
-- ✅ Accessibility contrast ratios met (4.5:1 minimum)
-- ✅ Semantic color system (success, warning, error, info) included
-- ✅ ALL theme components use correct "Data" suffixed class names
-- ✅ NO invalid properties used in theme component definitions
-- ✅ Component theme properties validated against Flutter API documentation
 """
 
 USER_PROMPT = """

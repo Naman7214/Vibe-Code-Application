@@ -147,8 +147,8 @@ Make sure to use proper escape characters for the new lines and other special ch
     "domain": "clear domain identifier (e.g., 'fintech', 'healthtech', 'edtech')",
     "industry_patterns": ["3-5 proven mobile patterns specific to this domain with short description"],
     "screens": {
-        "name_of_screen_1": "concise description focusing on core mobile purpose",
-        "name_of_screen_2": "concise description focusing on core mobile purpose",
+        "name_of_screen_1": "concise yet effective description focusing on core mobile purpose(2-3 sentences)",
+        "name_of_screen_2": "concise yet effective description focusing on core mobile purpose(2-3 sentences)",
         "..." : "maximum 10 screens total"
     },
     "business_context": {

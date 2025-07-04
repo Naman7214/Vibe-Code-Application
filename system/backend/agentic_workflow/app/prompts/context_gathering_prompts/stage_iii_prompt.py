@@ -120,7 +120,7 @@ Analyze the screen requirements to identify and categorize components into globa
 </INPUT_CONTEXT>
 
 <INSTRUCTIONS>
-1. Identify components that will be used across multiple screens (global components)
+1. Identify minimum global components that will be used across multiple screens
 2. Only suggest components that work with mock or static data. Exclude authentication, role-based menus, live API data, or session management. Focus on UI components that demonstrate navigation patterns, visual states, and interactions using mock data only.
 2. Group global components into logical clusters based on their functionality (e.g., "navigation", "ui_elements", "data_display", "forms", "auth", "layout", etc.)
 3. Create a "miscellaneous" cluster for components that don't fit into specific groups
@@ -131,9 +131,10 @@ Analyze the screen requirements to identify and categorize components into globa
 8. Specify component responsibilities and data flow
 9. Consider component composition and modularity
 10. Focus on functional component architecture rather than visual details by considering the users UX and UI needs.
-11. BE SELECTIVE: Only identify components that are truly essential and provide clear value. Avoid over-engineering the component system.
-12. GLOBAL COMPONENTS: Only promote to global if it provides significant architectural value (e.g., Header, Footer, Button, Modal)
-13. AVOID MICRO-COMPONENTS: Don't create separate components for simple elements like individual form fields, text blocks, or basic UI elements
+11. If required then suggest Grid System, Lists & Item Components, Table Components,Card Components ,Modal & Dialog Components, Overlays, etc. for the screen specific components.
+12. BE SELECTIVE: Only identify components that are truly essential and provide clear value. Avoid over-engineering the component system.
+13. GLOBAL COMPONENTS: Only promote to global if it provides significant architectural value (e.g., Header, Footer, Button, Modal)
+14. AVOID MICRO-COMPONENTS: Don't create separate components for simple elements like individual form fields, text blocks, or basic UI elements
 14. Screen specific components will be used to build the self contained screens.
 </INSTRUCTIONS>
 
@@ -259,7 +260,7 @@ Make sure to use proper escape characters for the new lines and other special ch
 
 <OUTPUT>
 {
-    "design_philosophy": "brief statement of overall mobile design approach considering user context and device constraints (about 2-3 sentences) with core psychological engagement principle",
+    "design_philosophy": "brief statement of overall mobile design approach considering user context and device constraints (about 4-5 sentences) with core psychological engagement principle your design philosophy should be such that it hooks the user and makes them engage with the app while also considering the practicality of the design",
     "color_palette": {
         "primary": {"description": "reason behind choosing this color for mobile interfaces"},
         "secondary": {"description": "reason behind choosing this color for mobile interfaces"},
@@ -286,10 +287,6 @@ Make sure to use proper escape characters for the new lines and other special ch
         "primary_mood": "mobile-focused mood description (about 1-2 sentences)",
         "style_direction": ["mobile_style1", "mobile_style2"],
         "personality_traits": ["mobile_trait1", "mobile_trait2"]
-    },
-    "responsive_approach": {
-        "breakpoints": {"small_mobile": "value", "large_mobile": "value", "tablet": "value"},
-        "orientation_handling": "landscape and portrait considerations"
     },
     "platform_specific": {
         "material_design": "Android-specific Material Design considerations",
@@ -347,6 +344,7 @@ Analyze the mobile screen requirements to identify and categorize custom Flutter
 11. Leverage Flutter's built-in widgets as the foundation and only create custom widgets when necessary for specific functionality
 12. Focus on StatefulWidget vs StatelessWidget decisions based on screen requirements
 13. Your technical context will be used to build the flutter app that runs entirely without any backend dependencies. Uses mock data, hardcoded values, and simulated responses instead of real API calls, database connections, or external services. For features requiring permissions (camera, location, etc.) or third-party integrations (payments, GPS, social login), create mock implementations that demonstrate the UI/UX flow without actual functionality. Focus on creating a complete, interactive frontend experience that showcases the app's design and user interface rather than implementing real-world integrations.
+14. Use ListView/GridView, Cards & Tiles, Dialogs & Alerts, Bottom Sheet when required. it helps to make the fully interactive and intuitive screen.
 </INSTRUCTIONS>
 
 <WIDGET_STATE_DECISION_FRAMEWORK>
@@ -384,7 +382,6 @@ Make sure to use proper escape characters for the new lines and other special ch
                 "section_mapping": "which mobile key section it serves",
                 "responsibilities": ["mobile_responsibility1", "mobile_responsibility2"],
                 "description": "mobile widget purpose, functionality, and usage context including mobile interactions (about 2-3 sentences)",
-                "platform_adaptivity": "follows_unified_material3_cupertino_strategy",
                 "child_widgets": ["list of child widgets or built-in Flutter widgets it contains"],
                 "state_management": "description of state management needs if StatefulWidget"
             }
