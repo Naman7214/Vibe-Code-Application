@@ -174,7 +174,9 @@ class Helper:
             f"Processing single screen: {screen_name}"
         )
 
-        system_prompt = SYSTEM_PROMPT
+        system_prompt = SYSTEM_PROMPT.format(
+            base_path=f"{get_project_root()}/artifacts/{session_state.get()}",
+        )
 
         single_screen_data = {screen_name: screen_data}
         single_navigation_data = {screen_name: screen_navigation_data}
