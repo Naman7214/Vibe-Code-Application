@@ -136,7 +136,9 @@ class AnthropicService:
                             print(f"    Message {i+1}: {message}")
                     elif key == "tools":
                         for i, tool in enumerate(value):
-                            print(f"    Tool {i+1}: {tool.get('name', 'Unknown')} ({tool.get('type', 'Unknown type')})")
+                            print(
+                                f"    Tool {i+1}: {tool.get('name', 'Unknown')} ({tool.get('type', 'Unknown type')})"
+                            )
                 else:
                     print(f"  {key.capitalize()}: {value}")
             print("=" * 50)
@@ -159,7 +161,7 @@ class AnthropicService:
                             "input": content_block.input,
                         }
                         tool_calls.append(tool_call_data)
-                        
+
                         # Print tool call details
                         print(f"🔧 TOOL CALL DETECTED:")
                         print(f"  ID: {content_block.id}")
@@ -172,7 +174,9 @@ class AnthropicService:
                 print(f"  Content Length: {len(collected_text)} characters")
                 print(f"  Tool Calls: {len(tool_calls)}")
                 print(f"  Stop Reason: {final_message.stop_reason}")
-                print(f"  Usage: Input={final_message.usage.input_tokens}, Output={final_message.usage.output_tokens}")
+                print(
+                    f"  Usage: Input={final_message.usage.input_tokens}, Output={final_message.usage.output_tokens}"
+                )
                 print("=" * 50)
 
                 loggers["anthropic"].info(

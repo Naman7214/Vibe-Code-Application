@@ -1,7 +1,6 @@
 import os
 from datetime import datetime
 
-
 from fastapi import Depends, HTTPException, status
 
 from system.backend.tools.app.models.domain.error import Error
@@ -12,7 +11,9 @@ from system.backend.tools.app.utils.path_validator import is_safe_path
 class FileReadService:
     def __init__(self, error_repo: ErrorRepo = Depends()):
         self.error_repo = error_repo
-        self.MAX_LINES = 1500  # Maximum number of lines to return (matches default end_line)
+        self.MAX_LINES = (
+            1500  # Maximum number of lines to return (matches default end_line)
+        )
 
     async def read_file(
         self,

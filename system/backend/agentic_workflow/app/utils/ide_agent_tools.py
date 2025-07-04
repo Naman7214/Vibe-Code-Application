@@ -3,7 +3,6 @@ import os
 from typing import Any, Dict, List
 
 import httpx
-from fastapi import HTTPException
 
 from system.backend.agentic_workflow.app.config.settings import settings
 from system.backend.agentic_workflow.app.utils.logger import loggers
@@ -270,9 +269,7 @@ class IDEAgentTools:
                 "list_directory": "/list-directory",
                 "search_files": "/search-files",
                 "delete_file": "/delete-file",
-                "code_base_search": "/code-base-search",
                 "grep_search": "/grep-search",
-                "web_search": "/web-search",
                 "exit_tool": "/exit-tool",
             }
 
@@ -287,32 +284,65 @@ class IDEAgentTools:
                 tool_name, tool_input
             )
 
+            # Debug logging
+            print(f"🔧 DEBUG: Calling tool {tool_name}")
+            print(f"🔧 DEBUG: URL: {url}")
+            print(f"🔧 DEBUG: Original tool_input: {tool_input}")
+            print(f"🔧 DEBUG: Mapped request_payload: {request_payload}")
+
+            loggers["ide_agent"].info(
+                f"Calling tool {tool_name} with payload: {request_payload}"
+            )
+
             async with httpx.AsyncClient(
                 timeout=self.timeout, verify=False
             ) as client:
                 response = await client.post(url, json=request_payload)
+
                 response.raise_for_status()
 
                 result = response.json()
-                loggers["ide_agent"].info(
-                    f"Tool {tool_name} called successfully"
-                )
-                return result
+
+                # Extract data field from tools server response
+                # Tools server returns: {"data": {...}, "message": "...", "error": null}
+                if result.get("error") is None:
+                    # Success - return the data field directly
+                    data = result.get("data", {})
+                    loggers["ide_agent"].info(
+                        f"Tool {tool_name} called successfully. Returning data: {data}"
+                    )
+                    return {"success": True, "data": data}
+                else:
+                    # Error case
+                    error_msg = result.get("error", "Unknown error")
+                    print(f"🔧 DEBUG: Tool returned error: {error_msg}")
+                    loggers["ide_agent"].error(
+                        f"Tool {tool_name} failed: {error_msg}"
+                    )
+                    return {"success": False, "error": error_msg}
 
         except httpx.RequestError as exc:
             error_msg = f"Error calling tool {tool_name}: {str(exc)}"
+            print(f"🔧 DEBUG: RequestError: {error_msg}")
             loggers["ide_agent"].error(error_msg)
-            raise HTTPException(status_code=500, detail=error_msg)
+            return {"success": False, "error": error_msg}
         except httpx.HTTPStatusError as exc:
             error_msg = f"HTTP error calling tool {tool_name}: {exc.response.status_code}"
+            print(f"🔧 DEBUG: HTTPStatusError: {error_msg}")
+            try:
+                error_response = exc.response.json()
+                print(f"🔧 DEBUG: Error response body: {error_response}")
+                if "detail" in error_response:
+                    error_msg = error_response["detail"]
+            except:
+                print(f"🔧 DEBUG: Error response text: {exc.response.text}")
             loggers["ide_agent"].error(error_msg)
-            raise HTTPException(
-                status_code=exc.response.status_code, detail=error_msg
-            )
+            return {"success": False, "error": error_msg}
         except Exception as exc:
             error_msg = f"Unexpected error calling tool {tool_name}: {str(exc)}"
+            print(f"🔧 DEBUG: Unexpected error: {error_msg}")
             loggers["ide_agent"].error(error_msg)
-            raise HTTPException(status_code=500, detail=error_msg)
+            return {"success": False, "error": error_msg}
 
     def _map_tool_input_to_request(
         self, tool_name: str, tool_input: Dict[str, Any]
@@ -354,50 +384,19 @@ class IDEAgentTools:
         """
         Format tool results for display to the LLM
         """
+
+        # Now result comes from call_tool as {"success": True/False, "data": {...}} or {"success": False, "error": "..."}
         if result.get("success"):
-            if tool_name in ["read_file", "edit_file", "search_replace"]:
-                return f"✅ {tool_name} completed successfully.\n\nResult:\n{result.get('data', '')}"
-            elif tool_name == "run_terminal_cmd":
-                output = result.get("data", {})
-                return f"✅ Command executed successfully.\n\nOutput:\n{output.get('output', '')}\nReturn code: {output.get('return_code', 0)}"
-            elif tool_name == "list_directory":
-                files = result.get("data", [])
-                file_list = "\n".join([f"  {file}" for file in files])
-                return f"✅ Directory listed successfully.\n\nContents:\n{file_list}"
-            elif tool_name in ["code_base_search", "grep_search"]:
-                matches = result.get("data", [])
-                if matches:
-                    formatted_matches = []
-                    for match in matches[:10]:  # Limit to first 10 matches
-                        formatted_matches.append(
-                            f"📁 {match.get('file', 'Unknown file')}\n   {match.get('content', '')}"
-                        )
-                    return (
-                        f"✅ Search completed successfully. Found {len(matches)} matches.\n\n"
-                        + "\n\n".join(formatted_matches)
-                    )
-                else:
-                    return "✅ Search completed successfully. No matches found."
-            elif tool_name == "web_search":
-                search_results = result.get("data", [])
-                if search_results:
-                    formatted_results = []
-                    for result_item in search_results[
-                        :5
-                    ]:  # Limit to first 5 results
-                        formatted_results.append(
-                            f"🔗 {result_item.get('title', 'No title')}\n   {result_item.get('snippet', '')}"
-                        )
-                    return (
-                        f"✅ Web search completed successfully.\n\n"
-                        + "\n\n".join(formatted_results)
-                    )
-                else:
-                    return "✅ Web search completed successfully. No results found."
-            elif tool_name == "exit_tool":
-                return f"✅ Exit tool executed successfully. Summary saved to file."
+            data = result.get("data", {})
+            # Simple formatting - just return the data as a string
+            if isinstance(data, dict):
+                return f"✅ {tool_name} completed successfully.\n\nResult:\n{json.dumps(data, indent=2)}"
+            elif isinstance(data, list):
+                return f"✅ {tool_name} completed successfully.\n\nResult:\n{json.dumps(data, indent=2)}"
             else:
-                return f"✅ {tool_name} completed successfully.\n\nResult:\n{json.dumps(result.get('data', {}), indent=2)}"
+                return (
+                    f"✅ {tool_name} completed successfully.\n\nResult:\n{data}"
+                )
         else:
             error_msg = result.get("error", "Unknown error")
             return f"❌ {tool_name} failed: {error_msg}"
