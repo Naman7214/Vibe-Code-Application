@@ -3,6 +3,7 @@ from contextlib import asynccontextmanager
 
 import uvicorn
 from fastapi import FastAPI, Request
+from fastapi.middleware.cors import CORSMiddleware
 
 from system.backend.agentic_workflow.app.apis.code_generation_route import (
     router as code_generation_router,
@@ -31,6 +32,18 @@ async def db_lifespan(app: FastAPI):
 
 app = FastAPI(title="Agentic Workflow", lifespan=db_lifespan)
 
+# Add CORS middleware
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=[
+        "http://localhost:3000",
+        "http://localhost:3001",
+    ],  # Allow frontend origins
+    allow_credentials=True,
+    allow_methods=["*"],  # Allow all methods including OPTIONS
+    allow_headers=["*"],  # Allow all headers including X-Session-ID
+)
+
 # Include API routers
 app.include_router(
     initial_processing_router, prefix="/api/v1", tags=["initial-processing"]
@@ -42,17 +55,6 @@ app.include_router(
     code_generation_router, prefix="/api/v1", tags=["code-generation"]
 )
 app.include_router(ide_agent_router, prefix="/api/v1", tags=["ide-agent"])
-
-# app.add_middleware(
-#     CORSMiddleware,
-#     allow_origins=[
-#         "http://localhost:3001",
-#         "http://localhost:3000",
-#     ],  # Specify the exact origin of your frontend
-#     allow_credentials=True,
-#     allow_methods=["POST", "GET"],  # Allow all methods (GET, POST, etc.)
-#     allow_headers=["*"],  # Allow all headers
-# )
 
 
 @app.middleware("http")
