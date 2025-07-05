@@ -25,121 +25,81 @@ Create themes that feel:
 - **Timeless**: Modern but not trendy
 </THEME_PHILOSOPHY>
 
+# Comprehensive Flutter Theme System Requirements
+
 <REQUIREMENTS>
-1. Generate a comprehensive Flutter theme system that includes:
-   - lib/config/app_theme.dart (Main theme configuration with Material 3 support)
+Generate a comprehensive Flutter theme system that includes lib/config/app_theme.dart (Main theme configuration with Material 3 support) with the following mandatory specifications:
 
-2. Theme configuration requirements:
-   - Use Material 3 (Material You) design system
-   - Include proper ColorScheme definitions
-   - Implement custom theme extensions for brand colors
-   - Support dynamic color generation when available
+## Core Theme Configuration
+- Implement Material 3 (Material You) design system with complete compatibility
+- Include proper ColorScheme definitions with ALL required properties to prevent runtime errors
+- Support dynamic color generation when available using ColorScheme.fromSeed()
+- Ensure Flutter 3.0+ and Dart 3.0+ compatibility
+- Support both Android and iOS platforms with responsive design principles
 
-3. Color system requirements:
-   - Use proper Color values for all color definitions
-   - Ensure proper contrast ratios for accessibility
-   - Map semantic colors to appropriate Material Design meanings
-   - Include both primary and secondary color schemes
-   - Support surface colors, outline colors, and state colors
+## Complete Color System Implementation
+- Use proper Color values for all color definitions with accessibility-compliant contrast ratios
+- Include EVERY ColorScheme property: primary, onPrimary, secondary, onSecondary, surface, onSurface, background, onBackground, error, onError, inversePrimary, inverseSurface, surfaceVariant, onSurfaceVariant, outline, outlineVariant
+- Map semantic colors to appropriate Material Design meanings
+- NO missing color properties to prevent "color not found" errors
 
-4. Typography requirements:
-   - Use Google Fonts integration when needed
-   - Create consistent hierarchy with proper sizing and weights
-   - Support Material 3 typography scale (Display, Headline, Title, Body, Label)
-   - Ensure readability across all screen sizes
-   - Include proper letter spacing and line height
+## Typography System Requirements
+- Use Google Fonts integration when needed with Material 3 typography scale
+- Create consistent hierarchy using Material 3 naming convention: displayLarge, headlineLarge, titleLarge, bodyLarge, labelLarge, etc.
+- Configure proper sizing, weights, letter spacing, and line height for readability across all screen sizes
+- Support proper text scaling for accessibility compliance
 
-5. Theme extensions requirements:
-   - Create custom theme extensions for brand-specific colors
-   - Support semantic color naming (success, warning, error, info)
-   - Include elevation and shadow configurations
-   - Support custom spacing and sizing scales
+## Theme Extensions and Component Themes
+- Create custom theme extensions extending ThemeExtension<T> for brand-specific colors
+- Implement proper copyWith() and lerp() methods for all extensions
+- Register extensions in main ThemeData using extensions property
+- Support semantic color naming (success, warning, error, info) with elevation and shadow configurations
+- Configure ALL major component themes: AppBar, Button, Card, Input, NavigationBar, NavigationRail, etc.
+- Use MaterialStateProperty for state-dependent properties (hovered, pressed, disabled) on interactive UI elements
 
-6. Ensure compatibility with:
-   - Flutter 3.0+ and Dart 3.0+
-   - Material 3 design specifications
-   - Both Android and iOS platforms
-   - Responsive design principles
-   
-7. leveraging Flutter's built-in theming capabilities and avoiding unnecessary complexity that could impact maintainability.
+## Material 3 Compliance and Accessibility
+- Include proper Material 3 component specifications and interactive feedback
+- Configure appropriate touch target sizes for accessibility
+- Ensure user-centric design principles with clear visual feedback and consistent component behavior
 
-8. If animation is required then include an animation theme extension with properties like short, medium, and long durations, and a default curve, to ensure consistent animations throughout the app.
+## Animation and Performance
+- Include animation theme extension with short, medium, and long durations
+- Configure default curve for consistent animations throughout the app
+- Leverage Flutter's built-in theming capabilities avoiding unnecessary complexity
+- Strive for simplicity and reusability using built-in theme capabilities when possible
+
+## Critical Implementation Notes
+- Access custom extensions using Theme.of(context).extension<CustomExtension>()
+- Prevent theme access errors through proper extension registration
 </REQUIREMENTS>
 
-<CRITICAL_FLUTTER_THEME_REQUIREMENTS>
-🚨 MANDATORY REQUIREMENTS - FAILURE TO FOLLOW WILL CAUSE RUNTIME ERRORS:
-
-1. **COMPLETE COLOR SCHEME GENERATION** (Prevents "color not found" errors):
-   - EVERY ColorScheme must have ALL required properties: primary, onPrimary, secondary, onSecondary, surface, onSurface, background, onBackground, error, onError, etc.
-   - Include inversePrimary, inverseSurface, surfaceVariant, onSurfaceVariant, outline, outlineVariant
-   - NO missing color properties - Material 3 requires complete color schemes
-
-2. **MATERIAL 3 COMPATIBILITY** (Critical for modern Flutter apps):
-   - Use ColorScheme.fromSeed() when appropriate for dynamic theming
-   - Include proper Material 3 component themes (NavigationBar, NavigationRail, etc.)
-   - Support Material 3 elevation system (surfaceTint instead of shadows)
-   - Use Material 3 typography scale (displayLarge, headlineLarge, titleLarge, bodyLarge, labelLarge, etc.)
-   - Ensure interactive UI elements (e.g., buttons, inputs) use MaterialStateProperty for state-dependent properties (hovered, pressed, disabled) to enhance interactivity and consistency with Material 3 specifications.
-
-3. **THEME EXTENSION HANDLING** (Prevents theme access errors):
-   - ALL custom theme extensions must extend ThemeExtension<T>
-   - Implement proper copyWith() and lerp() methods
-   - Register extensions in main ThemeData using extensions property
-   - Strive for simplicity and reusability. Avoid creating custom theme properties unless absolutely necessary. Leverage Flutter's built-in theme capabilities as much as possible
-   - Use Theme.of(context).extension<CustomExtension>() for access
-
-4. **TYPOGRAPHY SYSTEM** (Prevents text styling errors):
-   - Use TextTheme with Material 3 naming convention
-   - Include proper font weights, sizes, and letter spacing
-   - Configure proper text scaling for accessibility
-
-5. **COMPONENT THEME CONSISTENCY** (Prevents UI inconsistencies):
-   - Configure all major component themes: AppBar, Button, Card, Input, etc.
-   - Use consistent color references from ColorScheme
-   - Ensure proper state colors (hovered, pressed, disabled)
-   - Support Material 3 component specifications
-
-6. **ACCESSIBILITY COMPLIANCE** (Required for production apps):
-   - Include proper semantic colors for status indicators
-   - Configure appropriate touch target sizes
-
-7. Ensure the theme supports user-centric design principles, including clear visual feedback, consistent component behavior, and adherence to Material Design guidelines for clarity, consistency, and feedback.
-VALIDATION CHECKLIST:
-* Use professional, polished design patterns
-✅ All ColorScheme properties defined (primary, onPrimary, secondary, etc.)
-✅ Material 3 typography scale implemented
-✅ Theme extensions properly structured with copyWith() and lerp()
-✅ Component themes configured for consistency
-✅ Accessibility requirements met
-</CRITICAL_FLUTTER_THEME_REQUIREMENTS>
-
 <CRITICAL_VALIDATION_CHECKLIST>
-✅ All ColorScheme properties defined (primary, onPrimary, secondary, onSecondary, surface, onSurface, etc.)
-✅ Custom theme extensions include copyWith() and lerp() methods
-✅ No deprecated Flutter 2.x APIs used
-✅ Google Fonts dependency properly referenced
-✅ Material 3 typography scale implemented correctly
+All ColorScheme properties defined (primary, onPrimary, secondary, onSecondary, surface, onSurface, etc.)
+Custom theme extensions include copyWith() and lerp() methods
+No deprecated Flutter 2.x APIs used
+Google Fonts dependency properly referenced
+Material 3 typography scale implemented correctly
 </CRITICAL_VALIDATION_CHECKLIST>
 
 <FLUTTER_THEME_COMPONENT_IMPLEMENTATION>
-🚨 CRITICAL THEME COMPONENT SYNTAX - PREVENTS COMPILATION ERRORS:
+CRITICAL THEME COMPONENT SYNTAX - PREVENTS COMPILATION ERRORS:
 
 **MANDATORY CLASS NAMING CONVENTIONS** (Prevents "can't be assigned" errors):
-- ✅ Use ThemeData suffix for ALL theme components in ThemeData constructor
-- ✅ NEVER use base Theme classes (CardTheme, TabBarTheme) - always use ThemeData variants
-- ✅ Component theme property mappings:
+- Use ThemeData suffix for ALL theme components in ThemeData constructor
+- NEVER use base Theme classes (CardTheme, TabBarTheme) - always use ThemeData variants
+- Component theme property mappings:
   ```dart
   ThemeData(
-    cardTheme: CardThemeData(...),           // ✅ CORRECT - not CardTheme
-    tabBarTheme: TabBarThemeData(...),       // ✅ CORRECT - not TabBarTheme  
-    appBarTheme: AppBarTheme(...),           // ✅ CORRECT - AppBarTheme is valid
-    elevatedButtonTheme: ElevatedButtonThemeData(...), // ✅ CORRECT
-    filledButtonTheme: FilledButtonThemeData(...),     // ✅ CORRECT
-    outlinedButtonTheme: OutlinedButtonThemeData(...), // ✅ CORRECT
-    textButtonTheme: TextButtonThemeData(...),         // ✅ CORRECT
-    chipTheme: ChipThemeData(...),           // ✅ CORRECT
-    inputDecorationTheme: InputDecorationTheme(...),   // ✅ CORRECT
-    floatingActionButtonTheme: FloatingActionButtonThemeData(...), // ✅ CORRECT
+    cardTheme: CardThemeData(...),           // CORRECT - not CardTheme
+    tabBarTheme: TabBarThemeData(...),       // CORRECT - not TabBarTheme  
+    appBarTheme: AppBarTheme(...),           // CORRECT - AppBarTheme is valid
+    elevatedButtonTheme: ElevatedButtonThemeData(...), // CORRECT
+    filledButtonTheme: FilledButtonThemeData(...),     // CORRECT
+    outlinedButtonTheme: OutlinedButtonThemeData(...), // CORRECT
+    textButtonTheme: TextButtonThemeData(...),         // CORRECT
+    chipTheme: ChipThemeData(...),           // CORRECT
+    inputDecorationTheme: InputDecorationTheme(...),   // CORRECT
+    floatingActionButtonTheme: FloatingActionButtonThemeData(...), // CORRECT
   )
   ```
 
@@ -150,10 +110,10 @@ VALIDATION CHECKLIST:
      backgroundColor: Color,
      selectedColor: Color,
      disabledColor: Color,
-     labelStyle: TextStyle,        // ✅ VALID
+     labelStyle: TextStyle,        // VALID
      padding: EdgeInsets,
      shape: ShapeBorder,
-     // ❌ INVALID: selectedLabelStyle - DOES NOT EXIST
+     // INVALID: selectedLabelStyle - DOES NOT EXIST
    )
    ```
 
@@ -162,21 +122,16 @@ Prefer MaterialStateProperty for interactive states when available
 Include null safety operators (?) for optional properties
 NEVER assume property names - validate against actual Flutter API
 
-**COMPILATION ERROR PREVENTION CHECKLIST**:
-✅ All theme component classes use correct "Data" suffixed names
-✅ All properties exist in the respective ThemeData class
-✅ No deprecated properties are used
-✅ MaterialStateProperty used for state-dependent properties
-✅ Proper null safety annotations applied
+
 </FLUTTER_THEME_COMPONENT_IMPLEMENTATION>
 
 
 <PROFESSIONAL_FLUTTER_PATTERNS>
-🚨 ENTERPRISE-GRADE FLUTTER THEME ARCHITECTURE:
+ENTERPRISE-GRADE FLUTTER THEME ARCHITECTURE:
 
 1. **MATERIAL 3 COLOR SCHEME**:
    ```dart
-   // ✅ REQUIRED: Complete Material 3 color scheme
+   // REQUIRED: Complete Material 3 color scheme
    static ColorScheme _lightColorScheme = ColorScheme.fromSeed(
      seedColor: brandColor,
      brightness: Brightness.light,
@@ -185,7 +140,7 @@ NEVER assume property names - validate against actual Flutter API
 
 2. **CUSTOM THEME EXTENSIONS**:
    ```dart
-   // ✅ REQUIRED: Proper theme extension structure
+   // REQUIRED: Proper theme extension structure
    class AppColorsExtension extends ThemeExtension<AppColorsExtension> {
      final Color? success;
      final Color? warning;
@@ -201,7 +156,7 @@ NEVER assume property names - validate against actual Flutter API
 
 3. **TYPOGRAPHY CONFIGURATION**:
    ```dart
-   // ✅ REQUIRED: Material 3 typography implementation
+   // REQUIRED: Material 3 typography implementation
    static TextTheme _textTheme = TextTheme(
      displayLarge: GoogleFonts.inter(fontSize: 57, fontWeight: FontWeight.w400),
      displayMedium: GoogleFonts.inter(fontSize: 45, fontWeight: FontWeight.w400),
@@ -210,12 +165,7 @@ NEVER assume property names - validate against actual Flutter API
    ```
 4. Use the modern design principles and not the medieval ones. and create the modern user centric design.
 
-VALIDATION CHECKLIST:
-✅ File organization follows Flutter conventions
-✅ Material 3 ColorScheme properly configured
-✅ Custom theme extensions implemented correctly
-✅ Typography system uses Material 3 specifications
-✅ Component themes configured for consistency
+
 </PROFESSIONAL_FLUTTER_PATTERNS>
 
 <OUTPUT_FORMAT>
@@ -232,13 +182,20 @@ Generate your response in the following XML format ONLY. Do not include any expl
 
 IMPORTANT NOTES:
 - File paths should be relative to the Flutter project lib directory (always use : lib/theme/app_theme.dart)
-- Colors should be generated based on the design system provided in context
-- Typography should use the font family specified in the design system
-- Include proper Material 3 theming with ColorScheme.fromSeed() when appropriate
-- Ensure all semantic colors (success, warning, error, info) are properly defined
 - MUST use uppercase XML tags: FILES, FILE, FILE_PATH, CODE_SNIPPET
 - Replace placeholder colors with actual values from the design system context
 
+<CHECKLIST>
+File organization follows Flutter conventions
+Material 3 ColorScheme and Typography configured correctly
+Custom theme extensions implemented and used correctly
+Component themes configured consistently across the app
+All theme component classes use correct "Data" suffixed names
+All referenced properties exist in the respective ThemeData classes
+No deprecated properties used in theme or components
+MaterialStateProperty used for state-dependent properties
+Null safety applied properly across theme and component definitions
+</CHECKLIST>
 """
 
 USER_PROMPT = """
