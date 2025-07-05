@@ -354,20 +354,27 @@ class StageVHelper:
     ) -> str:
         """Extract a detailed error message from output"""
         # Check if this is Flutter output with compilation errors
-        if "Target dart2js failed" in output or "Error: Compilation failed" in output:
+        if (
+            "Target dart2js failed" in output
+            or "Error: Compilation failed" in output
+        ):
             return self._extract_flutter_compilation_errors(output)
-        
+
         # First, try to use parsed errors if they contain meaningful information
         if parsed_errors:
             for error in parsed_errors:
                 error_line = error.get("error_line", "")
-                if error_line and error_line != "error during build:" and len(error_line.strip()) > 10:
+                if (
+                    error_line
+                    and error_line != "error during build:"
+                    and len(error_line.strip()) > 10
+                ):
                     return error_line.strip()
-        
+
         # If no good parsed errors, extract from raw output
         lines = output.split("\n")
         error_lines = []
-        
+
         # Look for specific error patterns with more context
         error_patterns = [
             r"Error: \[vite\].*",
@@ -380,15 +387,15 @@ class StageVHelper:
             r"TypeError.*",
             r"ReferenceError.*",
             r"SyntaxError.*",
-            r"npm ERR!.*"
+            r"npm ERR!.*",
         ]
-        
+
         # Find lines matching error patterns
         for i, line in enumerate(lines):
             line = line.strip()
             if not line:
                 continue
-                
+
             # Check for specific error patterns
             for pattern in error_patterns:
                 if re.search(pattern, line, re.IGNORECASE):
@@ -396,34 +403,54 @@ class StageVHelper:
                     # Include next few lines for context if they seem relevant
                     for j in range(i + 1, min(i + 4, len(lines))):
                         next_line = lines[j].strip()
-                        if next_line and not next_line.startswith("at ") and len(next_line) < 200:
+                        if (
+                            next_line
+                            and not next_line.startswith("at ")
+                            and len(next_line) < 200
+                        ):
                             # Include lines that provide context but aren't stack traces
-                            if any(keyword in next_line.lower() for keyword in [
-                                "this is most likely", "unintended", "because", 
-                                "runtime", "application", "module", "import", "file"
-                            ]):
+                            if any(
+                                keyword in next_line.lower()
+                                for keyword in [
+                                    "this is most likely",
+                                    "unintended",
+                                    "because",
+                                    "runtime",
+                                    "application",
+                                    "module",
+                                    "import",
+                                    "file",
+                                ]
+                            ):
                                 error_lines.append(next_line)
-                            elif re.match(r".*\.(js|jsx|ts|tsx|dart).*", next_line):
+                            elif re.match(
+                                r".*\.(js|jsx|ts|tsx|dart).*", next_line
+                            ):
                                 error_lines.append(next_line)
                     break
-        
+
         if error_lines:
             return "\n".join(error_lines)
-        
+
         # Fallback: look for any line with error-related keywords
         for line in lines:
             line = line.strip()
-            if line and any(keyword in line.lower() for keyword in ["error", "fail", "exception"]):
+            if line and any(
+                keyword in line.lower()
+                for keyword in ["error", "fail", "exception"]
+            ):
                 if len(line) > 10 and line != "error during build:":
                     # Get a few lines of context
                     line_index = lines.index(line)
                     context_lines = [line]
-                    for j in range(line_index + 1, min(line_index + 3, len(lines))):
+                    for j in range(
+                        line_index + 1, min(line_index + 3, len(lines))
+                    ):
                         next_line = lines[j].strip()
                         if next_line and len(next_line) > 5:
                             context_lines.append(next_line)
                     return "\n".join(context_lines)
-        
+
         return "No specific error message found"
 
     def _extract_flutter_compilation_errors(self, output: str) -> str:
@@ -431,82 +458,104 @@ class StageVHelper:
         lines = output.split("\n")
         compilation_errors = []
         current_error = []
-        
+
         # Look for lines that start with file paths (Flutter error format)
         for i, line in enumerate(lines):
             line = line.strip()
-            
+
             # Flutter errors typically start with a file path and line/column numbers
             if re.match(r"lib/.*\.dart:\d+:\d+:", line):
                 # If we have a previous error, save it
                 if current_error:
                     compilation_errors.append("\n".join(current_error))
                     current_error = []
-                
+
                 # Start new error with the file path line
                 current_error.append(line)
-                
+
                 # Look for the "Error:" line that follows
                 for j in range(i + 1, min(i + 10, len(lines))):
                     next_line = lines[j].strip()
                     if next_line.startswith("Error:"):
                         current_error.append(next_line)
                         break
-                        
+
             # Also capture standalone error messages
-            elif line.startswith("Error:") and not any("Error:" in err for err in current_error):
+            elif line.startswith("Error:") and not any(
+                "Error:" in err for err in current_error
+            ):
                 if current_error:
                     compilation_errors.append("\n".join(current_error))
                     current_error = []
                 current_error.append(line)
-                
+
                 # Look for additional context lines
                 for j in range(i + 1, min(i + 3, len(lines))):
                     next_line = lines[j].strip()
-                    if next_line and not next_line.startswith("Error:") and not next_line.startswith("lib/"):
+                    if (
+                        next_line
+                        and not next_line.startswith("Error:")
+                        and not next_line.startswith("lib/")
+                    ):
                         # Add context if it's meaningful
-                        if any(keyword in next_line.lower() for keyword in [
-                            "missing", "expected", "found", "implementation", "constructor"
-                        ]):
+                        if any(
+                            keyword in next_line.lower()
+                            for keyword in [
+                                "missing",
+                                "expected",
+                                "found",
+                                "implementation",
+                                "constructor",
+                            ]
+                        ):
                             current_error.append(next_line)
-        
+
         # Don't forget the last error
         if current_error:
             compilation_errors.append("\n".join(current_error))
-        
+
         # If we found specific compilation errors, return them
         if compilation_errors:
             return "\n\n".join(compilation_errors)
-        
+
         # Fallback: try to extract the main error block
         error_start = -1
         error_end = -1
-        
+
         for i, line in enumerate(lines):
-            if "Target dart2js failed" in line or "Error: Compilation failed" in line:
+            if (
+                "Target dart2js failed" in line
+                or "Error: Compilation failed" in line
+            ):
                 error_start = max(0, i - 1)
                 break
-        
+
         if error_start >= 0:
             # Find the end of the error block (before stack trace)
             for i in range(error_start, len(lines)):
                 line = lines[i].strip()
-                if line.startswith("#0") or line.startswith("Error: Failed to compile"):
+                if line.startswith("#0") or line.startswith(
+                    "Error: Failed to compile"
+                ):
                     error_end = i
                     break
-            
+
             if error_end > error_start:
                 error_block = lines[error_start:error_end]
                 # Filter out empty lines and stack trace entries
                 filtered_errors = []
                 for line in error_block:
                     line = line.strip()
-                    if line and not line.startswith("at ") and not line.startswith("#"):
+                    if (
+                        line
+                        and not line.startswith("at ")
+                        and not line.startswith("#")
+                    ):
                         filtered_errors.append(line)
-                
+
                 if filtered_errors:
                     return "\n".join(filtered_errors)
-        
+
         # Ultimate fallback
         return "Flutter compilation failed with multiple errors"
 

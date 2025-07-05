@@ -42,8 +42,6 @@ class IDEAgentUsecase:
         """Convert relative path to absolute path"""
         return os.path.abspath(relative_path)
 
-
-
     def _read_file_structure_content(self, session_id: str) -> str:
         """Read and return file structure content"""
         file_structure_path = (
@@ -67,7 +65,9 @@ class IDEAgentUsecase:
 
     def _read_global_scratch_pad_content(self, session_id: str) -> str:
         """Read and return global scratch pad content"""
-        global_scratch_pad_path = f"artifacts/{session_id}/scratchpads/global_scratchpad.txt"
+        global_scratch_pad_path = (
+            f"artifacts/{session_id}/scratchpads/global_scratchpad.txt"
+        )
         global_scratch_pad_content = ""
 
         try:
@@ -80,13 +80,17 @@ class IDEAgentUsecase:
             loggers["ide_agent"].warning(
                 f"Failed to read global scratch pad: {str(e)}"
             )
-            global_scratch_pad_content = f"Error reading global scratch pad: {str(e)}"
+            global_scratch_pad_content = (
+                f"Error reading global scratch pad: {str(e)}"
+            )
 
         return global_scratch_pad_content
 
     def _read_screen_scratch_pads_content(self, session_id: str) -> str:
         """Read and return all screen scratch pads content"""
-        screen_scratch_pads_dir = f"artifacts/{session_id}/scratchpads/screen_scratchpads"
+        screen_scratch_pads_dir = (
+            f"artifacts/{session_id}/scratchpads/screen_scratchpads"
+        )
         screen_scratch_pads_content = ""
 
         try:
@@ -103,23 +107,31 @@ class IDEAgentUsecase:
                         try:
                             with open(file_path, "r", encoding="utf-8") as f:
                                 file_content = f.read()
-                                screen_contents.append(f"=== {file_name} ===\n{file_content}")
+                                screen_contents.append(
+                                    f"=== {file_name} ===\n{file_content}"
+                                )
                         except Exception as e:
                             loggers["ide_agent"].warning(
                                 f"Failed to read screen scratch pad {file_name}: {str(e)}"
                             )
-                            screen_contents.append(f"=== {file_name} ===\nError reading file: {str(e)}")
-                    
+                            screen_contents.append(
+                                f"=== {file_name} ===\nError reading file: {str(e)}"
+                            )
+
                     screen_scratch_pads_content = "\n\n".join(screen_contents)
                 else:
                     screen_scratch_pads_content = "No screen scratch pads found"
             else:
-                screen_scratch_pads_content = "Screen scratch pads directory not available"
+                screen_scratch_pads_content = (
+                    "Screen scratch pads directory not available"
+                )
         except Exception as e:
             loggers["ide_agent"].warning(
                 f"Failed to read screen scratch pads: {str(e)}"
             )
-            screen_scratch_pads_content = f"Error reading screen scratch pads: {str(e)}"
+            screen_scratch_pads_content = (
+                f"Error reading screen scratch pads: {str(e)}"
+            )
 
         return screen_scratch_pads_content
 
@@ -197,8 +209,8 @@ class IDEAgentUsecase:
             global_scratch_pad_content = self._read_global_scratch_pad_content(
                 session_id
             )
-            screen_scratch_pads_content = self._read_screen_scratch_pads_content(
-                session_id
+            screen_scratch_pads_content = (
+                self._read_screen_scratch_pads_content(session_id)
             )
 
             print(f"📁 Codebase found at: {codebase_path}")

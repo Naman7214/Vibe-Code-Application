@@ -1,5 +1,4 @@
 import json
-import os
 from typing import Any, Dict, List
 
 import httpx
@@ -255,7 +254,9 @@ class IDEAgentTools:
 
         if tool_name == "exit_tool":
             # Keep the original summary from the agent, just set the file path
-            tool_input["file_path"] = f"artifacts/{session_id}/scratchpads/global_scratchpad.txt"
+            tool_input["file_path"] = (
+                f"artifacts/{session_id}/scratchpads/global_scratchpad.txt"
+            )
             tool_input["explanation"] = "IDE Agent task completion summary"
 
         try:

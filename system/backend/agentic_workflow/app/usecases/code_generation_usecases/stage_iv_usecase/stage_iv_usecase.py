@@ -37,7 +37,7 @@ class StageIVUsecase:
         self.anthropic_service = anthropic_service
         self.error_repo = error_repo
         self.helper = StageIVHelper()
-        
+
         # Set up logger for debugging
         self.logger = logging.getLogger("code_generation_stage_iv")
         if not self.logger.handlers:
@@ -65,14 +65,20 @@ class StageIVUsecase:
         """
         try:
             # Debug: Log what we received
-            self.logger.info(f"Stage IV received screen_dict type: {type(screen_dict)}")
+            self.logger.info(
+                f"Stage IV received screen_dict type: {type(screen_dict)}"
+            )
             self.logger.info(f"Stage IV received is_follow_up: {is_follow_up}")
-            
+
             # Debug: Check each item in screen_dict
             for key, value in screen_dict.items():
-                self.logger.info(f"screen_dict['{key}'] = {type(value)}: {str(value)[:100]}...")
-                if hasattr(value, '__dict__'):
-                    self.logger.error(f"Non-serializable object found in screen_dict['{key}']: {type(value)}")
+                self.logger.info(
+                    f"screen_dict['{key}'] = {type(value)}: {str(value)[:100]}..."
+                )
+                if hasattr(value, "__dict__"):
+                    self.logger.error(
+                        f"Non-serializable object found in screen_dict['{key}']: {type(value)}"
+                    )
 
             # Get session ID from context variable
             session_id = session_state.get()
@@ -93,12 +99,18 @@ class StageIVUsecase:
                 # Create a safe version for JSON serialization
                 safe_screen_dict = {}
                 for key, value in screen_dict.items():
-                    if isinstance(value, (str, int, float, bool, list, dict, type(None))):
+                    if isinstance(
+                        value, (str, int, float, bool, list, dict, type(None))
+                    ):
                         safe_screen_dict[key] = value
                     else:
                         safe_screen_dict[key] = str(value)
-                screen_descriptions_json = json.dumps(safe_screen_dict, indent=2)
-                self.logger.info("Using safe version of screen_dict for JSON serialization")
+                screen_descriptions_json = json.dumps(
+                    safe_screen_dict, indent=2
+                )
+                self.logger.info(
+                    "Using safe version of screen_dict for JSON serialization"
+                )
 
             # Format user prompt with context
             user_prompt = USER_PROMPT.format(

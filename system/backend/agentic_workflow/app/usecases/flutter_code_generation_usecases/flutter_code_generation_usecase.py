@@ -36,50 +36,50 @@ class FlutterCodeGenerationUsecase:
 
     async def execute(self, request: CodeGenerationRequest) -> JSONResponse:
         # Run Flutter boilerplate setup only if it's not a follow-up request
-        # if not request.is_follow_up:
-        #     await setup_flutter_boilerplate.create_flutter_boilerplate()
+        if not request.is_follow_up:
+            await setup_flutter_boilerplate.create_flutter_boilerplate()
 
-        # # Skip Stage I for follow-up requests as it handles initial setup
-        # stage_i_result = {
-        #     "success": True,
-        #     "message": "Skipped for follow-up request",
-        #     "data": {},
-        # }
-        # if not request.is_follow_up:
-        #     stage_i_result = await self.stage_i_usecase.execute()
-        #     if not stage_i_result["success"]:
-        #         return JSONResponse(
-        #             content={
-        #                 "success": False,
-        #                 "message": stage_i_result["message"],
-        #                 "error": stage_i_result["error"],
-        #             },
-        #             status_code=status.HTTP_400_BAD_REQUEST,
-        #         )
+        # Skip Stage I for follow-up requests as it handles initial setup
+        stage_i_result = {
+            "success": True,
+            "message": "Skipped for follow-up request",
+            "data": {},
+        }
+        if not request.is_follow_up:
+            stage_i_result = await self.stage_i_usecase.execute()
+            if not stage_i_result["success"]:
+                return JSONResponse(
+                    content={
+                        "success": False,
+                        "message": stage_i_result["message"],
+                        "error": stage_i_result["error"],
+                    },
+                    status_code=status.HTTP_400_BAD_REQUEST,
+                )
 
-        # stage_ii_result = await self.stage_ii_usecase.execute(request)
-        # if not stage_ii_result["success"]:
-        #     return JSONResponse(
-        #         content={
-        #             "success": False,
-        #             "message": stage_ii_result["message"],
-        #             "error": stage_ii_result["error"],
-        #         },
-        #         status_code=status.HTTP_400_BAD_REQUEST,
-        #     )
+        stage_ii_result = await self.stage_ii_usecase.execute(request)
+        if not stage_ii_result["success"]:
+            return JSONResponse(
+                content={
+                    "success": False,
+                    "message": stage_ii_result["message"],
+                    "error": stage_ii_result["error"],
+                },
+                status_code=status.HTTP_400_BAD_REQUEST,
+            )
 
-        # stage_iii_result = await self.stage_iii_usecase.execute(
-        #     request.dict_of_screens, request.is_follow_up
-        # )
-        # if not stage_iii_result["success"]:
-        #     return JSONResponse(
-        #         content={
-        #             "success": False,
-        #             "message": stage_iii_result["message"],
-        #             "error": stage_iii_result["error"],
-        #         },
-        #         status_code=status.HTTP_400_BAD_REQUEST,
-        #     )
+        stage_iii_result = await self.stage_iii_usecase.execute(
+            request.dict_of_screens, request.is_follow_up
+        )
+        if not stage_iii_result["success"]:
+            return JSONResponse(
+                content={
+                    "success": False,
+                    "message": stage_iii_result["message"],
+                    "error": stage_iii_result["error"],
+                },
+                status_code=status.HTTP_400_BAD_REQUEST,
+            )
 
         # Execute Stage V validation
         stage_v_result = await self.stage_v_usecase.execute(request)
