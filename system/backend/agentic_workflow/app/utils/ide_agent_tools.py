@@ -205,7 +205,7 @@ class IDEAgentTools:
                             "description": "The pattern to exclude in the search",
                         },
                     },
-                    "required": ["query"],
+                    "required": ["query", "case_sensitive"],
                 },
             },
             {
