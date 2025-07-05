@@ -111,8 +111,6 @@ class Helper:
             f"Processing {total_screens} screens in {total_batches} batches (batch size: {batch_size})"
         )
 
-        all_code_files = []
-
         for i in range(0, len(screen_names), batch_size):
             batch_number = (i // batch_size) + 1
             batch_screens = screen_names[i : i + batch_size]
@@ -133,7 +131,7 @@ class Helper:
                 for screen in batch_screens
             }
 
-            batch_code_files = await self.process_screen_batch(
+            await self.process_screen_batch(
                 batch_stage_iv,
                 batch_navigation,
                 global_scratchpad,
@@ -141,16 +139,11 @@ class Helper:
             )
 
             self.logger.info(
-                f"Completed batch {batch_number}/{total_batches}, generated {len(batch_code_files)} code files"
+                f"Completed batch {batch_number}/{total_batches}"
             )
-            all_code_files.extend(batch_code_files)
 
-        self.logger.info(
-            f"All batches completed. Total code files generated: {len(all_code_files)}"
-        )
-        self.logger.info("Writing code files to filesystem")
-        write_code_files(all_code_files, base_dir="")
-
+        self.logger.info("All batches completed.")
+        
         self.logger.info("Generating updated directory structure")
         structure = generate_directory_structure(
             directory_path=f"{get_project_root()}/artifacts/{session_state.get()}/codebase",
@@ -199,20 +192,9 @@ class Helper:
         self.logger.info(
             f"Executing {len(tasks)} screen processing tasks in parallel"
         )
-        screen_results = await asyncio.gather(*tasks)
+        await asyncio.gather(*tasks)
 
-        all_code_files = []
-        for i, code_files in enumerate(screen_results):
-            screen_name = batch_screens[i]
-            self.logger.info(
-                f"Screen '{screen_name}' generated {len(code_files)} code files"
-            )
-            all_code_files.extend(code_files)
-
-        self.logger.info(
-            f"Batch processing completed. Total files from batch: {len(all_code_files)}"
-        )
-        return all_code_files
+        self.logger.info("Batch processing completed.")
 
     async def process_single_screen(
         self,
@@ -223,7 +205,7 @@ class Helper:
         file_structure,
     ):
         """
-        Process a single screen and return its code files.
+        Process a single screen and save its code files immediately.
         """
         loggers["screen_generation"].info(
             f"Processing single screen: {screen_name}"
@@ -251,4 +233,6 @@ class Helper:
 
         code_files = parse_xml_to_dict(response)
 
-        return code_files
+        self.logger.info(f"Writing {len(code_files)} code files for screen: {screen_name}")
+        write_code_files(code_files, base_dir="")
+        self.logger.info(f"Successfully saved code files for screen: {screen_name}")

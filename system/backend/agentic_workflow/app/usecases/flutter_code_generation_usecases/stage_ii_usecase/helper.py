@@ -88,7 +88,6 @@ class Helper:
 
         screen_names = list(stage_iv_data.keys())
         batch_size = 5
-        all_code_files = []
 
         for i in range(0, len(screen_names), batch_size):
             batch_screens = screen_names[i : i + batch_size]
@@ -105,16 +104,12 @@ class Helper:
                 for screen in batch_screens
             }
 
-            batch_code_files = await self.process_screen_batch(
+            await self.process_screen_batch(
                 batch_stage_iv,
                 batch_navigation,
                 global_scratchpad,
                 file_structure,
             )
-
-            all_code_files.extend(batch_code_files)
-
-        write_code_files(all_code_files, base_dir="")
 
         structure = generate_directory_structure(
             directory_path=f"{get_project_root()}/artifacts/{session_state.get()}/codebase",
@@ -151,13 +146,7 @@ class Helper:
             )
             tasks.append(task)
 
-        screen_results = await asyncio.gather(*tasks)
-
-        all_code_files = []
-        for code_files in screen_results:
-            all_code_files.extend(code_files)
-
-        return all_code_files
+        await asyncio.gather(*tasks)
 
     async def process_single_screen(
         self,
@@ -168,7 +157,7 @@ class Helper:
         file_structure,
     ):
         """
-        Process a single screen and return its code files.
+        Process a single screen and save its code files immediately.
         """
         loggers["screen_generation"].info(
             f"Processing single screen: {screen_name}"
@@ -194,4 +183,6 @@ class Helper:
 
         code_files = parse_xml_to_dict(response)
 
-        return code_files
+        loggers["screen_generation"].info(f"Writing {len(code_files)} code files for screen: {screen_name}")
+        write_code_files(code_files, base_dir="")
+        loggers["screen_generation"].info(f"Successfully saved code files for screen: {screen_name}")
