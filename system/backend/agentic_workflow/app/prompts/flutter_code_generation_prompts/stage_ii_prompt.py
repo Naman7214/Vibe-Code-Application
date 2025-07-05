@@ -27,7 +27,7 @@ You will receive:
 5. file_structure: Current project organization and file paths
 
 <NOTES>
-- Implement code using the exact dependency versions specified in pubspec.yaml.
+- Implement code using the exact dependency versions specified in pubspec.yaml if some other dependency is required then use them but, make sure to select only the dependencies and their versions that works with the existing dependencies, stable and you have full confident in writing the code of that without any errors. (you dont need to add the dependency in the pubspec.yaml file it will be added automatically by the system)
 - Thoroughly understand the screen context before implementation.
 </NOTES>
 </INPUT_DATA>
@@ -53,11 +53,38 @@ The screen details are reference material only, providing an overview and basic 
 - Use StatelessWidget for static components, StatefulWidget for interactive components if it's required to build some additional widgets then given in the context then do it but wisely.
 - Use ListView/GridView, Cards & Tiles, Dialogs & Alerts, Bottom Sheet when required even if in the context it's not mentioned. it helps to make the fully interactive and intuitive screen.
 - Utilize Material 3 components and theming to achieve a sleek, contemporary design. Incorporate adaptive widgets to ensure consistency across platforms (Android/iOS). Use animations judiciously to enhance user experience, such as for state changes and transitions (e.g., AnimatedContainer, hero animations for navigation).
-- Use high-resolution, optimized images relevant to the content, enhancing the user experience. Apply consistent spacing, alignment, and the design system’s color palette for a balanced, aesthetically pleasing layout. Ensure typography is readable and follows the design system’s hierarchy.
+- Use high-resolution, optimized images relevant to the content, enhancing the user experience. Apply consistent spacing, alignment, and the design system's color palette for a balanced, aesthetically pleasing layout. Ensure typography is readable and follows the design system's hierarchy.
 </RESPONSIBILITIES>
 
 <FUNCTIONALITY_MANDATE>
-Build a full-fledged mobile intuitive and Interactive application, not a static demo. Every button must trigger meaningful actions, forms must validate and process data, and lists must be scrollable and filterable. The screen should feel like a complete, production-ready application.
+**ELITE-LEVEL INTERACTIVITY REQUIREMENTS:**
+
+**EVERY INTERACTIVE ELEMENT MUST:**
+- **Perform REAL actions** - not just show toast messages
+- **Update UI state meaningfully** - change data, navigate, or trigger workflows
+- **Provide immediate visual feedback** - loading states, success animations, error handling
+- **Implement complete user flows** - from action trigger to completion
+
+**MANDATORY INTERACTIVE FEATURES:**
+- **Forms**: Full validation, data persistence, multi-step flows
+- **Lists**: Search, filter, sort, infinite scroll, pull-to-refresh
+- **Navigation**: Smooth transitions, deep linking, state preservation
+- **Data Management**: Local storage, offline capability, data synchronization
+- **Animations**: Micro-interactions, state transitions, loading animations
+- **Advanced UI**: Bottom sheets, modals, drag-and-drop, swipe actions
+
+**PRODUCTION-READY STANDARDS:**
+Build apps that feel indistinguishable from professionally developed applications. Every feature should work exactly as users expect in modern mobile apps.
+
+**MODERN UI PATTERNS TO IMPLEMENT:**
+- **Shimmer loading effects** using shimmer package for skeleton screens
+- **Lottie animations** for delightful micro-interactions and success states
+- **Advanced charts** using fl_chart for data visualization
+- **Image handling** with cached_network_image and image_picker
+- **Haptic feedback** for tactile user interactions
+- **Smooth page transitions** using animations package
+- **Pull-to-refresh** and infinite scroll for lists
+- **Bottom sheets and modals** for contextual actions
 </FUNCTIONALITY_MANDATE>
 </SCREEN_CONTEXT_CLARIFICATION>
 
@@ -154,11 +181,31 @@ For general properties: AppTheme.warningColor
 - Implement graceful degradation for smaller screens
 </RESPONSIVE_LAYOUT_PRINCIPLES>
 
+<SPACING_AND_LAYOUT_PRINCIPLES>
+**Visual Hierarchy & Spacing:**
+- Apply consistent spacing throughout the screen using logical increments
+- Ensure clear visual separation between different content sections
+- Maintain adequate breathing room around interactive elements
+- Use appropriate padding and margins to create balanced layouts
+
+**Element Positioning:**
+- Prevent overlapping elements with sufficient clearance
+- Ensure touch targets are appropriately sized for mobile interaction
+- Create logical groupings with consistent spacing patterns
+- Use SafeArea to accommodate different device constraints
+
+**Layout Best Practices:**
+- Establish clear content hierarchy through spacing
+- Apply consistent alignment patterns within sections
+- Use proper spacing widgets (SizedBox, Padding) for layout control
+- Balance density with usability for optimal user experience
+</SPACING_AND_LAYOUT_PRINCIPLES>
+
 <STATE_MANAGEMENT>
 - Create state management classes (e.g., ChangeNotifier) for screen-specific features if necessary.
 - Initialize state with realistic mock data embedded in the widget to avoid external dependencies.
 - Use Provider for Shared State: For app-wide state 
-- Use setState for Local State: For state local to a screen (e.g., toggling a button’s appearance), use StatefulWidget with setState to manage UI updates efficiently.
+- Use setState for Local State: For state local to a screen (e.g., toggling a button's appearance), use StatefulWidget with setState to manage UI updates efficiently.
 </STATE_MANAGEMENT>
 
 Data Quality Requirements
@@ -169,6 +216,8 @@ Culturally diverse content
 Professional quality images from Unsplash
 
 Include dart:async (import 'dart:async';) always Automatically include import 'dart:async'; in any file using asynchronous operations (e.g., Future, async/await, Stream). For example, include it in screens or widgets handling API calls, timers, or asynchronous state updates.
+
+- **ColorScheme Properties:** Use only standard ColorScheme properties (primary, secondary, error, surface, etc.) - NEVER use non-existent properties like colorScheme.warning
 
 
 Escape Dollar Signs in Strings: Ensure all $ symbols in string literals are escaped as \$ to prevent string interpolation errors. For example, write "\$100" instead of "$100". Validate that all generated strings with currency or variable-like symbols are correctly escaped.
@@ -309,7 +358,7 @@ For each screen, create a scratchpad entry that includes:
 </SCRATCHPAD_REQUIREMENTS>
 
 <CODE_GENERATION_CHECKLIST>
-- Are all widgets imported correctly?
+- Are all widgets imported correctly with proper dependency versions?
 - Are properties passed with correct types and structures?
 - Is mock data realistic and complete?
 - Do interactive elements have defined behaviors?
@@ -319,6 +368,8 @@ For each screen, create a scratchpad entry that includes:
 - Are accessibility best practices followed?
 - Is the screen intuitive and interactive?
 - Is consistent UI maintained throughout the screen?
+- Is proper spacing applied with no overlapping elements?
+- Is SafeArea implemented and padding hierarchy followed?
 - Is the code clean, readable, and standards-compliant? 
 - Are all the clickable elements/widget are interactive and intuitive?
 - Is the App is following the modern widgets/theme/navigation principles?

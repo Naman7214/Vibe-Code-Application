@@ -40,11 +40,12 @@ Generate a comprehensive Flutter theme system that includes lib/config/app_theme
 ## Complete Color System Implementation
 - Use proper Color values for all color definitions with accessibility-compliant contrast ratios
 - Include EVERY ColorScheme property: primary, onPrimary, secondary, onSecondary, surface, onSurface, background, onBackground, error, onError, inversePrimary, inverseSurface, surfaceVariant, onSurfaceVariant, outline, outlineVariant
+- **CRITICAL: ColorScheme does NOT have warning, success, info properties - use custom theme extensions for semantic colors**
 - Map semantic colors to appropriate Material Design meanings
 - NO missing color properties to prevent "color not found" errors
 
 ## Typography System Requirements
-- Use Google Fonts integration when needed with Material 3 typography scale
+- Use Google Fonts integration when needed with Material 3 typography scale, Only use verified Google Fonts families.
 - Create consistent hierarchy using Material 3 naming convention: displayLarge, headlineLarge, titleLarge, bodyLarge, labelLarge, etc.
 - Configure proper sizing, weights, letter spacing, and line height for readability across all screen sizes
 - Support proper text scaling for accessibility compliance
@@ -65,8 +66,10 @@ Generate a comprehensive Flutter theme system that includes lib/config/app_theme
 ## Animation and Performance
 - Include animation theme extension with short, medium, and long durations
 - Configure default curve for consistent animations throughout the app
-- Leverage Flutter's built-in theming capabilities avoiding unnecessary complexity
-- Strive for simplicity and reusability using built-in theme capabilities when possible
+- **ADVANCED ANIMATION SUPPORT**: Include theme configurations for micro-interactions, loading states, and transitions
+- **PERFORMANCE OPTIMIZATION**: Optimize theme for smooth 60fps animations and minimal rebuilds
+- Leverage Flutter's built-in theming capabilities while adding custom extensions for enhanced UX
+- **MODERN DESIGN PATTERNS**: Support for shimmer effects, lottie animations, and advanced Material 3 transitions
 
 ## Critical Implementation Notes
 - Access custom extensions using Theme.of(context).extension<CustomExtension>()
@@ -100,6 +103,7 @@ CRITICAL THEME COMPONENT SYNTAX - PREVENTS COMPILATION ERRORS:
     chipTheme: ChipThemeData(...),           // CORRECT
     inputDecorationTheme: InputDecorationTheme(...),   // CORRECT
     floatingActionButtonTheme: FloatingActionButtonThemeData(...), // CORRECT
+    dialogTheme: DialogThemeData(...), // CORRECT
   )
   ```
 

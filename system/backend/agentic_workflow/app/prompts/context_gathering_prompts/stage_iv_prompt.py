@@ -164,6 +164,8 @@ You will receive a comprehensive JSON context object containing:
 - Maintain alignment with Material Design and Cupertino guidelines for platform consistency
 - Go beyond basic requirements to create compelling, production-ready mobile experiences
 - Consider mobile-specific constraints like screen sizes, touch targets
+- **CRITICAL OVERFLOW PREVENTION: Prioritize responsive layout strategies that prevent RenderFlex overflow errors on different screen sizes**
+- **MANDATORY RESPONSIVE GUIDANCE: Emphasize flexible sizing, scrollable containers, and adaptive layouts over fixed dimensions**
 - Your technical context will be used to build the intuitive and Interactive flutter app that runs entirely without any backend dependencies. Uses mock data, hardcoded values, and simulated responses instead of real API calls, database connections, or external services. For features requiring permissions (camera, location, etc.) or third-party integrations (payments, GPS, social login), create mock implementations that demonstrate the UI/UX flow without actual functionality. Focus on creating a complete, interactive frontend experience that showcases the app's design and user interface rather than implementing real-world integrations.
 </INTEGRATION_APPROACH>
 
@@ -172,6 +174,8 @@ You will receive a comprehensive JSON context object containing:
 - Limit mock data arrays to 2-3 representative examples per widget
 - ALL Map parameters must specify complete object schemas with all required properties
 - ALL scalar parameters (String, int, double, bool) must have explicit default values
+- **RESPONSIVE LAYOUT PRIORITY: For sizing parameters, emphasize responsive strategies (MediaQuery percentages, constraints) over fixed pixel values**
+- **OVERFLOW PREVENTION: Guide toward flexible layouts and scrollable containers to prevent RenderFlex overflow errors**
 - Consider StatefulWidget vs StatelessWidget based on data management needs
 - ALL image URLs must be valid Unsplash URLs (e.g., "https://images.unsplash.com/photo-1234567890/coffee?w=400&h=300&fit=crop") instead of local asset placeholders
 </FLUTTER_DATA_STRUCTURE_REQUIREMENTS>
@@ -224,6 +228,9 @@ Each screen description must cover:
 - Screen transition patterns and animations
 - Consider mobile keyboard behavior and input methods
 - Account for mobile platform conventions (iOS vs Android navigation patterns)
+- **CRITICAL: Prevent RenderFlex overflow by emphasizing flexible, responsive layouts over fixed dimensions**
+- **MANDATORY: All sizing guidance must prioritize responsive strategies (MediaQuery, Flexible, Expanded) over exact pixel values**
+- **OVERFLOW PREVENTION: Explicitly guide toward scrollable containers and flexible layouts for content that may exceed screen bounds**
 - This is the modern era not the medieval so all the decision should be according to modern principles and not the medieval ones.
 </MOBILE_SPECIFIC_CONSIDERATIONS>
 
@@ -246,7 +253,7 @@ The structure should be flexible and adapted to each mobile screen's specific ne
 
 Wrap your entire JSON response inside `<OUTPUT> … </OUTPUT>` XML tags.
 Make sure to use proper escape characters for the new lines and other special characters such that it'll not cause any error in the upcoming parsing of the output.
-
+all reasoning/rationals/guidance should be under 2 sentences
 EXAMPLE OUTPUT STRUCTURE:
 <OUTPUT>
 {
@@ -276,14 +283,9 @@ EXAMPLE OUTPUT STRUCTURE:
         ]
       }
     },
-    "interactions": {
-      "description": "strategic guidance for mobile touch interactions, gestures, and navigation patterns"
-    },
-    "responsive": {
-      "description": "strategic guidance for responsive behavior across mobile screen sizes and orientations"
-    },
-    "design": {
-      "description": "strategic guidance for mobile-optimized design considering touch targets, readability, and mobile UX patterns"
+    "interactions": "strategic guidance for mobile touch interactions, gestures, and navigation patterns"
+    "responsive": "strategic guidance for responsive behavior across mobile screen sizes and orientations"
+    "design": "strategic guidance for mobile-optimized design considering touch targets, readability, and mobile UX patterns"
     }
   }
 }

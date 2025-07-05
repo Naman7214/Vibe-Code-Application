@@ -254,7 +254,7 @@ Create a global mobile design theme strategy that will serve as the foundation r
 </OUTPUT_REQUIREMENTS>
 
 Make sure to use proper escape characters for the new lines and other special characters such that it'll not cause any error in the upcoming parsing of the output.
-
+all reasoning and rationals should be under 2 sentences
 <OUTPUT>
 {
     "design_philosophy": "brief statement of overall mobile design approach considering user context and device constraints (about 4-5 sentences) with core psychological engagement principle your design philosophy should be such that it hooks the user and makes them engage with the app while also considering the practicality of the design",
@@ -366,7 +366,7 @@ Make sure to use proper escape characters for the new lines and other special ch
         "screen_name": {
             "widget_name": {
                 "type": "StatefulWidget | StatelessWidget",
-                "description": "mobile widget purpose, functionality, and usage context including mobile interactions (about 2-3 sentences)",
+                "description": "mobile widget purpose, functionality, and usage context including mobile interactions (about 2 sentences)",
                 "responsibilities": ["mobile_responsibility1", "mobile_responsibility2"],
                 "state_management": "description of state management needs if StatefulWidget"
             }
