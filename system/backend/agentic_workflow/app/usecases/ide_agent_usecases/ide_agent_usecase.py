@@ -36,7 +36,7 @@ class IDEAgentUsecase:
         self.anthropic_service = anthropic_service
         self.error_repo = error_repo
         self.ide_tools = IDEAgentTools()
-        self.max_tool_calls = 25
+        self.max_tool_calls = 35
 
     def _get_absolute_path(self, relative_path: str) -> str:
         """Convert relative path to absolute path"""
