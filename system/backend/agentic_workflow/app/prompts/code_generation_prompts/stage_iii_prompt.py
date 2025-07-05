@@ -60,6 +60,7 @@ The screen details are reference material only, providing an overview and basic 
 - Creates curiosity by gradually showing information which encourages exploration.
 - Always maintain consistent branding and visual hierarchy throughout the web application.
 - Maintain consistent code quality and architectural standards.
+- Efficiently use the available viewport width and height to create a rich user experience.
 </RESPONSIBILITIES>
 
 <FUNCTIONALITY_MANDATE>
@@ -149,8 +150,12 @@ Build a full-fledged web application frontend, not a static demo. Every button m
 Use TailwindCSS grid utilities for main structure and Flexbox utilities for component alignment; implement responsive breakpoints to ensure layouts adapt seamlessly across all screen sizes; establish clear z-index hierarchy for proper layering of overlapping elements; utilize container classes for responsive layouts with proper content boundaries.
 </LAYOUT_FOUNDATION>
 
+<GRID_SYSTEM_IMPLEMENTATION>
+Implement standardized grid system with uniform gaps across all components; align grid items consistently using cross-axis alignment utilities; apply systematic spacing values from Tailwind's scale ensuring uniformity across related components; use responsive grid modifications for different screen sizes.
+</GRID_SYSTEM_IMPLEMENTATION>
+
 <OVERLAY_AND_MODEL_STANDARDS>
-Center overlays and modals using Flexbox utilities with appropriate z-index for proper layering; use standardized modal widths with consistent padding and accessibility-compliant focus states; apply uniform backdrop styling ensuring proper contrast ratios; structure modals with header, content, and footer sections using consistent spacing; ensure modal content is scrollable. Ensure consistent padding and spacing in the modals and overlays.
+Center overlays and modals using Flexbox utilities with appropriate z-index for proper layering; use standardized modal widths with consistent padding and accessibility-compliant focus states; apply uniform backdrop styling ensuring proper contrast ratios; structure modals with header, content, and footer sections using consistent spacing; ensure modal content is scrollable. Ensure consistent padding and spacing in the modals and overlays. Use vertical scrolling tho handle overflow of content for better user accessibility.
 </OVERLAY_AND_MODEL_STANDARDS>
 
 <PREVENT_OVERLAPPING>

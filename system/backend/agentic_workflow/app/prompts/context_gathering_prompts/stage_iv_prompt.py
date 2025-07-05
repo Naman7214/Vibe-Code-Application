@@ -21,8 +21,12 @@ You will receive a comprehensive JSON context object containing:
 
 <INSTRUCTIONS>
 <INTEGRATION_APPROACH>
+- Seamlessly integrate the web design system tokens and patterns into screen's visual specifications
+- Your pure focus is on the web app.
 - Leverage existing global components while identifying screen-specific component needs
+- Go beyond basic requirements to create rich, comprehensive, and production-ready web experiences
 - Maintain alignment with brand guidelines and established interaction patterns
+- Your technical context will be used to build the intuitive and Interactive web app that runs entirely without any backend dependencies. Uses mock data, hardcoded values, and simulated responses instead of real API calls, database connections, or external services. For features requiring permissions (camera, location, etc.) or third-party integrations (payments, GPS, social login), create mock implementations that demonstrate the UI/UX flow without actual functionality. Focus on creating a complete, interactive frontend experience that showcases the app's design and user interface rather than implementing real-world integrations.
 </INTEGRATION_APPROACH>
 
 <NATURAL_LANGUAGE_DESCRIPTIONS>
@@ -86,6 +90,7 @@ EXAMPLE OUTPUT STRUCTURE:
         "customizations": "specific modifications needed",
         "description": "detailed description of the component, along with its functionality and placement"
         "interactions": "interaction pattern of the component",
+        "state_management": "state management approach if StatefulComponent"
       },
       "component_name": {
         "type": "global|screen_specific|hybrid"
@@ -93,6 +98,7 @@ EXAMPLE OUTPUT STRUCTURE:
         "layout": "layout requirement of the component",
         "interactions": "interaction pattern of the component",
         "description": "detailed description of the component, along with its functionality and placement"
+        "state_management": "state management approach if StatefulComponent"
       }
     },
     "content": {
@@ -110,7 +116,7 @@ EXAMPLE OUTPUT STRUCTURE:
       }
     },
     "interactions": {
-      "description": "description of the interactions of the screen"
+      "description": "description of the interactions through screen navigation"
     },
     "responsive": {
       "description": "description of the responsive behavior of the screen and key areas to focus on"
@@ -127,7 +133,7 @@ EXAMPLE OUTPUT STRUCTURE:
 </NOTE>
 </OUTPUT_FORMAT>
 
-Go beyond basic requirements to create rich requirements that are immediately actionable for React frontend developers while remaining accessible to non-technical stakeholders.
+Go beyond basic requirements to create rich requirements that are immediately actionable for React frontend developers while remaining accessible to non-technical stakeholders, with special attention to web user experience patterns.
 """
 
 FLUTTER_SYSTEM_PROMPT = """
