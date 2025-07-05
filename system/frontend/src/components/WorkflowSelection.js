@@ -1,11 +1,21 @@
 import React from 'react';
 import { Plus, FileText, ArrowRight, Wrench } from 'lucide-react';
+import logo from '../logo.png';
 
 const WorkflowSelection = ({ onSelectWorkflow }) => {
   return (
     <div className="max-w-6xl mx-auto p-6">
       <div className="text-center mb-8">
-        <h2 className="text-3xl font-bold text-gray-900 mb-2">Choose Workflow</h2>
+        <div className="flex items-center justify-center mb-4">
+          <div className="logo-container bg-white rounded-xl shadow-sm border border-gray-100 p-3 mr-4">
+            <img 
+              src={logo} 
+              alt="Velocity.new Logo" 
+              className="w-10 h-10"
+            />
+          </div>
+          <h2 className="text-3xl font-bold text-gray-900">Choose Workflow</h2>
+        </div>
         <p className="text-gray-600">
           Select how you want to proceed with your code generation
         </p>

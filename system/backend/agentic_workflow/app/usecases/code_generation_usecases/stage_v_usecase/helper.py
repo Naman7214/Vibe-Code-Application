@@ -101,6 +101,15 @@ class StageVHelper:
                     r"Build failed",
                     r"Exception:",
                     r"Compiler message",
+                    r"Target dart2js failed",
+                    r"Compilation failed",
+                    r"lib/.*\.dart:\d+:\d+:",
+                    r"Error when reading",
+                    r"No such file or directory",
+                    r"Expected .* after",
+                    r"missing implementations",
+                    r"Couldn't find constructor",
+                    r"ProcessException",
                 ],
             },
         ]
@@ -322,6 +331,16 @@ class StageVHelper:
             r"Oops! Something went wrong",
             r"Missing script:",
             r"npm ERR!",
+            # Flutter-specific patterns
+            r"Target dart2js failed",
+            r"Error: Compilation failed",
+            r"ProcessException",
+            r"Error when reading",
+            r"No such file or directory",
+            r"Expected .* after",
+            r"missing implementations",
+            r"Couldn't find constructor",
+            r"lib/.*\.dart:\d+:\d+:.*Error:",
         ]
 
         for pattern in critical_patterns:
@@ -334,6 +353,10 @@ class StageVHelper:
         self, output: str, parsed_errors: List[Dict[str, Any]]
     ) -> str:
         """Extract a detailed error message from output"""
+        # Check if this is Flutter output with compilation errors
+        if "Target dart2js failed" in output or "Error: Compilation failed" in output:
+            return self._extract_flutter_compilation_errors(output)
+        
         # First, try to use parsed errors if they contain meaningful information
         if parsed_errors:
             for error in parsed_errors:
@@ -402,6 +425,90 @@ class StageVHelper:
                     return "\n".join(context_lines)
         
         return "No specific error message found"
+
+    def _extract_flutter_compilation_errors(self, output: str) -> str:
+        """Extract and format Flutter compilation errors"""
+        lines = output.split("\n")
+        compilation_errors = []
+        current_error = []
+        
+        # Look for lines that start with file paths (Flutter error format)
+        for i, line in enumerate(lines):
+            line = line.strip()
+            
+            # Flutter errors typically start with a file path and line/column numbers
+            if re.match(r"lib/.*\.dart:\d+:\d+:", line):
+                # If we have a previous error, save it
+                if current_error:
+                    compilation_errors.append("\n".join(current_error))
+                    current_error = []
+                
+                # Start new error with the file path line
+                current_error.append(line)
+                
+                # Look for the "Error:" line that follows
+                for j in range(i + 1, min(i + 10, len(lines))):
+                    next_line = lines[j].strip()
+                    if next_line.startswith("Error:"):
+                        current_error.append(next_line)
+                        break
+                        
+            # Also capture standalone error messages
+            elif line.startswith("Error:") and not any("Error:" in err for err in current_error):
+                if current_error:
+                    compilation_errors.append("\n".join(current_error))
+                    current_error = []
+                current_error.append(line)
+                
+                # Look for additional context lines
+                for j in range(i + 1, min(i + 3, len(lines))):
+                    next_line = lines[j].strip()
+                    if next_line and not next_line.startswith("Error:") and not next_line.startswith("lib/"):
+                        # Add context if it's meaningful
+                        if any(keyword in next_line.lower() for keyword in [
+                            "missing", "expected", "found", "implementation", "constructor"
+                        ]):
+                            current_error.append(next_line)
+        
+        # Don't forget the last error
+        if current_error:
+            compilation_errors.append("\n".join(current_error))
+        
+        # If we found specific compilation errors, return them
+        if compilation_errors:
+            return "\n\n".join(compilation_errors)
+        
+        # Fallback: try to extract the main error block
+        error_start = -1
+        error_end = -1
+        
+        for i, line in enumerate(lines):
+            if "Target dart2js failed" in line or "Error: Compilation failed" in line:
+                error_start = max(0, i - 1)
+                break
+        
+        if error_start >= 0:
+            # Find the end of the error block (before stack trace)
+            for i in range(error_start, len(lines)):
+                line = lines[i].strip()
+                if line.startswith("#0") or line.startswith("Error: Failed to compile"):
+                    error_end = i
+                    break
+            
+            if error_end > error_start:
+                error_block = lines[error_start:error_end]
+                # Filter out empty lines and stack trace entries
+                filtered_errors = []
+                for line in error_block:
+                    line = line.strip()
+                    if line and not line.startswith("at ") and not line.startswith("#"):
+                        filtered_errors.append(line)
+                
+                if filtered_errors:
+                    return "\n".join(filtered_errors)
+        
+        # Ultimate fallback
+        return "Flutter compilation failed with multiple errors"
 
     async def create_validation_summary(
         self, validation_results: List[Dict[str, Any]], has_errors: bool

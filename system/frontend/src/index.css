@@ -49,4 +49,16 @@ pre {
   transition-property: color, background-color, border-color, opacity, transform;
   transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
   transition-duration: 150ms;
+}
+
+/* Logo styling to ensure clean integration */
+img[alt="Velocity.new Logo"] {
+  object-fit: contain;
+  background-color: transparent;
+  mix-blend-mode: multiply;
+}
+
+/* Alternative styling if mix-blend-mode doesn't work well */
+.logo-container {
+  background: linear-gradient(145deg, #ffffff, #f8f9fa);
 } 

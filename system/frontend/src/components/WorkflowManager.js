@@ -10,6 +10,7 @@ import Step3CodeGeneration from './Step3CodeGeneration';
 import Step4ErrorFixing from './Step4ErrorFixing';
 import Step5Completion from './Step5Completion';
 import { Plus } from 'lucide-react';
+import logo from '../logo.png';
 
 const WorkflowManager = () => {
   const {
@@ -374,7 +375,16 @@ const WorkflowManager = () => {
       <div className="container mx-auto px-4">
         {/* Header */}
         <div className="text-center mb-8">
-          <h1 className="text-4xl font-bold text-gray-900 mb-2">Velocity.new</h1>
+          <div className="flex items-center justify-center mb-4">
+            <div className="logo-container bg-white rounded-xl shadow-sm border border-gray-100 p-2 mr-3">
+              <img 
+                src={logo} 
+                alt="Velocity.new Logo" 
+                className="w-8 h-8"
+              />
+            </div>
+            <h1 className="text-4xl font-bold text-gray-900">Velocity.new</h1>
+          </div>
           <p className="text-gray-600">AI-Powered Code Generation Platform</p>
           {currentStep > 0 && (
             <button

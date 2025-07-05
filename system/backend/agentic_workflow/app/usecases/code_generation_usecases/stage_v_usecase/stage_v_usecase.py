@@ -42,9 +42,18 @@ class StageVUsecase:
                 error_message = result["error_details"]["message"]
                 raw_output = result["error_details"].get("raw_output", "")
                 
-                # If the error message is generic and we have raw output, try to extract better details
-                if (error_message in ["error during build:", "No specific error message found"] or 
-                    len(error_message.strip()) < 20) and raw_output:
+                # For Flutter builds, use the specialized error extraction if the original message is generic
+                if ("flutter build" in command and 
+                    (error_message in ["error during build:", "No specific error message found"] or 
+                     len(error_message.strip()) < 20) and raw_output):
+                    
+                    # Use the helper's Flutter error extraction
+                    if ("Target dart2js failed" in raw_output or "Error: Compilation failed" in raw_output):
+                        error_message = self.helper._extract_flutter_compilation_errors(raw_output)
+                    
+                # For other commands, try to extract better details from raw output
+                elif ((error_message in ["error during build:", "No specific error message found"] or 
+                       len(error_message.strip()) < 20) and raw_output):
                     
                     # Look for more specific error information in raw output
                     lines = raw_output.split("\n")
