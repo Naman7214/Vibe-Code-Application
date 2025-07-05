@@ -26,14 +26,13 @@ class IDEAgentController:
             if result["success"]:
                 return JSONResponse(
                     content={
-                        "data": {
-                            "tool_calls_used": result["tool_calls_used"],
-                            "completion_reason": result.get(
-                                "completion_reason", "completed"
-                            ),
-                            "session_id": result["session_id"],
-                        },
+                        "success": True,
                         "message": result["message"],
+                        "tool_calls_used": result["tool_calls_used"],
+                        "completion_reason": result.get(
+                            "completion_reason", "completed"
+                        ),
+                        "session_id": result["session_id"],
                         "error": None,
                     },
                     status_code=status.HTTP_200_OK,
@@ -41,13 +40,13 @@ class IDEAgentController:
             else:
                 return JSONResponse(
                     content={
-                        "data": {
-                            "tool_calls_used": result.get("tool_calls_used", 0),
-                            "completion_reason": result.get(
-                                "completion_reason", "error"
-                            ),
-                        },
+                        "success": False,
                         "message": result["message"],
+                        "tool_calls_used": result.get("tool_calls_used", 0),
+                        "completion_reason": result.get(
+                            "completion_reason", "error"
+                        ),
+                        "session_id": result.get("session_id", ""),
                         "error": result["error"],
                     },
                     status_code=status.HTTP_400_BAD_REQUEST,
@@ -56,11 +55,11 @@ class IDEAgentController:
         except Exception as e:
             return JSONResponse(
                 content={
-                    "data": {
-                        "tool_calls_used": 0,
-                        "completion_reason": "error",
-                    },
+                    "success": False,
                     "message": "IDE agent execution failed",
+                    "tool_calls_used": 0,
+                    "completion_reason": "error",
+                    "session_id": "",
                     "error": str(e),
                 },
                 status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,

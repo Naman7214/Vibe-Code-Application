@@ -52,7 +52,7 @@ class IDEAgentTools:
             },
             {
                 "name": "edit_file",
-                "description": """Use this tool to propose an edit to an existing file or write the content in a new file. This will be read by a less intelligent model, which will quickly apply the edit. You should make it clear what the edit is, while also minimizing the unchanged code you write. You should still bias towards repeating as few lines of the original file as possible to convey the change. But, each edit should contain sufficient context of unchanged lines around the code you're editing to resolve ambiguity. Make sure it is clear what the edit should be, and where it should be applied.
+                "description": """Use this tool to propose an edit to an existing file or write the content in a new file. This will be read by a less intelligent model, which will quickly apply the edit. You should make it clear what the edit is, while also minimizing the unchanged code you write. You should still bias towards repeating as few lines of the original file as possible to convey the change. But, each edit should contain sufficient context of unchanged lines around the code you're editing to resolve ambiguity. Make sure it is clear what the edit should be, and where it should be applied. But note it is highly CRITICAL to generate patches of code that contains the edit and not the entire file. 
 
                 IMPORTANT: If you need to make multiple changes to the same file, COMBINE ALL CHANGES into a SINGLE tool call. Do NOT use this tool multiple times for the same file - consolidate all modifications, additions, and deletions into one comprehensive edit by following the below formatting requirements.
 
@@ -255,9 +255,7 @@ class IDEAgentTools:
 
         if tool_name == "exit_tool":
             # Keep the original summary from the agent, just set the file path
-            tool_input["file_path"] = os.path.join(
-                codebase_path, "scratchpads/global_scratchpad.txt"
-            )
+            tool_input["file_path"] = f"artifacts/{session_id}/scratchpads/global_scratchpad.txt"
             tool_input["explanation"] = "IDE Agent task completion summary"
 
         try:

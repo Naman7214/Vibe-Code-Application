@@ -1,6 +1,6 @@
 import glob
 import os
-from typing import Any, Dict, List
+from typing import Any, Dict
 
 from fastapi import Depends, HTTPException
 
@@ -42,22 +42,7 @@ class IDEAgentUsecase:
         """Convert relative path to absolute path"""
         return os.path.abspath(relative_path)
 
-    def _get_screen_scratch_pads_paths(self, session_id: str) -> List[str]:
-        """Get list of screen scratch pad file paths"""
-        screen_scratch_pads_dir = (
-            f"artifacts/{session_id}/scratchpads/screen_scratchpads"
-        )
-        screen_scratch_pads_paths = []
 
-        if os.path.exists(screen_scratch_pads_dir):
-            # Get all .txt files in the screen_scratchpads directory
-            pattern = os.path.join(screen_scratch_pads_dir, "*.txt")
-            screen_scratch_pads_paths = [
-                self._get_absolute_path(path) for path in glob.glob(pattern)
-            ]
-            screen_scratch_pads_paths.sort()  # Sort for consistent ordering
-
-        return screen_scratch_pads_paths
 
     def _read_file_structure_content(self, session_id: str) -> str:
         """Read and return file structure content"""
@@ -79,6 +64,64 @@ class IDEAgentUsecase:
             file_structure_content = f"Error reading file structure: {str(e)}"
 
         return file_structure_content
+
+    def _read_global_scratch_pad_content(self, session_id: str) -> str:
+        """Read and return global scratch pad content"""
+        global_scratch_pad_path = f"artifacts/{session_id}/scratchpads/global_scratchpad.txt"
+        global_scratch_pad_content = ""
+
+        try:
+            if os.path.exists(global_scratch_pad_path):
+                with open(global_scratch_pad_path, "r", encoding="utf-8") as f:
+                    global_scratch_pad_content = f.read()
+            else:
+                global_scratch_pad_content = "Global scratch pad not available"
+        except Exception as e:
+            loggers["ide_agent"].warning(
+                f"Failed to read global scratch pad: {str(e)}"
+            )
+            global_scratch_pad_content = f"Error reading global scratch pad: {str(e)}"
+
+        return global_scratch_pad_content
+
+    def _read_screen_scratch_pads_content(self, session_id: str) -> str:
+        """Read and return all screen scratch pads content"""
+        screen_scratch_pads_dir = f"artifacts/{session_id}/scratchpads/screen_scratchpads"
+        screen_scratch_pads_content = ""
+
+        try:
+            if os.path.exists(screen_scratch_pads_dir):
+                # Get all .txt files in the screen_scratchpads directory
+                pattern = os.path.join(screen_scratch_pads_dir, "*.txt")
+                screen_files = glob.glob(pattern)
+                screen_files.sort()  # Sort for consistent ordering
+
+                if screen_files:
+                    screen_contents = []
+                    for file_path in screen_files:
+                        file_name = os.path.basename(file_path)
+                        try:
+                            with open(file_path, "r", encoding="utf-8") as f:
+                                file_content = f.read()
+                                screen_contents.append(f"=== {file_name} ===\n{file_content}")
+                        except Exception as e:
+                            loggers["ide_agent"].warning(
+                                f"Failed to read screen scratch pad {file_name}: {str(e)}"
+                            )
+                            screen_contents.append(f"=== {file_name} ===\nError reading file: {str(e)}")
+                    
+                    screen_scratch_pads_content = "\n\n".join(screen_contents)
+                else:
+                    screen_scratch_pads_content = "No screen scratch pads found"
+            else:
+                screen_scratch_pads_content = "Screen scratch pads directory not available"
+        except Exception as e:
+            loggers["ide_agent"].warning(
+                f"Failed to read screen scratch pads: {str(e)}"
+            )
+            screen_scratch_pads_content = f"Error reading screen scratch pads: {str(e)}"
+
+        return screen_scratch_pads_content
 
     def _extract_summary_from_exit_tool_result(
         self, tool_result: Dict[str, Any], tool_input: Dict[str, Any]
@@ -148,23 +191,25 @@ class IDEAgentUsecase:
                 )
 
             # Get context paths and content
-            global_scratch_pad_path = self._get_absolute_path(
-                f"artifacts/{session_id}/scratchpads/global_scratchpad.txt"
-            )
-            screen_scratch_pads_paths = self._get_screen_scratch_pads_paths(
+            file_structure_content = self._read_file_structure_content(
                 session_id
             )
-            file_structure_content = self._read_file_structure_content(
+            global_scratch_pad_content = self._read_global_scratch_pad_content(
+                session_id
+            )
+            screen_scratch_pads_content = self._read_screen_scratch_pads_content(
                 session_id
             )
 
             print(f"📁 Codebase found at: {codebase_path}")
-            print(f"📝 Global scratch pad: {global_scratch_pad_path}")
-            print(
-                f"📋 Screen scratch pads: {len(screen_scratch_pads_paths)} files found"
-            )
             print(
                 f"🗂️  File structure loaded: {len(file_structure_content)} characters"
+            )
+            print(
+                f"📝 Global scratch pad content: {len(global_scratch_pad_content)} characters"
+            )
+            print(
+                f"📋 Screen scratch pads content: {len(screen_scratch_pads_content)} characters"
             )
 
             # Initialize conversation tracking
@@ -175,7 +220,10 @@ class IDEAgentUsecase:
 
             # Get tool definitions and system prompt
             tools = self.ide_tools.get_tool_definitions()
-            system_prompt_with_context = f"{SYSTEM_PROMPT}\n\n**Session Context:** Codebase location: {codebase_path}"
+            system_prompt_with_context = SYSTEM_PROMPT.format(
+                global_scratch_pad_content=global_scratch_pad_content,
+                screen_scratch_pads_content=screen_scratch_pads_content,
+            )
 
             print(f"🛠️  Available tools: {len(tools)}")
 
@@ -183,8 +231,6 @@ class IDEAgentUsecase:
             user_prompt = USER_PROMPT.format(
                 user_query=request.user_query,
                 codebase_path=self._get_absolute_path(codebase_path),
-                global_scratch_pad_path=global_scratch_pad_path,
-                screen_scratch_pads_path=screen_scratch_pads_paths,
                 file_structure_content=file_structure_content,
             )
 
