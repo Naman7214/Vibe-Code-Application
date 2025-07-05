@@ -198,6 +198,7 @@ lib/presentation/screen_name/
 - Keep widgets small, focused, and reusable, following the single responsibility principle.
 - Include realistic, comprehensive mock data that goes beyond basic requirements - create rich, detailed, comprehensive and larger datasets that demonstrate real-world usage
 - Manage layout, colors, typography, and other design aspects using ThemeData and custom styles.
+- Include all the required imports
 - Use in-page interactions for filtering, sorting, and content manipulation when routing not specified
 </CODE_QUALITY>
 
@@ -323,8 +324,7 @@ For each screen, create a scratchpad entry that includes:
 - Is the App is following the modern widgets/theme/navigation principles?
 </CODE_GENERATION_CHECKLIST>
 
-Your generated code will be directly integrated into a Flutter application, so it must be syntactically correct, properly formatted, and ready for immediate execution.
-Don't hold back give it your all to generate the fully error, run time issue free flutter code.
+Your generated code will be directly integrated into a Flutter application, so it must be syntactically correct, properly formatted, and ready for immediate execution, generate the fully error, run time issue free flutter code.
 """
 
 USER_PROMPT = """

@@ -162,7 +162,7 @@ You will receive a comprehensive JSON context object containing:
 </INTEGRATION_APPROACH>
 
 <FLUTTER_DATA_STRUCTURE_REQUIREMENTS>
-- ALL widget parameters must specify initial state with proper Flutter data types
+- ALL widget parameters should provide guidance on initial state with Flutter data type considerations
 - Limit mock data arrays to 2-3 representative examples per widget
 - ALL Map parameters must specify complete object schemas with all required properties
 - ALL scalar parameters (String, int, double, bool) must have explicit default values
@@ -172,7 +172,7 @@ You will receive a comprehensive JSON context object containing:
 
 <WIDGET_PARAMETER_SAFETY_SPECIFICATIONS>
 - Define clear parameter interfaces for all custom widgets including expected data types
-- Specify enum values for parameters like size, variant, platform adaptivity, etc.
+- Provide strategic guidance for parameters like size, variant, platform adaptivity, etc.
 - Ensure mock data structures exactly match widget parameter expectations
 - Include validation rules for form inputs and data transformation requirements
 - Document required vs optional parameters with clear default value specifications
@@ -200,12 +200,12 @@ Each screen description must cover:
 </SELF_CONTAINED_FUNCTIONALITY>
 
 <WIDGET_SPECIFICATION_REQUIREMENTS>
-- For each custom widget, specify exact parameter interfaces with Flutter data types and default values
-- Limit mock data to 2-3 representative examples that match the expected parameter structure
-- Define form field initial states with proper Flutter TextEditingController handling
-- Specify List parameters with concise mobile-appropriate mock data arrays
-- Document widget size/variant options as explicit enum values optimized for mobile screens
-- Ensure all Map parameters include complete property definitions with proper mobile data nesting
+- For each custom widget, provide strategic parameter interface guidance with Flutter data type considerations and default value approaches
+- Limit mock data to 2-3 representative examples that align with expected parameter structure guidance
+- Define form field initial state guidance with proper Flutter TextEditingController handling approaches
+- Provide List parameter guidance with concise mobile-appropriate mock data array strategies
+- Document widget size/variant option strategies optimized for mobile screens
+- Ensure all Map parameters include complete property guidance with proper mobile data nesting approaches
 - Consider StatefulWidget state management requirements and lifecycle methods
 - Platform adaptivity references the unified Material 3 + Cupertino strategy
 - Maintain Mobile Grid Systems with flexible layouts for various screen sizes
@@ -271,17 +271,17 @@ EXAMPLE OUTPUT STRUCTURE:
       }
     },
     "interactions": {
-      "description": "description of mobile touch interactions, gestures, and navigation patterns"
+      "description": "strategic guidance for mobile touch interactions, gestures, and navigation patterns"
     },
     "responsive": {
-      "description": "description of responsive behavior across mobile screen sizes and orientations"
+      "description": "strategic guidance for responsive behavior across mobile screen sizes and orientations"
     },
     "design": {
-      "description": "description of mobile-optimized design considering touch targets, readability, and mobile UX patterns"
+      "description": "strategic guidance for mobile-optimized design considering touch targets, readability, and mobile UX patterns"
     }
   }
 }
 </OUTPUT>
 
-Go beyond basic requirements to create rich mobile requirements that are immediately actionable for Flutter developers while remaining accessible to non-technical stakeholders, with special attention to mobile user experience patterns and cross-platform considerations.
+Go beyond basic requirements to create rich mobile requirements that provide strategic guidance for Flutter developers while remaining accessible to non-technical stakeholders, with special attention to mobile user experience patterns and cross-platform considerations.
 """

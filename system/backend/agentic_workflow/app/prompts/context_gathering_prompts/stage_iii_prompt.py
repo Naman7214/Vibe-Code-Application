@@ -231,17 +231,16 @@ Create a global mobile design theme strategy that will serve as the foundation r
 15. Creates a mobile experience, not a web experience
 16. Balances innovation/creativity with usability and practicality
 17. This is the modern era not the medieval so all the design decision should be according to modern design principles and not the medieval ones.
-
-
 </INSTRUCTIONS>
 
 <OUTPUT_REQUIREMENTS>
 - Provide structured JSON output wrapped in <OUTPUT> tags, only the request JSON is required, no other text or comments
-- Focus on creating a reusable mobile design foundation
-- Include rationale for major design decisions with mobile considerations
-- Balance brand expression with mobile functional clarity
-- Design decisions must be implementable in Flutter ThemeData
-- For color descriptions, focus on technical specs with brief psychological rationale
+- Focus on creating a reusable mobile design foundation through strategic reasoning rather than exact specifications
+- Include comprehensive rationale for major design decisions with mobile considerations
+- Balance brand expression with mobile functional clarity through thoughtful design principles
+- Design decisions must be implementable in Flutter ThemeData through clear guidance and reasoning
+- Avoid specific values like font size, color, 500, 24sp, #xxxxxx. instead provide strategic guidance for the same.
+- Provide strategic design guidance that enables balance between the design psychology and the practicality of the design.
 </OUTPUT_REQUIREMENTS>
 
 Make sure to use proper escape characters for the new lines and other special characters such that it'll not cause any error in the upcoming parsing of the output.
@@ -250,25 +249,25 @@ Make sure to use proper escape characters for the new lines and other special ch
 {
     "design_philosophy": "brief statement of overall mobile design approach considering user context and device constraints (about 4-5 sentences) with core psychological engagement principle your design philosophy should be such that it hooks the user and makes them engage with the app while also considering the practicality of the design",
     "color_palette": {
-        "primary": {"description": "reason behind choosing this color for mobile interfaces"},
-        "secondary": {"description": "reason behind choosing this color for mobile interfaces"},
-        "accent": {"description": "reason behind choosing this color for mobile touch interactions"},
-        "neutral": "rational of the neutral colors optimized for mobile readability",
+        "primary": "detailed reasoning for primary color choice, including psychological impact and mobile usability considerations",
+        "secondary": "detailed reasoning for secondary color choice, including how it complements primary and supports mobile hierarchy",
+        "accent": "detailed reasoning for accent color choice, including touch interaction feedback and mobile engagement principles",
+        "neutral": "comprehensive rationale for neutral color strategy, including mobile readability, accessibility, and visual balance considerations",
         "semantic": {
-            "success": {"description": "color for success states and positive feedback on mobile"},
-            "warning": {"description": "color for warning states and cautions on mobile"},
-            "error": {"description": "color for error states and negative feedback on mobile"},
-            "info": {"description": "color for informational states and neutral feedback on mobile"}
+            "success": "reasoning for success color approach, including mobile feedback patterns and positive reinforcement psychology",
+            "warning": "reasoning for warning color approach, including mobile attention-grabbing and caution communication",
+            "error": "reasoning for error color approach, including mobile error visibility and user guidance principles",
+            "info": "reasoning for informational color approach, including mobile information hierarchy and neutral communication"
         }
     },
     "typography": {
-        "heading_font": {"family": "mobile-optimized font name", "characteristics": "brief mobile readability description"},
-        "body_font": {"family": "mobile-optimized font name", "characteristics": "brief mobile readability description"},
+        "heading_font": "reasoning for heading font selection, including mobile readability, brand alignment, and cross-platform compatibility",
+        "body_font": "reasoning for body font selection, including mobile reading comfort, accessibility, and performance considerations",
         "hierarchy": {
-            "h1": {"size": "mobile_size", "weight": "weight", "usage": "usage on mobile screens"},
-            "h2": {"size": "mobile_size", "weight": "weight", "usage": "usage on mobile screens"},
-            "body": {"size": "mobile_size", "weight": "weight", "usage": "usage on mobile screens"},
-            "caption": {"size": "mobile_size", "weight": "weight", "usage": "usage on mobile screens"}
+            "h1": "sizing and weight strategy for primary headings, including mobile prominence and visual hierarchy principles",
+            "h2": "sizing and weight strategy for secondary headings, including mobile scanning patterns and information architecture",
+            "body": "sizing and weight strategy for body text, including mobile reading comfort and accessibility standards",
+            "caption": "sizing and weight strategy for captions, including mobile space efficiency and secondary information hierarchy"
         }
     },
     "visual_mood": {
@@ -279,7 +278,7 @@ Make sure to use proper escape characters for the new lines and other special ch
 }
 </OUTPUT>
 
-Your technical output is used by the Flutter developer to build the mobile design system. So make sure to provide the output in a manner that it'll be easy to understand and use by the Flutter developer.
+Your strategic design guidance is used by the Flutter developer to build the mobile design system. Provide comprehensive reasoning and principles that enable flexible and intelligent implementation.
 """
 
 FLUTTER_SYSTEM_PROMPT_B = """
