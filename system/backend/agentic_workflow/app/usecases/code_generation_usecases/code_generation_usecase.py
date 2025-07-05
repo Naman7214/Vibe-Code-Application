@@ -22,6 +22,9 @@ from system.backend.agentic_workflow.app.usecases.code_generation_usecases.stage
 from system.backend.agentic_workflow.app.utils.react_boilerplate_setup import (
     setup_react_boilerplate,
 )
+from system.backend.agentic_workflow.app.utils.session_context import (
+    session_state,
+)
 
 
 class CodeGenerationUsecase:
@@ -92,9 +95,8 @@ class CodeGenerationUsecase:
                 status_code=status.HTTP_400_BAD_REQUEST,
             )
 
-        stage_iv_result = await self.stage_iv_usecase.execute(
-            request.dict_of_screens, request.is_follow_up
-        )
+        # Execute original Stage IV usecase
+        stage_iv_result = await self.stage_iv_usecase.execute(request)
         if not stage_iv_result["success"]:
             return JSONResponse(
                 content={
@@ -104,6 +106,8 @@ class CodeGenerationUsecase:
                 },
                 status_code=status.HTTP_400_BAD_REQUEST,
             )
+
+        # Routes generation is now handled within Stage IV usecase
 
         stage_v_result = await self.stage_v_usecase.execute(request)
 
@@ -133,3 +137,5 @@ class CodeGenerationUsecase:
             },
             status_code=status.HTTP_200_OK,
         )
+
+

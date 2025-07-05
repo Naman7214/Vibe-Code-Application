@@ -53,48 +53,41 @@ class FlutterStageIIIHelper:
             "existing_routes": "",
         }
 
-        # Read screen scratchpads based on is_follow_up flag
-        if is_follow_up:
-            # Read only screens specified in the input dict
-            screen_names = list(screen_dict.keys())
-            self.logger.info(
-                f"Follow-up mode: Reading Flutter scratchpads for screens: {screen_names}"
-            )
-        else:
-            # Read all available screen scratchpads
-            screen_names = await self._get_all_screen_names(
-                screen_scratchpads_dir
-            )
-            self.logger.info(
-                f"Initial mode: Reading all available Flutter screen scratchpads: {screen_names}"
-            )
+        # Read screen scratchpads
+        screen_scratchpads = {}
+        if os.path.exists(screen_scratchpads_dir):
+            for screen_name in screen_dict.keys():
+                scratchpad_path = os.path.join(
+                    screen_scratchpads_dir, f"{screen_name}.json"
+                )
+                if os.path.exists(scratchpad_path):
+                    try:
+                        with open(scratchpad_path, "r", encoding="utf-8") as f:
+                            screen_scratchpads[screen_name] = f.read()
+                        self.logger.info(
+                            f"Successfully read scratchpad for {screen_name}"
+                        )
+                    except Exception as e:
+                        self.logger.error(
+                            f"Error reading scratchpad for {screen_name}: {e}"
+                        )
+                        screen_scratchpads[screen_name] = (
+                            f"Error reading scratchpad: {e}"
+                        )
+                else:
+                    self.logger.warning(
+                        f"Scratchpad not found for {screen_name}"
+                    )
+                    screen_scratchpads[screen_name] = (
+                        f"Scratchpad not found for {screen_name}"
+                    )
 
-        # Read screen scratchpad files
-        for screen_name in screen_names:
-            scratchpad_file = os.path.join(
-                screen_scratchpads_dir, f"{screen_name}.txt"
-            )
-            try:
-                with open(scratchpad_file, "r", encoding="utf-8") as f:
-                    content = f.read()
-                    context_data["screen_scratchpads"][screen_name] = content
-                self.logger.info(
-                    f"Successfully read Flutter scratchpad for {screen_name}"
-                )
-            except FileNotFoundError:
-                self.logger.warning(
-                    f"Flutter scratchpad not found for {screen_name} at {scratchpad_file}"
-                )
-                context_data["screen_scratchpads"][
-                    screen_name
-                ] = f"No scratchpad available for {screen_name}"
-            except Exception as e:
-                self.logger.error(
-                    f"Error reading Flutter scratchpad for {screen_name}: {e}"
-                )
-                context_data["screen_scratchpads"][
-                    screen_name
-                ] = f"Error reading scratchpad for {screen_name}"
+        # Format screen scratchpads as JSON string
+        import json
+
+        context_data["screen_scratchpads"] = json.dumps(
+            screen_scratchpads, indent=2
+        )
 
         # Read existing app_routes.dart if this is a follow-up
         if is_follow_up:
@@ -116,37 +109,6 @@ class FlutterStageIIIHelper:
                 )
 
         return context_data
-
-    async def _get_all_screen_names(self, screen_scratchpads_dir: str) -> list:
-        """
-        Get all available screen names from the flutter_screen_scratchpads directory
-
-        Args:
-            screen_scratchpads_dir: Path to the Flutter screen scratchpads directory
-
-        Returns:
-            List of screen names (without .txt extension)
-        """
-        screen_names = []
-        try:
-            if os.path.exists(screen_scratchpads_dir):
-                for filename in os.listdir(screen_scratchpads_dir):
-                    if filename.endswith(".txt"):
-                        screen_name = filename[:-4]  # Remove .txt extension
-                        screen_names.append(screen_name)
-                self.logger.info(
-                    f"Found {len(screen_names)} Flutter screen scratchpads"
-                )
-            else:
-                self.logger.warning(
-                    f"Flutter screen scratchpads directory not found: {screen_scratchpads_dir}"
-                )
-        except Exception as e:
-            self.logger.error(
-                f"Error reading Flutter screen scratchpads directory: {e}"
-            )
-
-        return screen_names
 
     async def update_file_structure(self, session_id: str, codebase_path: str):
         """
@@ -235,6 +197,47 @@ class FlutterStageIIIHelper:
 
         self.logger.info(
             f"Updated global_scratchpad.txt at {flutter_scratchpad_path}"
+        )
+
+    async def update_scratchpads_with_generated_content(
+        self, session_id: str, routes_content: str, context_registry_content: str, codebase_path: str
+    ):
+        """
+        Update scratchpad files with the generated routes content and context registry
+
+        Args:
+            session_id: The session ID for file paths
+            routes_content: The generated routes file content
+            context_registry_content: The context registry content
+            codebase_path: Path to the codebase directory
+        """
+        scratchpads_dir = f"artifacts/{session_id}/scratchpads"
+        os.makedirs(scratchpads_dir, exist_ok=True)
+
+        # Format output for scratchpad
+        formatted_output = f"""
+<FLUTTER_STAGE_III_CODE_GENERATION>
+<TIMESTAMP>{self._get_timestamp()}</TIMESTAMP>
+<ROUTES_CONTEXT_REGISTRY>
+{context_registry_content}
+</ROUTES_CONTEXT_REGISTRY>
+<GENERATED_ROUTES_FILE>
+{routes_content}
+</GENERATED_ROUTES_FILE>
+</FLUTTER_STAGE_III_CODE_GENERATION>
+
+"""
+
+        # Append to Flutter-specific scratchpad
+        flutter_scratchpad_path = os.path.join(
+            scratchpads_dir, "global_scratchpad.txt"
+        )
+
+        with open(flutter_scratchpad_path, "a", encoding="utf-8") as f:
+            f.write(formatted_output)
+
+        self.logger.info(
+            f"Updated global_scratchpad.txt with generated routes content at {flutter_scratchpad_path}"
         )
 
     def _get_timestamp(self) -> str:

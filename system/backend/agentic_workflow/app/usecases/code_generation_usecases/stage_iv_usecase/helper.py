@@ -270,6 +270,64 @@ class StageIVHelper:
             f"Updated global_scratchpad.txt at {global_scratchpad_path}"
         )
 
+    async def update_scratchpads_with_routes_generation(
+        self, session_id: str, routes_content: str, context_registry_content: str, codebase_path: str
+    ):
+        """
+        Update scratchpad files with routes generation content and analysis.
+        
+        Args:
+            session_id: The session ID for file paths
+            routes_content: Generated Routes.jsx content
+            context_registry_content: Context registry content with analysis
+            codebase_path: Path to the codebase directory
+        """
+        scratchpads_dir = f"artifacts/{session_id}/scratchpads"
+        os.makedirs(scratchpads_dir, exist_ok=True)
+
+        # Format output for scratchpad with routes generation details
+        formatted_output = f"""
+<STAGE_IV_ROUTES_GENERATION>
+<TIMESTAMP>{self._get_timestamp()}</TIMESTAMP>
+<ROUTES_CONTEXT_REGISTRY>
+{context_registry_content}
+</ROUTES_CONTEXT_REGISTRY>
+<GENERATED_ROUTES_FILE>
+File: src/Routes.jsx
+Content Length: {len(routes_content)} characters
+Generated using heuristic analysis of pages directory structure
+</GENERATED_ROUTES_FILE>
+</STAGE_IV_ROUTES_GENERATION>
+
+"""
+
+        # Append to global scratchpad
+        global_scratchpad_path = os.path.join(
+            scratchpads_dir, "global_scratchpad.txt"
+        )
+
+        with open(global_scratchpad_path, "a", encoding="utf-8") as f:
+            f.write(formatted_output)
+
+        self.logger.info(
+            f"Updated global_scratchpad.txt with routes generation summary at {global_scratchpad_path}"
+        )
+
+        # Also create a dedicated routes analysis file
+        routes_analysis_path = os.path.join(
+            scratchpads_dir, "routes_analysis.txt"
+        )
+
+        with open(routes_analysis_path, "w", encoding="utf-8") as f:
+            f.write(f"ROUTES GENERATION ANALYSIS\n")
+            f.write(f"Generated at: {self._get_timestamp()}\n")
+            f.write(f"{'='*50}\n\n")
+            f.write(context_registry_content)
+
+        self.logger.info(
+            f"Created routes analysis file at {routes_analysis_path}"
+        )
+
     def _get_timestamp(self) -> str:
         """Get current timestamp as string"""
         from datetime import datetime
