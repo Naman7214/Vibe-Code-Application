@@ -271,11 +271,15 @@ class StageIVHelper:
         )
 
     async def update_scratchpads_with_routes_generation(
-        self, session_id: str, routes_content: str, context_registry_content: str, codebase_path: str
+        self,
+        session_id: str,
+        routes_content: str,
+        context_registry_content: str,
+        codebase_path: str,
     ):
         """
         Update scratchpad files with routes generation content and analysis.
-        
+
         Args:
             session_id: The session ID for file paths
             routes_content: Generated Routes.jsx content
@@ -331,16 +335,16 @@ Generated using heuristic analysis of pages directory structure
     def generate_context_registry(self, analysis: Dict) -> str:
         """
         Generate context registry content based on routes analysis.
-        
+
         Args:
             analysis: Analysis results from the routes generator
-            
+
         Returns:
             Formatted context registry content
         """
         pages = analysis.get("pages", [])
         components = analysis.get("components", {})
-        
+
         # Build route list
         route_list = []
         for page in pages:
@@ -348,7 +352,7 @@ Generated using heuristic analysis of pages directory structure
             route_list.append(
                 f"• {page['component_name']} → {routes_str} {'(HOME)' if page.get('is_home') else ''}"
             )
-        
+
         # Build components summary
         components_summary = []
         if components.get("scroll_to_top"):
@@ -357,7 +361,7 @@ Generated using heuristic analysis of pages directory structure
             components_summary.append("• ErrorBoundary component")
         if components.get("has_ui_components"):
             components_summary.append("• UI components directory")
-        
+
         return f"""REACT STAGE IV - ROUTES GENERATION SUMMARY
 =========================================
 

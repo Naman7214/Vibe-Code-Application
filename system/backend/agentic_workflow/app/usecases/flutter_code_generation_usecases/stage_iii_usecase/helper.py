@@ -200,7 +200,11 @@ class FlutterStageIIIHelper:
         )
 
     async def update_scratchpads_with_generated_content(
-        self, session_id: str, routes_content: str, context_registry_content: str, codebase_path: str
+        self,
+        session_id: str,
+        routes_content: str,
+        context_registry_content: str,
+        codebase_path: str,
     ):
         """
         Update scratchpad files with the generated routes content and context registry
@@ -243,23 +247,23 @@ class FlutterStageIIIHelper:
     def generate_context_registry(self, analysis: Dict) -> str:
         """
         Generate context registry content based on routes analysis.
-        
+
         Args:
             analysis: Analysis results from the routes generator
-            
+
         Returns:
             Formatted context registry content
         """
         screens = analysis.get("screens", [])
         initial_screen = analysis.get("initial_screen", {})
-        
+
         # Build route list
         route_list = []
         for screen in screens:
             route_list.append(
                 f"• {screen['route_constant']} → {screen['class_name']} (path: /{screen['route_path']})"
             )
-        
+
         return f"""FLUTTER STAGE III - ROUTES GENERATION SUMMARY
 =============================================
 

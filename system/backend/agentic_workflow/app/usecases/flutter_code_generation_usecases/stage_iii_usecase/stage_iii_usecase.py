@@ -1,5 +1,5 @@
-from typing import Any, Dict
 import os
+from typing import Any, Dict
 
 from fastapi import Depends, HTTPException
 
@@ -10,11 +10,11 @@ from system.backend.agentic_workflow.app.models.schemas.code_generation_schema i
 from system.backend.agentic_workflow.app.repositories.error_repo import (
     ErrorRepo,
 )
-from system.backend.agentic_workflow.app.utils.session_context import (
-    session_state,
-)
 from system.backend.agentic_workflow.app.utils.flutter_routes_generator import (
     generate_flutter_routes_for_project,
+)
+from system.backend.agentic_workflow.app.utils.session_context import (
+    session_state,
 )
 
 from .helper import FlutterStageIIIHelper
@@ -28,9 +28,7 @@ class FlutterStageIIIUsecase:
         self.error_repo = error_repo
         self.helper = FlutterStageIIIHelper()
 
-    async def execute(
-        self, request: CodeGenerationRequest
-    ) -> Dict[str, Any]:
+    async def execute(self, request: CodeGenerationRequest) -> Dict[str, Any]:
         """
         Execute Flutter Stage III processing for code generation
         Generates routes/app_routes.dart file using heuristic analysis of the presentation structure
@@ -45,7 +43,7 @@ class FlutterStageIIIUsecase:
             # Extract data from request
             screen_dict = request.dict_of_screens
             is_follow_up = request.is_follow_up
-            
+
             # Get session ID from context variable
             session_id = session_state.get()
             if not session_id:
@@ -62,19 +60,23 @@ class FlutterStageIIIUsecase:
 
             # Generate routes using the heuristic generator
             routes_content, analysis = generate_flutter_routes_for_project(
-                lib_path=lib_path,
-                output_path=routes_file_path
+                lib_path=lib_path, output_path=routes_file_path
             )
 
             # Create context registry content
-            context_registry_content = self.helper.generate_context_registry(analysis)
+            context_registry_content = self.helper.generate_context_registry(
+                analysis
+            )
 
             # Update file structure to reflect newly generated files
             await self.helper.update_file_structure(session_id, codebase_path)
 
             # Update scratchpad files with the generated content
             await self.helper.update_scratchpads_with_generated_content(
-                session_id, routes_content, context_registry_content, codebase_path
+                session_id,
+                routes_content,
+                context_registry_content,
+                codebase_path,
             )
 
             return {
@@ -115,5 +117,3 @@ class FlutterStageIIIUsecase:
                 + str(e),
                 "error": str(e),
             }
-
-

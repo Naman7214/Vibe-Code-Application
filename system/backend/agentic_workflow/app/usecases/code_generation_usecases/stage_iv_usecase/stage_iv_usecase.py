@@ -19,6 +19,9 @@ from system.backend.agentic_workflow.app.repositories.error_repo import (
 from system.backend.agentic_workflow.app.services.anthropic_services.llm_service import (
     AnthropicService,
 )
+from system.backend.agentic_workflow.app.utils.routes_generator import (
+    generate_routes_for_project,
+)
 from system.backend.agentic_workflow.app.utils.session_context import (
     session_state,
 )
@@ -27,9 +30,6 @@ from system.backend.agentic_workflow.app.utils.write_file import (
 )
 from system.backend.agentic_workflow.app.utils.xml_parser import (
     parse_xml_to_dict,
-)
-from system.backend.agentic_workflow.app.utils.routes_generator import (
-    generate_routes_for_project,
 )
 
 from .helper import StageIVHelper
@@ -56,9 +56,7 @@ class StageIVUsecase:
             self.logger.addHandler(handler)
             self.logger.setLevel(logging.INFO)
 
-    async def execute(
-        self, request: CodeGenerationRequest
-    ) -> Dict[str, Any]:
+    async def execute(self, request: CodeGenerationRequest) -> Dict[str, Any]:
         """
         Execute Stage IV processing for code generation
         Generates Routes.jsx file based on screen scratchpads
@@ -73,7 +71,7 @@ class StageIVUsecase:
             # Extract data from request
             screen_dict = request.dict_of_screens
             is_follow_up = request.is_follow_up
-            
+
             # Debug: Log what we received
             self.logger.info(
                 f"Stage IV received screen_dict type: {type(screen_dict)}"
@@ -105,19 +103,23 @@ class StageIVUsecase:
 
             # Generate routes using the heuristic generator
             routes_content, analysis = generate_routes_for_project(
-                src_path=src_path,
-                output_path=routes_file_path
+                src_path=src_path, output_path=routes_file_path
             )
 
             # Create context registry content
-            context_registry_content = self.helper.generate_context_registry(analysis)
+            context_registry_content = self.helper.generate_context_registry(
+                analysis
+            )
 
             # Update file structure to reflect newly generated files
             await self.helper.update_file_structure(session_id, codebase_path)
 
             # Update scratchpad files with the generated content
             await self.helper.update_scratchpads_with_routes_generation(
-                session_id, routes_content, context_registry_content, codebase_path
+                session_id,
+                routes_content,
+                context_registry_content,
+                codebase_path,
             )
 
             # Prepare input context using helper
@@ -189,7 +191,8 @@ class StageIVUsecase:
                 "success": True,
                 "message": "Stage IV code generation completed successfully using heuristic routes generator",
                 "error": None,
-                "generated_files": [item["file_path"] for item in actual_files] + ["src/Routes.jsx"],
+                "generated_files": [item["file_path"] for item in actual_files]
+                + ["src/Routes.jsx"],
                 "analysis": analysis,
             }
 
@@ -223,5 +226,3 @@ class StageIVUsecase:
                 + str(e),
                 "error": str(e),
             }
-
-

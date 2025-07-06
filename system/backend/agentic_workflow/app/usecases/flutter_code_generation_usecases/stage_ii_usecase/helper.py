@@ -183,6 +183,10 @@ class Helper:
 
         code_files = parse_xml_to_dict(response)
 
-        loggers["screen_generation"].info(f"Writing {len(code_files)} code files for screen: {screen_name}")
+        loggers["screen_generation"].info(
+            f"Writing {len(code_files)} code files for screen: {screen_name}"
+        )
         write_code_files(code_files, base_dir="")
-        loggers["screen_generation"].info(f"Successfully saved code files for screen: {screen_name}")
+        loggers["screen_generation"].info(
+            f"Successfully saved code files for screen: {screen_name}"
+        )

@@ -138,12 +138,10 @@ class Helper:
                 file_structure,
             )
 
-            self.logger.info(
-                f"Completed batch {batch_number}/{total_batches}"
-            )
+            self.logger.info(f"Completed batch {batch_number}/{total_batches}")
 
         self.logger.info("All batches completed.")
-        
+
         self.logger.info("Generating updated directory structure")
         structure = generate_directory_structure(
             directory_path=f"{get_project_root()}/artifacts/{session_state.get()}/codebase",
@@ -233,6 +231,10 @@ class Helper:
 
         code_files = parse_xml_to_dict(response)
 
-        self.logger.info(f"Writing {len(code_files)} code files for screen: {screen_name}")
+        self.logger.info(
+            f"Writing {len(code_files)} code files for screen: {screen_name}"
+        )
         write_code_files(code_files, base_dir="")
-        self.logger.info(f"Successfully saved code files for screen: {screen_name}")
+        self.logger.info(
+            f"Successfully saved code files for screen: {screen_name}"
+        )

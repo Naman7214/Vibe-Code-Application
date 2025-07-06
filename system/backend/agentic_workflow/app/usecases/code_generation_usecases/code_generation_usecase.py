@@ -22,9 +22,6 @@ from system.backend.agentic_workflow.app.usecases.code_generation_usecases.stage
 from system.backend.agentic_workflow.app.utils.react_boilerplate_setup import (
     setup_react_boilerplate,
 )
-from system.backend.agentic_workflow.app.utils.session_context import (
-    session_state,
-)
 
 
 class CodeGenerationUsecase:
@@ -83,7 +80,7 @@ class CodeGenerationUsecase:
                     },
                     status_code=status.HTTP_400_BAD_REQUEST,
                 )
-                
+
         stage_iii_result = await self.stage_iii_usecase.execute(request)
         if not stage_iii_result["success"]:
             return JSONResponse(
@@ -137,5 +134,3 @@ class CodeGenerationUsecase:
             },
             status_code=status.HTTP_200_OK,
         )
-
-
