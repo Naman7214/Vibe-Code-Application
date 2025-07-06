@@ -17,5 +17,5 @@ prompt-toolkit
 rich
 Crawl4AI
 mcp[cli]
-
-anthropic==0.50.0
+anthropic
+google-genai

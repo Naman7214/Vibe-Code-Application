@@ -60,6 +60,7 @@ def setup_logger(
 
 loggers = {
     "anthropic": setup_logger("anthropic", "anthropic.log"),
+    "gemini": setup_logger("gemini", "gemini.log"),
     "stage_iv": setup_logger("stage_iv", "stage_iv.log"),
     "screen_generation": setup_logger(
         "screen_generation", "screen_generation.log"

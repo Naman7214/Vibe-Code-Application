@@ -13,6 +13,10 @@ class Settings(BaseSettings):
     ANTHROPIC_DEFAULT_MODEL: str = "claude-sonnet-4-20250514"
     OPENAI_API_KEY: str
     OPENAI_DEFAULT_MODEL: str = "o3-2025-04-16"
+    
+    # Gemini settings
+    GEMINI_API_KEY: str
+    GEMINI_DEFAULT_MODEL: str = "gemini-2.5-pro"
 
     # Tools API settings for IDE agent
     TOOLS_API_BASE_URL: str = "http://localhost:8001/api/v1"

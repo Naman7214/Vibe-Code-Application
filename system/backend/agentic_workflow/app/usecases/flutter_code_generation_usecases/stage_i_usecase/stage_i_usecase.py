@@ -14,6 +14,9 @@ from system.backend.agentic_workflow.app.repositories.error_repo import (
 from system.backend.agentic_workflow.app.services.anthropic_services.llm_service import (
     AnthropicService,
 )
+from system.backend.agentic_workflow.app.services.gemini_services.llm_service import (
+    GeminiService,
+)
 from system.backend.agentic_workflow.app.utils.session_context import (
     session_state,
 )
@@ -31,9 +34,11 @@ class FlutterStageIUsecase:
     def __init__(
         self,
         anthropic_service: AnthropicService = Depends(),
+        gemini_service: GeminiService = Depends(),
         error_repo: ErrorRepo = Depends(),
     ):
         self.anthropic_service = anthropic_service
+        self.gemini_service = gemini_service
         self.error_repo = error_repo
         self.helper = FlutterStageIHelper()
 
@@ -66,10 +71,15 @@ class FlutterStageIUsecase:
                 codebase_path=context_data["codebase_path"],
             )
 
-            # Make LLM call
-            response = await self.anthropic_service.anthropic_client_request(
+            # Make LLM call using Gemini
+            response = await self.gemini_service.gemini_client_request(
                 prompt=user_prompt, system_prompt=SYSTEM_PROMPT
             )
+            
+            # Claude call (commented out)
+            # response = await self.anthropic_service.anthropic_client_request(
+            #     prompt=user_prompt, system_prompt=SYSTEM_PROMPT
+            # )
 
             # Parse XML response to get file data
             file_data = parse_xml_to_dict(response)

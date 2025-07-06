@@ -13,6 +13,9 @@ from system.backend.agentic_workflow.app.prompts.code_generation_prompts.stage_i
 from system.backend.agentic_workflow.app.services.anthropic_services.llm_service import (
     AnthropicService,
 )
+from system.backend.agentic_workflow.app.services.gemini_services.llm_service import (
+    GeminiService,
+)
 from system.backend.agentic_workflow.app.utils.file_structure import (
     generate_directory_structure,
     get_project_root,
@@ -26,8 +29,9 @@ from system.backend.agentic_workflow.app.utils.xml_parser import (
 
 
 class StageIIHelper:
-    def __init__(self, anthropic_service: AnthropicService = Depends()):
+    def __init__(self, anthropic_service: AnthropicService = Depends(), gemini_service: GeminiService = Depends()):
         self.anthropic_service = anthropic_service
+        self.gemini_service = gemini_service
 
     async def read_json_file(self, file_path: str) -> Dict[str, Any]:
         """
@@ -222,10 +226,15 @@ class StageIIHelper:
             file_structure=context_data["file_structure"],
         )
 
-        # Make LLM call using anthropic_client_request
-        response = await self.anthropic_service.anthropic_client_request(
+        # Make LLM call using Gemini
+        response = await self.gemini_service.gemini_client_request(
             prompt=user_prompt, system_prompt=system_prompt
         )
+        
+        # Claude call (commented out)
+        # response = await self.anthropic_service.anthropic_client_request(
+        #     prompt=user_prompt, system_prompt=system_prompt
+        # )
 
         return response
 
@@ -297,10 +306,15 @@ class StageIIHelper:
             file_structure=context_data["file_structure"],
         )
 
-        # Make LLM call using anthropic_client_request
-        response = await self.anthropic_service.anthropic_client_request(
+        # Make LLM call using Gemini
+        response = await self.gemini_service.gemini_client_request(
             prompt=user_prompt, system_prompt=system_prompt
         )
+        
+        # Claude call (commented out)
+        # response = await self.anthropic_service.anthropic_client_request(
+        #     prompt=user_prompt, system_prompt=system_prompt
+        # )
 
         return response
 

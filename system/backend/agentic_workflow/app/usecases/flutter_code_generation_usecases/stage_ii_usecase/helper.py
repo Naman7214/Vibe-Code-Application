@@ -14,6 +14,9 @@ from system.backend.agentic_workflow.app.prompts.flutter_code_generation_prompts
 from system.backend.agentic_workflow.app.services.anthropic_services.llm_service import (
     AnthropicService,
 )
+from system.backend.agentic_workflow.app.services.gemini_services.llm_service import (
+    GeminiService,
+)
 from system.backend.agentic_workflow.app.utils.file_structure import (
     generate_directory_structure,
     get_project_root,
@@ -32,9 +35,10 @@ from system.backend.agentic_workflow.app.utils.xml_parser import (
 
 class Helper:
     def __init__(
-        self, anthropic_service: AnthropicService = Depends(AnthropicService)
+        self, anthropic_service: AnthropicService = Depends(AnthropicService), gemini_service: GeminiService = Depends()
     ):
         self.anthropic_service = anthropic_service
+        self.gemini_service = gemini_service
 
     def read_context_files(self, request: CodeGenerationRequest):
         """
@@ -212,9 +216,15 @@ class Helper:
             file_structure=file_structure,
         )
 
-        response = await self.anthropic_service.anthropic_client_request(
+        # Make LLM call using Gemini
+        response = await self.gemini_service.gemini_client_request(
             system_prompt=system_prompt, prompt=user_prompt
         )
+        
+        # Claude call (commented out)
+        # response = await self.anthropic_service.anthropic_client_request(
+        #     system_prompt=system_prompt, prompt=user_prompt
+        # )
 
         code_files = parse_xml_to_dict(response)
 
