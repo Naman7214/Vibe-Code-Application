@@ -42,7 +42,6 @@ Create a global design theme strategy that will serve as the foundation referenc
 </OUTPUT_REQUIREMENTS>
 
 Make sure to use proper escape characters for the new lines and other special characters such that it'll not cause any error in the upcoming parsing of the output.
-all reasoning and rationals should be under 2 sentences
 <OUTPUT>
 {
     "design_psychology": "brief statement of overall design approach (about 4-5 sentences) with core psychological engagement principle such that it hooks the user and makes them want to use the application",
@@ -69,7 +68,7 @@ all reasoning and rationals should be under 2 sentences
         }
     },
     "visual_mood": {
-        "primary_mood": "web focused mood description (about 1-2 sentences)",
+        "primary_mood": "web focused mood description (about 2-3 sentences)",
         "style_direction": ["web style1", "web style2"],
         "personality_traits": ["web trait1", "web trait2"
     }
@@ -138,7 +137,7 @@ Make sure to use proper escape characters for the new lines and other special ch
 {
     "global_components": {
         "cluster_name": {
-            "description": "Brief description of what this cluster contains and its purpose (about 1-2 sentences)",
+            "description": "Brief description of what this cluster contains and its purpose (about 2-3 sentences)",
             "components": {
                 "component_name": {
                     "used_by_screens": ["screen1", "screen2"],

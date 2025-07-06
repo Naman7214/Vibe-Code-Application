@@ -63,8 +63,8 @@ Make sure to use proper escape characters for the new lines and other special ch
     "industry_patterns": ["3-5 proven patterns specific to this domain with short description"],
     "project_context": "a detailed description of the project context",
     "screens": {
-        "name_of_screen_1": "concise yet effective description focusing on core purpose(2-3 sentences)",
-        "name_of_screen_2": "concise yet effective description focusing on core purpose(2-3 sentences)",
+        "name_of_screen_1": "effective description focusing on core purpose(2-3 sentences)",
+        "name_of_screen_2": "effective description focusing on core purpose(2-3 sentences)",
         "..." : "maximum 10 screens total"
     },
     "business_type": "specific business model classification"

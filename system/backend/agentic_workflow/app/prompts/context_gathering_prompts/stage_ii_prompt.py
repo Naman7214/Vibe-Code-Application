@@ -40,16 +40,16 @@ Analyze the provided domain context, project context, industry patterns and sele
 <OUTPUT>
 {
     "screen_name": {
-        "primary_purpose": "a detailed purpose statement of the screen (about 4-5 sentences)",
+        "primary_purpose": "a detailed purpose statement of the screen (about 5-6 sentences)",
         "data_needs": {
             "display_data": ["data type1", "data type2"],
             "user_input": ["input type1", "input type2"],
-            "description": "description of the data needs (about 3-4 sentences)"
+            "description": "description of the data needs (about 4-5 sentences)"
         },
         "interaction_patterns": ["interaction pattern1", "interaction pattern2", "interaction pattern3"],
         "user_actions": ["action 1 ", "action 2"],
         "responsive_considerations": ["consideration 1", "consideration 2"]
-        "user_stories": ["concise yet effective user story 1 (2-3 sentences)", "concise yet effective user story 2 (1-2 sentences)"]
+        "user_stories": ["concise yet effective user story 1 (3-4 sentences)", "concise yet effective user story 2 (3-4 sentences)"]
     },
     "global_data_requirements": ["shared data1", "shared data2"]
 }

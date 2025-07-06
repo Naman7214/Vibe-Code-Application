@@ -79,12 +79,11 @@ The structure should be flexible and adapted to each screen's specific needs whi
 
 - Provide structured JSON object wrapped in <OUTPUT> </OUTPUT> tags only, with no other text or comments out of the <OUTPUT> tags
 Make sure to use proper escape characters for the new lines and other special characters such that it'll not cause any error in the upcoming parsing of the output.
-all reasoning/rationals/guidance should be under 2 sentences
 EXAMPLE OUTPUT STRUCTURE:
 <OUTPUT>
 {
   "screen_name": {
-    "description": "natural language description of the screen(for this only max 5 sentences)",
+    "description": "natural language description of the screen(detailed one)",
     "components": {
       "component_name": {
         "type": "global|screen_specific|hybrid"
@@ -206,7 +205,7 @@ Each screen description must cover:
 
 <WIDGET_SPECIFICATION_REQUIREMENTS>
 - For each custom widget, provide strategic parameter interface guidance with Flutter data type considerations and default value approaches
-- Limit mock data to 2 representative examples that align with expected parameter structure guidance
+- Limit mock data to 3-4 representative examples that align with expected parameter structure guidance
 - Define form field initial state guidance with proper Flutter TextEditingController handling approaches
 - Provide List parameter guidance with concise mobile-appropriate mock data array strategies
 - Document widget size/variant option strategies optimized for mobile screens
