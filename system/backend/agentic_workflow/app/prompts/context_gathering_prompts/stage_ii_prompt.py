@@ -88,8 +88,8 @@ Analyze the provided domain context and selected screens to generate actionable 
 2. Determine data requirements for each screen (what data it needs to display/collect on mobile)
 3. Map mobile interaction patterns and user actions (gestures, navigation, platform-specific behaviors)
 4. Consider mobile-first design needs and cross-platform considerations (iOS/Android)
-6. Ensure zero feature loss during requirement analysis
-7. Your pure focus is on the flutter app, Exclude out web, desktop, or non Flutter concerns
+5. Ensure zero feature loss during requirement analysis
+6. Your pure focus is on the flutter app, Exclude out web, desktop, or non Flutter concerns
 7. NEVER infer any new screens, only use the screens that are provided in the <OUTPUT_FROM_FIRST_STAGE> tags having field `screens`
 8. Keep all descriptions concise and focused on actionable requirements for Flutter development. Avoid unnecessary details that are not directly relevant to building the app.
 </INSTRUCTIONS>

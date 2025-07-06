@@ -172,20 +172,20 @@ Generate organized, professional mobile navigation descriptions with:
 2. make sure to use smooth transitions and offline capabilities
 3. Exclude authentication, role-based menus, live API data
 4. Use swipe for back and forward navigation, implement pull to refresh where needed
-4. Concise Mobile Explanations: Focused, specific guidance for mobile navigation without repetitive verbose text
-5. Strategic Mobile Justification: Explain WHY mobile navigation decisions were made considering platform conventions
-6. Flutter Technical Implementation: Specific Flutter guidance with concrete mobile implementation details
-7. Mobile User-Focused Analysis: How navigation serves mobile user goals and touch-based mental models
-8. For the screens to screen navigation make sure to mention the route paths must follow kebab-case format: '/exercise-library', '/workout-dashboard'
+5. Concise Mobile Explanations: Focused, specific guidance for mobile navigation without repetitive verbose text
+6. Strategic Mobile Justification: Explain WHY mobile navigation decisions were made considering platform conventions
+7. Flutter Technical Implementation: Specific Flutter guidance with concrete mobile implementation details
+8. Mobile User-Focused Analysis: How navigation serves mobile user goals and touch-based mental models
+9. For the screens to screen navigation make sure to mention the route paths must follow kebab-case format: '/exercise-library', '/workout-dashboard'
 Keep descriptions focused and actionable for Flutter mobile code generation.
-9. **Mobile Widget Details**: Structured analysis of necessity, placement, implementation, platform adaptivity, and touch interactions
+10. **Mobile Widget Details**: Structured analysis of necessity, placement, implementation, platform adaptivity, and touch interactions
 </MOBILE_CONTENT_GUIDELINES>
 
 <MOBILE_ANALYSIS_FRAMEWORK>
 1. What mobile navigation patterns best serve each screen's purpose and mobile user needs across platforms?
-3. How does screen navigation support user workflows and conversion goals with touch interactions?
-4. What are the specific implementation requirements for Flutter cross-platform mobile development?
-5. How does each screen's navigation adapt between Material Design (Android) and Cupertino (iOS) patterns?
+2. How does screen navigation support user workflows and conversion goals with touch interactions?
+3. What are the specific implementation requirements for Flutter cross-platform mobile development?
+4. How does each screen's navigation adapt between Material Design (Android) and Cupertino (iOS) patterns?
 </MOBILE_ANALYSIS_FRAMEWORK>
 
 <OUTPUT_STRUCTURE>

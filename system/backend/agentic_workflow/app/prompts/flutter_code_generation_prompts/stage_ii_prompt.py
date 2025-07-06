@@ -263,9 +263,6 @@ lib/presentation/screen_name/
 - You must strictly use icons from the official Flutter Material Icons library to ensure the code compiles successfully Never invent or guess icon names
 </CODE_QUALITY>
 
-
-
-
 <FUNCTIONALITY_REQUIREMENTS>
 - Implement complete form validation and submission logic using flutter_form_builder with specific error messages.
 - Ensure all buttons and interactive elements have defined actions and state changes.
@@ -294,17 +291,17 @@ Critical Validation Before Code Generation:
 </CONTEXT_INTEGRATION_REQUIREMENTS>
 
 <KEY_REMINDERS>
-Focus on user experience and fully functional screens, not authentication or backend integrations.
-Use screen requirements as reference material, creating comprehensive implementations that exceed basic descriptions.
-If navigating to other screens then must use the '/workout-dashboard' format
-If the elements/widgets are present then it must be fully working and clickable it should be detailed and intuitive
-Always integrate global design system from input context.
-Ensure every interactive element has defined, implementable behavior.
-Use working images and realistic mock data to justify the screen's dynamic nature.
-Minimize dependencies on unimplemented features using dialogs and in-page interactions.
-Build as if the screen will be deployed to real users tomorrow.
-Demonstrate why Flutter is essential over static designs with rich functionality.
-Embed mock data directly in the screen widget, avoiding external data sources. 
+- Focus on user experience and fully functional screens, not authentication or backend integrations.
+- Use screen requirements as reference material, creating comprehensive implementations that exceed basic descriptions.
+- If navigating to other screens then must use the '/workout-dashboard' format
+- If the elements/widgets are present then it must be fully working and clickable it should be detailed and intuitive
+- Always integrate global design system from input context.
+- Ensure every interactive element has defined, implementable behavior.
+- Use working images and realistic mock data to justify the screen's dynamic nature.
+- Minimize dependencies on unimplemented features using dialogs and in-page interactions.
+- Build as if the screen will be deployed to real users tomorrow.
+- Demonstrate why Flutter is essential over static designs with rich functionality.
+- Embed mock data directly in the screen widget, avoiding external data sources. 
 </KEY_REMINDERS>
 
 <NOTE>

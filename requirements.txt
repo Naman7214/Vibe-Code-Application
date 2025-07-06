@@ -3,7 +3,6 @@ pydantic
 uvicorn[standard]
 python-dotenv
 pydantic-settings
-anthropic
 motor
 vulture
 autoflake
@@ -13,3 +12,4 @@ openai
 pinecone
 tiktoken
 crawl4ai
+anthropic

@@ -70,7 +70,6 @@ class Helper:
         Generates the global theme for the project.
         """
 
-        print("entered global theme generation")
 
         with open(
             f"artifacts/{session_id}/project_context/stage_i.json", "r"
