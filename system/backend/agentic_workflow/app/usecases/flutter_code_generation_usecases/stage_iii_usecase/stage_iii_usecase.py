@@ -4,6 +4,9 @@ import os
 from fastapi import Depends, HTTPException
 
 from system.backend.agentic_workflow.app.models.domain.error import Error
+from system.backend.agentic_workflow.app.models.schemas.code_generation_schema import (
+    CodeGenerationRequest,
+)
 from system.backend.agentic_workflow.app.repositories.error_repo import (
     ErrorRepo,
 )
@@ -26,20 +29,23 @@ class FlutterStageIIIUsecase:
         self.helper = FlutterStageIIIHelper()
 
     async def execute(
-        self, screen_dict: Dict[str, str], is_follow_up: bool = False
+        self, request: CodeGenerationRequest
     ) -> Dict[str, Any]:
         """
         Execute Flutter Stage III processing for code generation
         Generates routes/app_routes.dart file using heuristic analysis of the presentation structure
 
         Args:
-            screen_dict: Dictionary with screen names as keys and descriptions as values
-            is_follow_up: Flag indicating if this is a follow-up request
+            request: CodeGenerationRequest object containing screen dict and follow-up flag
 
         Returns:
             Dict with success status and message
         """
         try:
+            # Extract data from request
+            screen_dict = request.dict_of_screens
+            is_follow_up = request.is_follow_up
+            
             # Get session ID from context variable
             session_id = session_state.get()
             if not session_id:

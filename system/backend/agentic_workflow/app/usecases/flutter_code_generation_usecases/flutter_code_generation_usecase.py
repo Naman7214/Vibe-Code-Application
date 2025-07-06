@@ -68,9 +68,7 @@ class FlutterCodeGenerationUsecase:
                 status_code=status.HTTP_400_BAD_REQUEST,
             )
 
-        stage_iii_result = await self.stage_iii_usecase.execute(
-            request.dict_of_screens, request.is_follow_up
-        )
+        stage_iii_result = await self.stage_iii_usecase.execute(request)
         if not stage_iii_result["success"]:
             return JSONResponse(
                 content={

@@ -6,6 +6,9 @@ from typing import Any, Dict
 from fastapi import Depends, HTTPException
 
 from system.backend.agentic_workflow.app.models.domain.error import Error
+from system.backend.agentic_workflow.app.models.schemas.code_generation_schema import (
+    CodeGenerationRequest,
+)
 from system.backend.agentic_workflow.app.prompts.code_generation_prompts.stage_iv_prompt import (
     SYSTEM_PROMPT,
     USER_PROMPT,
@@ -54,20 +57,23 @@ class StageIVUsecase:
             self.logger.setLevel(logging.INFO)
 
     async def execute(
-        self, screen_dict: Dict[str, str], is_follow_up: bool = False
+        self, request: CodeGenerationRequest
     ) -> Dict[str, Any]:
         """
         Execute Stage IV processing for code generation
         Generates Routes.jsx file based on screen scratchpads
 
         Args:
-            screen_dict: Dictionary with screen names as keys and descriptions as values
-            is_follow_up: Flag indicating if this is a follow-up request
+            request: CodeGenerationRequest object containing screen dict and follow-up flag
 
         Returns:
             Dict with success status and message
         """
         try:
+            # Extract data from request
+            screen_dict = request.dict_of_screens
+            is_follow_up = request.is_follow_up
+            
             # Debug: Log what we received
             self.logger.info(
                 f"Stage IV received screen_dict type: {type(screen_dict)}"
