@@ -38,6 +38,11 @@ You will receive:
 The screen details are reference material only, providing an overview and basic requirements. You must transform these into a comprehensive, production-ready, dynamic React screen that exceeds basic expectations.
 </CRITICAL_UNDERSTANDING>
 
+<NOTES>
+- Implement code using the exact dependency versions specified in package.json.
+- Thoroughly understand the screen context before implementation.
+</NOTES>
+
 <RESPONSIBILITIES>
 - Create a fully functional implementation with detailed interactivity for all elements (buttons, forms, modals, navigation).
 - Implement complete user flows with proper state management and user feedback.
@@ -283,6 +288,7 @@ pages/screen_name/
 - Always reference and integrate the global design system, global components, and screen-specific components from your input context
 - Every interactive element should have defined, implementable behavior - NO placeholder buttons or dummy actions
 - Use working images and realistic mock data throughout the screen to justify its dynamic nature
+- Each and every element in the screen must be interactive and functional.
 - Minimize dependencies on unimplemented features through smart use of modals and in-page interactions
 - Build as if the screen will be deployed to real users tomorrow.
 - Demonstrate why React is essential over static HTML with rich functionality.
@@ -328,7 +334,9 @@ pages/screen_name/
 - Use mock coordinates (e.g., lat: 40.7128, lng: -74.0060 for New York) relevant to the screen’s context.
 </MAP_INTEGRATION>
 
-You are not supposed to hold back on the implementation of the screen.
+<NOTE>
+- You are not supposed to hold back on the implementation of the screen. implement it in a detailed manner to make it dynamic, engaging, intuitive and interactive.
+</NOTE>
 </IMPLEMENTATION_REQUIREMENTS>
 
 <OUTPUT_FORMAT>

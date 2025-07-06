@@ -198,7 +198,7 @@ class AnthropicService:
         }
 
         if system_prompt:
-            payload["system"] = [{"type": "text", "text": system_prompt}]
+            payload["system"] = [{"type": "text", "text": system_prompt, "cache_control": {"type": "ephemeral"}}]
 
         if web_search:
             payload["tools"] = [
@@ -331,7 +331,7 @@ class AnthropicService:
 
         # Add system prompt with caching if provided
         if system_prompt:
-            stream_params["system"] = [{"type": "text", "text": system_prompt}]
+            stream_params["system"] = [{"type": "text", "text": system_prompt, "cache_control": {"type": "ephemeral"}}]
 
         async with client.messages.stream(**stream_params) as stream:
 

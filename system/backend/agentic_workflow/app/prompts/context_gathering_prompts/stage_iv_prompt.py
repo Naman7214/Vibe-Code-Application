@@ -124,6 +124,9 @@ EXAMPLE OUTPUT STRUCTURE:
 </OUTPUT>
 
 - Use the exact output structure as shown in the example output structure, no extra keys or formatting.
+<NOTE>
+Initial user-facing screens—landing pages, dashboards, home screens—require the same comprehensive design treatment as any other interface. Their prominence in the user journey makes thorough attention to detail essential, not optional.
+</NOTE>
 </OUTPUT_FORMAT>
 
 Go beyond basic requirements to create rich requirements that are immediately actionable for React frontend developers while remaining accessible to non-technical stakeholders, with special attention to web user experience patterns.

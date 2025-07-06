@@ -163,13 +163,121 @@ Generate response in the following XML format don't include any other text or co
 <FILE>
 <FILE_PATH>tailwind.config.js</FILE_PATH>
 <CODE_SNIPPET>
-/* code related to tailwind.config.js */
+const defaultTheme = require('tailwindcss/defaultTheme')
+
+module.exports = {
+   content: [
+      "./src/**/*.{js,jsx,ts,tsx}",
+      "./public/index.html",
+   ],
+   theme: {
+      extend: {
+         colors: {
+         // REQUIRED: Semantic colors linked to CSS variables
+         'theme-primary': 'var(--color-primary)',
+         'on-primary': 'var(--color-on-primary)',
+         'theme-secondary': 'var(--color-secondary)',
+         'on-secondary': 'var(--color-on-secondary)',
+         background: 'var(--color-background)',
+         surface: 'var(--color-surface)',
+         'on-background': 'var(--color-on-background)',
+         'on-surface': 'var(--color-on-surface)',
+         // MAINTAIN: Complete color scales (50-950) for compatibility
+         primary: {
+            50: '#hex', 100: '#hex', 200: '#hex', 300: '#hex', 400: '#hex',
+            500: '#hex', 600: '#hex', 700: '#hex', 800: '#hex', 900: '#hex', 950: '#hex'
+         },
+         secondary: { /* Complete 50-950 scale */ },
+         success: { /* Complete 50-950 scale */ },
+         warning: { /* Complete 50-950 scale */ },
+         error: { /* Complete 50-950 scale */ },
+         info: { /* Complete 50-950 scale */ }
+         },
+         fontFamily: {
+         // Your custom font families here
+         },
+         boxShadow: {
+         // REQUIRED: Material Design elevation system
+         'elevation-1': '0 1px 3px rgba(0,0,0,0.12), 0 1px 2px rgba(0,0,0,0.24)',
+         'elevation-2': '0 3px 6px rgba(0,0,0,0.16), 0 3px 6px rgba(0,0,0,0.23)',
+         'elevation-3': '0 10px 20px rgba(0,0,0,0.19), 0 6px 6px rgba(0,0,0,0.23)',
+         'elevation-4': '0 14px 28px rgba(0,0,0,0.25), 0 10px 10px rgba(0,0,0,0.22)',
+         'elevation-5': '0 19px 38px rgba(0,0,0,0.30), 0 15px 12px rgba(0,0,0,0.22)'
+         },
+         // REQUIRED: Config animations reference CSS keyframes only
+         animation: {
+         'fade-in': 'fadeIn 0.3s ease-in-out',
+         'slide-in': 'slideIn 0.3s ease-out',
+         }
+         // NO keyframes in config - they belong in CSS
+      },
+   },
+   plugins: [
+      require('@tailwindcss/forms'),
+      require('tailwindcss-animate'),
+      require('@tailwindcss/typography'),
+      require('@tailwindcss/aspect-ratio'),
+      require('@tailwindcss/container-queries'),
+      require('tailwindcss-elevation'),
+   ],
+}
 </CODE_SNIPPET>
 </FILE>
 <FILE>
 <FILE_PATH>src/styles/tailwind.css</FILE_PATH>
 <CODE_SNIPPET>
-/* code related to tailwind.css */
+@import url('fonts-url-here');
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+   :root {
+      /* REQUIRED: Semantic CSS variables linked to Tailwind */
+      --color-primary: #hex;
+      --color-on-primary: #hex;
+      --color-secondary: #hex;
+      --color-on-secondary: #hex;
+      --color-background: #hex;
+      --color-surface: #hex;
+      --color-success: #hex;
+      --color-error: #hex;
+      --color-warning: #hex;
+      --color-info: #hex;
+      /* ... maintain 50-950 scales for compatibility */
+      --color-primary-50: #hex;
+      --color-primary-500: #hex;
+      /* ... complete scales for all colors */
+   }
+   
+
+   /* REQUIRED: All keyframes in CSS, NOT config */
+   @keyframes fadeIn {
+   from { opacity: 0; }
+   to { opacity: 1; }
+   }
+
+   @layer components {
+   /* Typography utilities - semantic color references */
+   .display {
+      @apply font-display text-display text-on-background tracking-tight;
+   }
+   
+   /* Component classes - use semantic colors */
+   .btn {
+      @apply inline-flex items-center justify-center px-6 py-3 font-medium rounded-lg transition-all duration-200;
+   }
+   
+   .btn-primary {
+      @apply btn bg-primary text-on-primary hover:opacity-90 focus:ring-2 focus:ring-primary;
+   }
+   
+   /* Animation utilities reference CSS keyframes */
+   .animate-fade-in {
+      animation: fadeIn 0.3s ease-in-out;
+   }
+}
 </CODE_SNIPPET>
 </FILE>
 </FILES>
@@ -186,6 +294,7 @@ IMPORTANT NOTES:
 - MUST use uppercase XML tags: FILES, FILE, FILE_PATH, CODE_SNIPPET
 - Go beyond the basics to generate a professional, engaging, and practical design theme for intuitive and interactive React web applications.
 - MUST think from user's perspective, psychological reasoning and aesthetically to create a design theme that is intuitive and engaging.
+- Use in-build Tailwind classes correctly.
 
 <CHECKLIST>
 - Colors reference CSS variables (--color-*) in :root
