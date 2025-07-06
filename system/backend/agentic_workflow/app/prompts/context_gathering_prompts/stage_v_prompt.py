@@ -20,13 +20,13 @@ Generate navigation context that includes:
 Generate organized, professional descriptions with:
 1. Our focus is to make every screens fully self contained if it's necessary then and only then use screen to screen navigation.
 2. Exclude authentication, role-based menus, live API data
-4. **Concise Explanations**: Focused, specific guidance without repetitive verbose text
-5. **Strategic Justification**: Explain WHY navigation decisions were made
-6. **Technical Implementation**: Specific React guidance with concrete details
-7. **Component Details**: Structured analysis of necessity, placement, implementation, and responsive behavior
-8. **User-Focused Analysis**: How navigation serves user goals and mental models
+3. Concise Explanations: Focused, specific guidance without repetitive verbose text
+4. Strategic Justification: Explain WHY navigation decisions were made
+5. Technical Implementation: Specific React guidance with concrete details
+6. Component Details: Structured analysis of necessity, placement, implementation, and responsive behavior
+7. User-Focused Analysis: How navigation serves user goals and mental models
 Keep descriptions focused and actionable for code generation.
-9. This is the modern era not the medieval so all the navigation decision should be according to modern navigation principles and not the medieval ones.
+8. This is the modern era not the medieval so all the navigation decision should be according to modern navigation principles and not the medieval ones.
 </CONTENT_GUIDELINES>
 
 <ANALYSIS_FRAMEWORK>
@@ -163,10 +163,10 @@ Generate organized, professional mobile navigation descriptions with:
 1. Your pure focus is on the flutter app, Exclude out web, desktop, or non Flutter concerns
 2. make sure to use smooth transitions and offline capabilities
 3. Exclude authentication, role-based menus, live API data
-4. **Concise Mobile Explanations**: Focused, specific guidance for mobile navigation without repetitive verbose text
-5. **Strategic Mobile Justification**: Explain WHY mobile navigation decisions were made considering platform conventions
-6. **Flutter Technical Implementation**: Specific Flutter guidance with concrete mobile implementation details
-7. **Mobile User-Focused Analysis**: How navigation serves mobile user goals and touch-based mental models
+4. Concise Mobile Explanations: Focused, specific guidance for mobile navigation without repetitive verbose text
+5. Strategic Mobile Justification: Explain WHY mobile navigation decisions were made considering platform conventions
+6. Flutter Technical Implementation: Specific Flutter guidance with concrete mobile implementation details
+7. Mobile User-Focused Analysis: How navigation serves mobile user goals and touch-based mental models
 8. For the screens to screen navigation make sure to refer to the screen name in this format only : '/exercise-library', '/workout-dashboard'
 Keep descriptions focused and actionable for Flutter mobile code generation.
 9. This is the modern era not the medieval so all the navigation decision should be according to modern navigation principles and not the medieval ones.

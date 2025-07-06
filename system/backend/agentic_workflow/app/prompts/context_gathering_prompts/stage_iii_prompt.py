@@ -87,8 +87,6 @@ USER_PROMPT_A = """
 <OUTPUT_FROM_SECOND_STAGE>
 {second_stage_output}
 </OUTPUT_FROM_SECOND_STAGE>
-
-MUST follow the output format strictly.
 """
 
 SYSTEM_PROMPT_B = """
@@ -109,19 +107,19 @@ Analyze the screen requirements to identify and categorize components into globa
 </INPUT_CONTEXT>
 
 <INSTRUCTIONS>
-1. Identify bare minimam global components that will be used across multiple screens
+1. Identify bare minimum global components that will be used across multiple screens
 2. Only suggest components that work with mock or static data. Exclude authentication, role-based menus, live API data, or session management. Focus on UI components that demonstrate navigation patterns, visual states, and interactions using mock data only.
-2. Group global components into logical clusters based on their functionality (e.g., "navigation", "ui_elements", "data_display", "forms", "auth", "layout", etc.)
-3. Create a "miscellaneous" cluster for components that don't fit into specific groups
-4. For the global components make sure to give the comprehensive details.
-5. Determine screen-specific components that serve unique purposes
-6. Analyze reusability potential and establish component variants
-7. Define component relationships, responsibilities and data flow
+3. Group global components into logical clusters based on their functionality (e.g., "navigation", "ui_elements", "data_display", "forms", "auth", "layout", etc.)
+4. Create a "miscellaneous" cluster for components that don't fit into specific groups
+5. For the global components make sure to give the comprehensive details.
+6. Determine screen-specific components that serve unique purposes
+7. Analyze reusability potential and establish component variants
+8. Define component relationships, responsibilities and data flow
 9. Consider component composition and modularity
-11. If required then suggest Grid System, Lists & Item Components, Table Components,Card Components ,Modal & Dialog Components, Overlays, etc. for the screen specific components.
-12. BE SELECTIVE: Only identify components that are truly essential and provide clear value. Avoid over-engineering the component system.
-13. GLOBAL COMPONENTS: Only promote to global if it provides significant architectural value (e.g., Header, Footer, Button, Modal)
-14. AVOID MICRO-COMPONENTS: Don't create separate components for simple elements like individual form fields, text blocks, or basic UI elements
+10. If required then suggest Grid System, Lists & Item Components, Table Components,Card Components ,Modal & Dialog Components, Overlays, etc. for the screen specific components.
+11. BE SELECTIVE: Only identify components that are truly essential and provide clear value. Avoid over-engineering the component system.
+12. GLOBAL COMPONENTS: Only promote to global if it provides significant architectural value (e.g., Header, Footer, Button, Modal)
+13. AVOID MICRO-COMPONENTS: Don't create separate components for simple elements like individual form fields, text blocks, or basic UI elements
 14. Screen specific components will be used to build the self contained screens.
 </INSTRUCTIONS>
 
@@ -183,8 +181,6 @@ USER_PROMPT_B = """
 <OUTPUT_FROM_THIRD_STAGE>
 {previous_output}
 </OUTPUT_FROM_THIRD_STAGE>
-
-MUST follow the output format strictly.
 """
 
 FLUTTER_SYSTEM_PROMPT_A = """
@@ -217,9 +213,9 @@ Create a global mobile design theme strategy that will serve as the foundation r
 11. Ensure all decisions work together as a unified system across different mobile devices
 12. Keep it as a reference framework - comprehensive enough to guide mobile screen-specific design generation
 13. For typography, must use mobile-optimized fonts that work well across iOS and Android platforms
-15. Creates a mobile experience, not a web experience
-16. Balances innovation/creativity with usability and practicality
-17. This is the modern era not the medieval so all the design decision should be according to modern design principles and not the medieval ones.
+14. Creates a mobile experience, not a web experience
+15. Balances innovation/creativity with usability and practicality
+16. This is the modern era not the medieval so all the design decision should be according to modern design principles and not the medieval ones.
 </INSTRUCTIONS>
 
 <OUTPUT_REQUIREMENTS>
@@ -289,10 +285,10 @@ Analyze the mobile screen requirements to identify and categorize custom Flutter
 </INPUT_CONTEXT>
 
 <WIDGET_ARCHITECTURE_STRATEGY>
-**Primary Focus**: Screen-specific custom widgets that enhance Flutter's built-in widgets
-**Built-in Widget Usage**: Leverage Scaffold, AppBar, ListView, Card, Button, TextField, etc. as foundation
-**Custom Widget Criteria**: Only create custom widgets when built-in widgets cannot achieve the required functionality or design
-**Integration Pattern**: Custom widgets will integrate with global design system (app_theme.dart) through Theme.of(context)
+Primary Focus: Screen-specific custom widgets that enhance Flutter's built-in widgets
+Built-in Widget Usage: Leverage Scaffold, AppBar, ListView, Card, Button, TextField, etc. as foundation
+Custom Widget Criteria: Only create custom widgets when built-in widgets cannot achieve the required functionality or design
+Integration Pattern: Custom widgets will integrate with global design system (app_theme.dart) through Theme.of(context)
 **Code Generation Expectation**: Stage II will expect these widget specifications to build complete screen implementations
 </WIDGET_ARCHITECTURE_STRATEGY>
 
@@ -314,18 +310,18 @@ Analyze the mobile screen requirements to identify and categorize custom Flutter
 </INSTRUCTIONS>
 
 <WIDGET_STATE_DECISION_FRAMEWORK>
-**StatelessWidget Use Cases:**
+StatelessWidget Use Cases:
 - Pure UI components with no local state
 - Components that only receive data via parameters
 - Display-only widgets (cards, headers, static content)
 
-**StatefulWidget Use Cases:**
+StatefulWidget Use Cases:
 - Form inputs requiring validation
 - Expandable/collapsible content
 - Components with loading states
 - Interactive elements with visual feedback
 
-**Decision Rule**: Default to StatelessWidget unless component needs to manage changing state internally
+Decision Rule: Default to StatelessWidget unless component needs to manage changing state internally
 </WIDGET_STATE_DECISION_FRAMEWORK>
 
 <OUTPUT_REQUIREMENTS>
@@ -366,8 +362,6 @@ FLUTTER_USER_PROMPT_A = """
 <OUTPUT_FROM_SECOND_STAGE>
 {second_stage_output}
 </OUTPUT_FROM_SECOND_STAGE>
-
-MUST follow the output format strictly.
 """
 
 FLUTTER_USER_PROMPT_B = """
@@ -378,6 +372,4 @@ FLUTTER_USER_PROMPT_B = """
 <OUTPUT_FROM_THIRD_STAGE>
 {previous_output}
 </OUTPUT_FROM_THIRD_STAGE>
-
-MUST follow the output format strictly.
 """

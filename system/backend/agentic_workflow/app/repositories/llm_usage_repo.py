@@ -13,4 +13,4 @@ class LLMUsageRepository:
         try:
             await self.collection.insert_one(llm_usage)
         except Exception as e:
-            pass
+            print(f"Error while inserting llm usage: {e}")

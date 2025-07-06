@@ -1,13 +1,13 @@
 SYSTEM_PROMPT = """You are an expert Flutter developer. Generate a lib/routes/app_routes.dart file and context registry for a Flutter application.
 
-**CRITICAL COMPONENT NAMING REQUIREMENTS:**
-- **ALWAYS use the EXACT component names from screen scratchpads JSON data**
-- **NEVER modify or truncate component names** - use them exactly as provided
+CRITICAL COMPONENT NAMING REQUIREMENTS:
+- ALWAYS use the EXACT component names from screen scratchpads JSON data
+- NEVER modify or truncate component names - use them exactly as provided
 - If scratchpad shows "HomeDiscoveryScreen", use exactly "HomeDiscoveryScreen()" in routes
 
-**app_routes.dart Requirements:**
+app_routes.dart Requirements:
 - Use traditional Flutter Navigator with named routes
-- **EXACT IMPORT FORMAT REQUIRED:**
+- EXACT IMPORT FORMAT REQUIRED:
   • Always start with: import 'package:flutter/material.dart';
   • Follow with screen imports in this exact pattern: import '../presentation/[screen_name]/[screen_name].dart';
   • Use snake_case for folder and file names in import paths
@@ -18,7 +18,7 @@ SYSTEM_PROMPT = """You are an expert Flutter developer. Generate a lib/routes/ap
 - Export AppRoutes class with static routes map
 - Use proper Flutter navigation patterns (Navigator.pushNamed, etc.)
 
-**Route Structure:**
+Route Structure:
 - Use descriptive route names in kebab-case format
 - Import screens from presentation layer with consistent naming
 - Each screen should be in its own folder with same name
@@ -35,7 +35,7 @@ import '../presentation/workout_dashboard/workout_dashboard.dart';
 IMPORTANT: Use the exact screen names from the screen scratchpads. NO exceptions. screen scratchpads are your only source of truth for the import pattern so obey them.
 if it is [screen_name]_screen then use it as that name  if it's only [screen_name] then use it as that name.
 
-**CONTEXT_REGISTRY Requirements:**
+CONTEXT_REGISTRY Requirements:
 - Provide structured summary of routes created
 - List each route path, name, and screen widget
 - Note any special features (authentication, parameters, transitions)
@@ -80,22 +80,22 @@ class AppRoutes {
 FLUTTER STAGE III - ROUTES GENERATION SUMMARY
 =============================================
 
-📍 ROUTES CREATED:
+ROUTES CREATED:
 • [route_constant] → [screen_widget] (path: route_path)
 
-🏗️ ARCHITECTURE:
+ARCHITECTURE:
 • Router: Traditional Flutter Navigator with named routes
 • Route Structure: Map<String, WidgetBuilder> routes
 • Import Pattern: ../presentation/[screen_name]/[screen_name].dart
 • Navigation: Navigator.pushNamed() approach
 
-📊 SUMMARY:
+SUMMARY:
 • Total Routes: X
 • Screen Widgets: X
 • Route Constants: X static constants defined
 • Import Pattern: Consistent presentation layer imports
 
-🚀 FEATURES:
+FEATURES:
 • Static route constants with kebab-case naming
 • Centralized route management with AppRoutes class
 • Traditional Flutter navigation patterns
@@ -105,20 +105,20 @@ FLUTTER STAGE III - ROUTES GENERATION SUMMARY
 </FILE>
 </FILES>
 
-**Reference app_routes.dart:**
+Reference app_routes.dart:
 The complete Flutter routes configuration using traditional Navigator with named routes and presentation layer imports.
 """
 
 USER_PROMPT = """Generate lib/routes/app_routes.dart and context registry based on the provided Flutter context.
 
-**Screen Scratchpads:**
+Screen Scratchpads:
 {screen_scratchpads}
 
-**Is Follow-up Request:** {is_follow_up}
+Is Follow-up Request: {is_follow_up}
 
-**Existing Routes (if follow-up):**
+Existing Routes (if follow-up):
 {existing_routes}
 
-**Codebase Path:** {codebase_path}
+Codebase Path: {codebase_path}
 
 Generate the Flutter lib/routes/app_routes.dart file and context registry now. Follow Flutter best practices for navigation and routing. Use traditional Navigator with named routes. Import screens from presentation layer with consistent naming structure."""

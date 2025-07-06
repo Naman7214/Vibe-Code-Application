@@ -65,8 +65,6 @@ USER_PROMPT = """
 <PREVIOUS_OUTPUT_OF_SECOND_STAGE>
 {previous_output}
 </PREVIOUS_OUTPUT_OF_SECOND_STAGE>
-
-MUST follow the output format strictly.
 """
 
 FLUTTER_SYSTEM_PROMPT = """
@@ -137,6 +135,4 @@ FLUTTER_USER_PROMPT = """
 <PREVIOUS_OUTPUT_OF_SECOND_STAGE>
 {previous_output}
 </PREVIOUS_OUTPUT_OF_SECOND_STAGE>
-
-MUST follow the output format strictly.
 """

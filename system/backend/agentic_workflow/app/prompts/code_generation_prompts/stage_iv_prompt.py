@@ -1,6 +1,6 @@
 SYSTEM_PROMPT = """You are an expert React developer. Generate a Routes.jsx file and context registry for a React application.
 
-**Routes.jsx Requirements:**
+Routes.jsx Requirements:
 - Use BrowserRouter, Routes, Route from react-router-dom
 - Include ScrollToTop component integration
 - Add ErrorBoundary component for error handling
@@ -16,7 +16,7 @@ SYSTEM_PROMPT = """You are an expert React developer. Generate a Routes.jsx file
 - VALIDATE all import paths exist in the generated file structure
 </ROUTE_IMPORT_STANDARDS>
 
-**CONTEXT_REGISTRY Requirements:**
+CONTEXT_REGISTRY Requirements:
 - Provide structured summary of routes created
 - List each route path and component
 - Note any special features (authentication, error handling)
@@ -62,40 +62,40 @@ export default Routes;
 STAGE IV - ROUTES GENERATION SUMMARY
 =====================================
 
-📍 ROUTES CREATED:
+ROUTES CREATED:
 • [path] → [component]
 
-🏗️ ARCHITECTURE:
+ARCHITECTURE:
 • Router: React Router v6 with BrowserRouter
 • Error Handling: Inline ErrorBoundary component
 • Navigation: ScrollToTop integration
 
-📊 SUMMARY:
+SUMMARY:
 • Total Routes: X
 • Components: X
 </CODE_SNIPPET>
 </FILE>
 </FILES>
 
-**Reference Routes.jsx:**
+Reference Routes.jsx:
 full code of the Routes.jsx file goes here
 """
 
 USER_PROMPT = """Generate Routes.jsx and context registry based on the provided context.
 
-**Screen Scratchpads:**
+Screen Scratchpads:
 {screen_scratchpads}
 
 
-**File Structure:**
+File Structure:
 {file_structure}
 
 
-**Is Follow-up Request:** {is_follow_up}
+Is Follow-up Request: {is_follow_up}
 
-**Existing Routes (if follow-up):**
+Existing Routes (if follow-up):
 {existing_routes}
 
-**Codebase Path:** {codebase_path}
+Codebase Path: {codebase_path}
 
 Generate the Routes.jsx file and context registry now."""

@@ -13,10 +13,10 @@ Focus on creating requirements that are immediately actionable for React fronten
 <INPUT_CONTEXT>
 You will receive a comprehensive JSON context object containing:
 
-- `screen_requirements`: Detailed requirements for each screen including purpose, key sections, data needs, and functionality
-- `design_system`: Global design specifications including colors, typography, spacing, visual themes, and styling guidelines  
-- `global_components`: Shared components used across multiple screens with their specifications and usage patterns
-- `screen_specific_components`: Components unique to particular screens with detailed specifications
+- screen_requirements: Detailed requirements for each screen including purpose, key sections, data needs, and functionality
+- design_system: Global design specifications including colors, typography, spacing, visual themes, and styling guidelines  
+- global_components: Shared components used across multiple screens with their specifications and usage patterns
+- screen_specific_components: Components unique to particular screens with detailed specifications
 </INPUT_CONTEXT>
 
 <INSTRUCTIONS>
@@ -68,16 +68,16 @@ A comprehensive natural language description (7-8 sentences) about the screen.
 
 <COMPONENTS>
 Any additional keys and nested objects needed to fully specify the screen implementation, such as:
-  - `components`: Component specifications and usage
-  - `content`: Mock data and content requirements
-  - `interactions`: User flows and interactive behaviors  
-  - `responsive`: Device-specific considerations
-  - Any other keys needed for complete implementation context
+- components: Component specifications and usage
+- content: Mock data and content requirements
+- interactions: User flows and interactive behaviors  
+- responsive: Device-specific considerations
+- Any other keys needed for complete implementation context
 </COMPONENTS>
 
 The structure should be flexible and adapted to each screen's specific needs while maintaining consistency in quality.
 
-Wrap your entire JSON response inside `<OUTPUT> … </OUTPUT>` XML tags.
+Wrap your entire JSON response inside <OUTPUT> … </OUTPUT> XML tags.
 Make sure to use proper escape characters for the new lines and other special characters such that it'll not cause any error in the upcoming parsing of the output.
 all reasoning/rationals/guidance should be under 2 sentences
 EXAMPLE OUTPUT STRUCTURE:
@@ -124,9 +124,7 @@ EXAMPLE OUTPUT STRUCTURE:
 }
 </OUTPUT>
 
-<NOTE>
 - Use the exact output structure as shown in the example output structure, no extra keys or formatting.
-</NOTE>
 </OUTPUT_FORMAT>
 
 Go beyond basic requirements to create rich requirements that are immediately actionable for React frontend developers while remaining accessible to non-technical stakeholders, with special attention to web user experience patterns.
@@ -148,9 +146,9 @@ Focus on creating requirements that are immediately actionable for Flutter devel
 <INPUT_CONTEXT>
 You will receive a comprehensive JSON context object containing:
 
-- `screen_requirements`: Detailed requirements for each mobile screen including purpose, key sections, data needs, and mobile-specific functionality
-- `design_system`: Global mobile design specifications including colors, typography, spacing, visual themes, and styling guidelines optimized for mobile devices
-- `screen_specific_widgets`: Custom widgets unique to particular screens with detailed specifications for mobile interactions
+- screen_requirements: Detailed requirements for each mobile screen including purpose, key sections, data needs, and mobile-specific functionality
+- design_system: Global mobile design specifications including colors, typography, spacing, visual themes, and styling guidelines optimized for mobile devices
+- screen_specific_widgets: Custom widgets unique to particular screens with detailed specifications for mobile interactions
 </INPUT_CONTEXT>
 
 <INSTRUCTIONS>
@@ -174,7 +172,7 @@ You will receive a comprehensive JSON context object containing:
 - **RESPONSIVE LAYOUT PRIORITY: For sizing parameters, emphasize responsive strategies (MediaQuery percentages, constraints) over fixed pixel values**
 - **OVERFLOW PREVENTION: Guide toward flexible layouts and scrollable containers to prevent RenderFlex overflow errors**
 - Consider StatefulWidget vs StatelessWidget based on data management needs
-- ALL image URLs must be valid Unsplash URLs (e.g., "https://images.unsplash.com/photo-1234567890/coffee?w=400&h=300&fit=crop") instead of local asset placeholders
+- ALL image URLs must be valid Unsplash URLs instead of local asset placeholders
 </FLUTTER_DATA_STRUCTURE_REQUIREMENTS>
 
 <WIDGET_PARAMETER_SAFETY_SPECIFICATIONS>
@@ -236,19 +234,19 @@ Each screen description must cover:
 <OUTPUT_FORMAT>
 Generate a JSON object where each mobile screen name is a top-level key containing:
 
-1. **`description`** (required): A comprehensive natural language description (7-8 sentences) about the mobile screen, focusing on mobile user experience and interactions.
+1. description (required): A comprehensive natural language description (7-8 sentences) about the mobile screen, focusing on mobile user experience and interactions.
 
-2. **Flexible structured mobile context**: Any additional keys and nested objects needed to fully specify the mobile screen implementation, such as:
-    - `widgets`: Custom widget specifications and usage for mobile
-    - `content`: Mock data and mobile-optimized content requirements (limit to 2-3 examples per section)
-    - `interactions`: Mobile user flows and touch-based interactive behaviors
-    - `responsive`: Mobile device-specific considerations and orientations
-    - `platform_adaptivity`: References unified Material 3 + Cupertino strategy
-    - Any other keys needed for complete mobile implementation context
+2. Flexible structured mobile context: Any additional keys and nested objects needed to fully specify the mobile screen implementation, such as:
+- widgets: Custom widget specifications and usage for mobile
+- content: Mock data and mobile-optimized content requirements (limit to 2-3 examples per section)
+- interactions: Mobile user flows and touch-based interactive behaviors
+- responsive: Mobile device-specific considerations and orientations
+- platform_adaptivity: References unified Material 3 + Cupertino strategy
+- Any other keys needed for complete mobile implementation context
 
 The structure should be flexible and adapted to each mobile screen's specific needs while maintaining consistency in mobile UX quality.
 
-Wrap your entire JSON response inside `<OUTPUT> … </OUTPUT>` XML tags.
+Wrap your entire JSON response inside <OUTPUT> … </OUTPUT> XML tags.
 Make sure to use proper escape characters for the new lines and other special characters such that it'll not cause any error in the upcoming parsing of the output.
 all reasoning/rationals/guidance should be under 2 sentences
 EXAMPLE OUTPUT STRUCTURE:

@@ -57,34 +57,34 @@ The screen details are reference material only, providing an overview and basic 
 </RESPONSIBILITIES>
 
 <FUNCTIONALITY_MANDATE>
-**ELITE-LEVEL INTERACTIVITY REQUIREMENTS:**
+ELITE-LEVEL INTERACTIVITY REQUIREMENTS:
 
-**EVERY INTERACTIVE ELEMENT MUST:**
-- **Perform REAL actions** - not just show toast messages
-- **Update UI state meaningfully** - change data, navigate, or trigger workflows
-- **Provide immediate visual feedback** - loading states, success animations, error handling
-- **Implement complete user flows** - from action trigger to completion
+EVERY INTERACTIVE ELEMENT MUST:
+- Perform REAL actions - not just show toast messages
+- Update UI state meaningfully - change data, navigate, or trigger workflows
+- Provide immediate visual feedback - loading states, success animations, error handling
+- Implement complete user flows - from action trigger to completion
 
-**MANDATORY INTERACTIVE FEATURES:**
-- **Forms**: Full validation, data persistence, multi-step flows
-- **Lists**: Search, filter, sort, infinite scroll, pull-to-refresh
-- **Navigation**: Smooth transitions, deep linking, state preservation
-- **Data Management**: Local storage, offline capability, data synchronization
-- **Animations**: Micro-interactions, state transitions, loading animations
-- **Advanced UI**: Bottom sheets, modals, drag-and-drop, swipe actions
+MANDATORY INTERACTIVE FEATURES:
+- Forms: Full validation, data persistence, multi-step flows
+- Lists: Search, filter, sort, infinite scroll, pull-to-refresh
+- Navigation: Smooth transitions, deep linking, state preservation
+- Data Management: Local storage, offline capability, data synchronization
+- Animations: Micro-interactions, state transitions, loading animations
+- Advanced UI: Bottom sheets, modals, drag-and-drop, swipe actions
 
-**PRODUCTION-READY STANDARDS:**
+PRODUCTION-READY STANDARDS:
 Build apps that feel indistinguishable from professionally developed applications. Every feature should work exactly as users expect in modern mobile apps.
 
-**MODERN UI PATTERNS TO IMPLEMENT:**
-- **Shimmer loading effects** using shimmer package for skeleton screens
-- **Lottie animations** for delightful micro-interactions and success states
-- **Advanced charts** using fl_chart for data visualization
-- **Image handling** with cached_network_image and image_picker
-- **Haptic feedback** for tactile user interactions
-- **Smooth page transitions** using animations package
-- **Pull-to-refresh** and infinite scroll for lists
-- **Bottom sheets and modals** for contextual actions
+MODERN UI PATTERNS TO IMPLEMENT:
+- Shimmer loading effects using shimmer package for skeleton screens
+- Lottie animations for delightful micro-interactions and success states
+- Advanced charts using fl_chart for data visualization
+- Image handling with cached_network_image and image_picker
+- Haptic feedback for tactile user interactions
+- Smooth page transitions using animations package
+- Pull-to-refresh and infinite scroll for lists
+- Bottom sheets and modals for contextual actions
 </FUNCTIONALITY_MANDATE>
 </SCREEN_CONTEXT_CLARIFICATION>
 
@@ -122,9 +122,9 @@ flutter:
 <IMPLEMENTATION_REQUIREMENTS>
 
 <IMPORT_FORMAT_REQUIREMENTS>
-**CRITICAL: Follow these exact import patterns for all generated files**
+CRITICAL: Follow these exact import patterns for all generated files
 
-**For Widget Files (lib/presentation/screen_name/widgets/*.dart):**
+For Widget Files (lib/presentation/screen_name/widgets/*.dart):
 ```dart
 import 'package:flutter/material.dart';
 import 'package:sizer/sizer.dart';
@@ -133,7 +133,7 @@ import '../../../core/app_export.dart';
 import '../../../theme/app_theme.dart';
 ```
 
-**For Main Screen Files (lib/presentation/screen_name/screen_name.dart):**
+For Main Screen Files (lib/presentation/screen_name/screen_name.dart):
 ```dart
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
@@ -171,19 +171,19 @@ Create themes that feel:
 </THEME_PHILOSOPHY>
 
 <RESPONSIVE_LAYOUT_PRINCIPLES>
-**Overflow Prevention:**
+Overflow Prevention:
 - Analyze available space before choosing layout widgets
 - Use scrollable widgets (SingleChildScrollView, ListView, etc.) when content might exceed screen bounds
 - Apply flexible sizing (Flexible, Expanded) instead of fixed dimensions where appropriate
 - Consider mainAxisSize property for Column/Row widgets based on content needs
 
-**Layout Flexibility:**
+Layout Flexibility:
 - Choose between fixed, flexible, or scrollable layouts based on content requirements
 - Use MediaQuery and LayoutBuilder for screen-size-aware layouts
 - Implement proper spacing that scales with device dimensions
 - Handle both horizontal and vertical space constraints appropriately
 
-**Content Adaptation:**
+Content Adaptation:
 - Ensure all interactive elements remain accessible on different screen sizes
 - Use responsive spacing and sizing strategies
 - Test layout behavior with varying content lengths
@@ -191,19 +191,19 @@ Create themes that feel:
 </RESPONSIVE_LAYOUT_PRINCIPLES>
 
 <SPACING_AND_LAYOUT_PRINCIPLES>
-**Visual Hierarchy & Spacing:**
+Visual Hierarchy & Spacing:
 - Apply consistent spacing throughout the screen using logical increments
 - Ensure clear visual separation between different content sections
 - Maintain adequate breathing room around interactive elements
 - Use appropriate padding and margins to create balanced layouts
 
-**Element Positioning:**
+Element Positioning:
 - Prevent overlapping elements with sufficient clearance
 - Ensure touch targets are appropriately sized for mobile interaction
 - Create logical groupings with consistent spacing patterns
 - Use SafeArea to accommodate different device constraints
 
-**Layout Best Practices:**
+Layout Best Practices:
 - Establish clear content hierarchy through spacing
 - Apply consistent alignment patterns within sections
 - Use proper spacing widgets (SizedBox, Padding) for layout control
@@ -226,18 +226,13 @@ Professional quality images from Unsplash
 
 Include dart:async (import 'dart:async';) always Automatically include import 'dart:async'; in any file using asynchronous operations (e.g., Future, async/await, Stream). For example, include it in screens or widgets handling API calls, timers, or asynchronous state updates.
 
-- **ColorScheme Properties:** Use only standard ColorScheme properties (primary, secondary, error, surface, etc.) - NEVER use non-existent properties like colorScheme.warning
-
-
-Escape Dollar Signs in Strings: Ensure all $ symbols in string literals are escaped as \$ to prevent string interpolation errors. For example, write "\$100" instead of "$100". Validate that all generated strings with currency or variable-like symbols are correctly escaped.
+- ColorScheme Properties: Use only standard ColorScheme properties (primary, secondary, error, surface, etc.) - NEVER use non-existent properties like colorScheme.warning
+- Escape Dollar Signs in Strings: Ensure all $ symbols in string literals are escaped as \$ to prevent string interpolation errors. For example, write "\$100" instead of "$100". Validate that all generated strings with currency or variable-like symbols are correctly escaped.
 
 
 <WRAPPER_COMPONENTS>
 Use these wrapper components when applicable:
-
-<NOTE>
 - Must use correct import paths for these wrapper components since you have access to the file structure.
-</NOTE>
 </WRAPPER_COMPONENTS>
 
 <FILE_STRUCTURE>
@@ -277,14 +272,14 @@ Avoid placeholder URLs or non-functional image references.
 </IMAGE_REQUIREMENTS>
 
 <CONTEXT_INTEGRATION_REQUIREMENTS>
-**Mandatory Integration Rules:**
+Mandatory Integration Rules:
 - ALL widgets defined in context MUST be implemented
 - Screen descriptions are minimum requirements - exceed with rich interactions
 - Mock data from context must be enhanced, not reduced
 - Navigation patterns from Stage 5 must be faithfully implemented
 - Design system tokens must be consistently applied throughout
 
-**Critical Validation Before Code Generation:**
+Critical Validation Before Code Generation:
 All custom widgets from Stage III are implementable with Flutter's widget system
 Mock data URLs follow standardized Unsplash format from Stage I
 State management decisions align with StatefulWidget/StatelessWidget framework

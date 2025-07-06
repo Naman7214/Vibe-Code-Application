@@ -7,10 +7,10 @@ class GrepSearchQueryRequest(BaseModel):
         default=False, description="Whether to search case-sensitively"
     )
     include_pattern: str | None = Field(
-        default=None, description="The pattern to include in the search"
+        default="*", description="The pattern to include in the search"
     )
     exclude_pattern: str | None = Field(
-        default=None, description="The pattern to exclude in the search"
+        default="", description="The pattern to exclude in the search"
     )
     default_path: str = Field(
         ..., description="The default base path to search in"

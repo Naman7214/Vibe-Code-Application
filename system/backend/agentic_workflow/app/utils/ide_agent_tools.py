@@ -97,7 +97,7 @@ class IDEAgentTools:
                             "properties": {
                                 "case_sensitive": {
                                     "type": "boolean",
-                                    "description": "Whether the search should be case sensitive",
+                                    "description": "Whether the search should be case sensitive default is true",
                                 },
                                 "include_pattern": {
                                     "type": "string",
@@ -216,7 +216,7 @@ class IDEAgentTools:
                     "properties": {
                         "summary": {
                             "type": "string",
-                            "description": "What things you have done so far",
+                            "description": "Summary of task you have complete, what things are not fixed yet, what are the key decisions you have made, what caused the error",
                         }
                     },
                     "required": ["summary"],

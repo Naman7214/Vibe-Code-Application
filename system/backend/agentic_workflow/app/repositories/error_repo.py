@@ -22,7 +22,7 @@ class ErrorRepo:
 
             insert_result = await self.collection.insert_one(error.to_dict())
             if not insert_result.inserted_id:
-                pass
+                print(f"Error while inserting error: {error}")
         except Exception as e:
-            pass
+            print(f"Error while inserting error: {e}")
         return insert_result

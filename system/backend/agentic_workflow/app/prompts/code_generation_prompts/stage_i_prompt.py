@@ -60,105 +60,99 @@ Create themes that feel:
 </REQUIREMENTS>
 
 <CRITICAL_STYLING_ERROR_PREVENTION>
-🚨 MANDATORY REQUIREMENTS - FAILURE TO FOLLOW WILL CAUSE RUNTIME ERRORS:
+MANDATORY REQUIREMENTS - FAILURE TO FOLLOW WILL CAUSE RUNTIME ERRORS:
 
-1. **COMPLETE COLOR SCALE GENERATION** (Prevents "class does not exist" errors):
-   - EVERY color (primary, secondary, accent, neutral, success, warning, error, info) MUST have ALL scale values: 50, 100, 200, 300, 400, 500, 600, 700, 800, 900, 950
-   - NO missing intermediate values allowed - components will reference all of these
-   - Example: success-800, warning-800, error-800 are commonly used and MUST exist
+1. COMPLETE COLOR SCALE GENERATION (Prevents "class does not exist" errors):
+- EVERY color (primary, secondary, accent, neutral, success, warning, error, info) MUST have ALL scale values: 50, 100, 200, 300, 400, 500, 600, 700, 800, 900, 950
+- NO missing intermediate values allowed - components will reference all of these
+- Example: success-800, warning-800, error-800 are commonly used and MUST exist
 
-2. **SEMANTIC COLOR REQUIREMENTS** (Critical for component compatibility):
-   - ALWAYS include complete semantic color sets even if not in design context:
-     * success: Full 50-950 scale with appropriate green hex values
-     * warning: Full 50-950 scale with appropriate orange/yellow hex values  
-     * error: Full 50-950 scale with appropriate red hex values
-     * info: Full 50-950 scale with appropriate blue hex values
+2. SEMANTIC COLOR REQUIREMENTS (Critical for component compatibility):
+- ALWAYS include complete semantic color sets even if not in design context:
+- success: Full 50-950 scale with appropriate green hex values
+- warning: Full 50-950 scale with appropriate orange/yellow hex values  
+- error: Full 50-950 scale with appropriate red hex values
+- info: Full 50-950 scale with appropriate blue hex values
 
-3. **ANIMATION HANDLING** (Prevents circular dependency errors):
-   - NEVER create custom animation classes that @apply themselves (e.g., .animate-fade-in { @apply animate-fade-in; })
-   - USE Tailwind's built-in animation system via config animations object
-   - RELY on tailwindcss-animate plugin for standard animations
-   - If custom animations needed, define them in keyframes without @apply self-references
+3. ANIMATION HANDLING (Prevents circular dependency errors):
+- NEVER create custom animation classes that @apply themselves (e.g., .animate-fade-in { @apply animate-fade-in; })
+- USE Tailwind's built-in animation system via config animations object
+- RELY on tailwindcss-animate plugin for standard animations
+- If custom animations needed, define them in keyframes without @apply self-references
 
-4. **CSS COMPONENT CLASS PATTERNS** (Prevents compilation errors):
-   - NO circular @apply references in component layer
-   - Component classes should @apply existing Tailwind utilities, never themselves
-   - Use semantic naming that doesn't conflict with generated utility classes
+4. CSS COMPONENT CLASS PATTERNS (Prevents compilation errors):
+- NO circular @apply references in component layer
+- Component classes should @apply existing Tailwind utilities, never themselves
+- Use semantic naming that doesn't conflict with generated utility classes
 
-5. **PLUGIN COMPATIBILITY** (For Tailwind CSS 3.4.6):
-   - Include exactly these plugins: @tailwindcss/forms, tailwindcss-animate, @tailwindcss/typography, @tailwindcss/aspect-ratio, @tailwindcss/container-queries, tailwindcss-elevation
-   - Ensure all plugin features are properly configured and don't conflict
+5. PLUGIN COMPATIBILITY (For Tailwind CSS 3.4.6):
+- Include exactly these plugins: @tailwindcss/forms, tailwindcss-animate, @tailwindcss/typography, @tailwindcss/aspect-ratio, @tailwindcss/container-queries, tailwindcss-elevation
+- Ensure all plugin features are properly configured and don't conflict
 
-6. **CSS CUSTOM PROPERTIES STANDARD**:
-   - ALL colors must be available as CSS custom properties: --color-primary-500, --color-success-800, etc.
-   - This ensures fallback compatibility and JavaScript access
+6. CSS CUSTOM PROPERTIES STANDARD:
+- ALL colors must be available as CSS custom properties: --color-primary-500, --color-success-800, etc.
+- This ensures fallback compatibility and JavaScript access
 
 VALIDATION CHECKLIST:
 Prioritize clarity and intuitiveness over visual complexity
-✅ All color scales have 11 values (50-950)  
-✅ Success, warning, error, info colors are included with full scales
-✅ No @apply circular references in animations
-✅ All semantic color combinations are valid (bg-success-100 text-success-800)
-✅ Plugin list matches package.json exactly
-✅ CSS custom properties cover all colors
+All color scales have 11 values (50-950)  
+Success, warning, error, info colors are included with full scales
+No @apply circular references in animations
+All semantic color combinations are valid (bg-success-100 text-success-800)
+Plugin list matches package.json exactly
+CSS custom properties cover all colors
 </CRITICAL_STYLING_ERROR_PREVENTION>
 
 
 <PROFESSIONAL_CSS_PATTERNS>
-🚨 ENTERPRISE-GRADE CSS ARCHITECTURE REQUIREMENTS:
+ENTERPRISE-GRADE CSS ARCHITECTURE REQUIREMENTS:
 
-1. **CSS VARIABLE INTEGRATION** (Critical for maintainability):
-   ```css
-   /* ✅ REQUIRED: Link Tailwind colors to CSS variables */
-   :root {
-     --color-primary: #hex;
-     --color-on-primary: #hex;
-     --color-surface: #hex;
-     --color-background: #hex;
-   }
+1. CSS VARIABLE INTEGRATION (Critical for maintainability):
+```css
+/* REQUIRED: Link Tailwind colors to CSS variables */
+:root {
+   --color-primary: #hex;
+   --color-on-primary: #hex;
+   --color-surface: #hex;
+   --color-background: #hex;
+}
    
-   /* In tailwind.config.js */
-   colors: {
-     primary: 'var(--color-primary)',
-     'on-primary': 'var(--color-on-primary)',
-     surface: 'var(--color-surface)',
-     background: 'var(--color-background)'
-   }
-   ```
+/* In tailwind.config.js */
+colors: {
+   primary: 'var(--color-primary)',
+   'on-primary': 'var(--color-on-primary)',
+   surface: 'var(--color-surface)',
+   background: 'var(--color-background)'
+}
+```
 
 
-2. **MATERIAL DESIGN SHADOWS** (Industry standard):
-   ```css
-   boxShadow: {
-     'elevation-1': '0 1px 3px rgba(0,0,0,0.12), 0 1px 2px rgba(0,0,0,0.24)',
-     'elevation-2': '0 3px 6px rgba(0,0,0,0.16), 0 3px 6px rgba(0,0,0,0.23)',
-     'elevation-3': '0 10px 20px rgba(0,0,0,0.19), 0 6px 6px rgba(0,0,0,0.23)',
-     'elevation-4': '0 14px 28px rgba(0,0,0,0.25), 0 10px 10px rgba(0,0,0,0.22)',
-     'elevation-5': '0 19px 38px rgba(0,0,0,0.30), 0 15px 12px rgba(0,0,0,0.22)'
-   }
-   ```
+2. MATERIAL DESIGN SHADOWS (Industry standard):
+```css
+boxShadow: {
+   'elevation-1': '0 1px 3px rgba(0,0,0,0.12), 0 1px 2px rgba(0,0,0,0.24)',
+   'elevation-2': '0 3px 6px rgba(0,0,0,0.16), 0 3px 6px rgba(0,0,0,0.23)',
+   'elevation-3': '0 10px 20px rgba(0,0,0,0.19), 0 6px 6px rgba(0,0,0,0.23)',
+   'elevation-4': '0 14px 28px rgba(0,0,0,0.25), 0 10px 10px rgba(0,0,0,0.22)',
+   'elevation-5': '0 19px 38px rgba(0,0,0,0.30), 0 15px 12px rgba(0,0,0,0.22)'
+}
+```
 
-3. **ANIMATION CONSISTENCY** (Prevents conflicts):
-   - ALL keyframes defined in CSS `@keyframes`, NOT in config
-   - Animation utilities in config reference CSS keyframes only
-   - NO circular references or duplicate definitions
+3. ANIMATION CONSISTENCY (Prevents conflicts):
+- ALL keyframes defined in CSS `@keyframes`, NOT in config
+- Animation utilities in config reference CSS keyframes only
+- NO circular references or duplicate definitions
 
-4. **SEMANTIC COMPONENT NAMING** (Shorter, intuitive):
-   ```css
-   /* ✅ PREFERRED: Short, semantic names */
-   .btn { /* base button */ }
-   .btn-primary { /* primary variant */ }
-   .card { /* base card */ }
-   
-   /* ❌ AVOID: Long, redundant names */
-   .button-component-primary-variant
-   ```
+4. SEMANTIC COMPONENT NAMING (Shorter, intuitive):
+```css
+/* PREFERRED: Short, semantic names */
+.btn { /* base button */ }
+.btn-primary { /* primary variant */ }
+.card { /* base card */ }
 
-VALIDATION CHECKLIST:
-✅ Colors reference CSS variables in config
-✅ Material Design elevation shadows included
-✅ All animations in CSS, config references them
-✅ Component names are semantic and concise
+/* AVOID: Long, redundant names */
+.button-component-primary-variant
+```
 </PROFESSIONAL_CSS_PATTERNS>
 
 <OUTPUT_FORMAT>
@@ -190,17 +184,19 @@ IMPORTANT NOTES:
 - Map colors from the design system to appropriate semantic meanings
 - MUST use uppercase XML tags: FILES, FILE, FILE_PATH, CODE_SNIPPET
 - Go beyond the basics to generate a professional, engaging, and practical design theme for intuitive and interactive React web applications.
-- MUST think from user's perspective, psychological reasoning and asthetically to create a design theme that is intuitive and engaging.
+- MUST think from user's perspective, psychological reasoning and aesthetically to create a design theme that is intuitive and engaging.
 
-🚨 CRITICAL ERROR PREVENTION CHECKLIST:
-- ✅ EVERY color has complete 50-950 scale (NO missing values like 200, 300, 400, 800, 900)
-- ✅ SUCCESS, WARNING, ERROR, INFO colors included even if not in design context
-- ✅ NO circular @apply references in CSS (no .animate-fade-in { @apply animate-fade-in; })
-- ✅ ALL plugins from package.json included: @tailwindcss/forms, tailwindcss-animate, @tailwindcss/typography, @tailwindcss/aspect-ratio, @tailwindcss/container-queries, tailwindcss-elevation
-- ✅ Animations defined in CSS keyframes, config references them (NO dual definitions)
-- ✅ CSS custom properties (--color-*) for all colors in :root
-- ✅ ALL container classes use w-full (NO max-w-* restrictions causing centered layouts)
-
+<CHECKLIST>
+- Colors reference CSS variables (--color-*) in :root
+- Every color has a complete 50-950 scale with no missing values
+- SUCCESS, WARNING, ERROR, INFO colors included even if not in design context
+- Material Design elevation shadows included using tailwindcss-elevation
+- All animations are defined in CSS keyframes and referenced in config (no dual definitions)
+- No circular @apply references in CSS
+- Component names are semantic and concise
+- All container classes use w-full, avoiding max-w-* restrictions that cause centered layouts
+- All relevant plugins included from package.json: @tailwindcss/forms, tailwindcss-animate, @tailwindcss/typography, @tailwindcss/aspect-ratio, @tailwindcss/container-queries, tailwindcss-elevation
+</CHECKLIST>
 </REQUIREMENTS>
 """
 
