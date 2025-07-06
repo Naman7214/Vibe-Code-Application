@@ -47,6 +47,7 @@ Typography System Requirements
 - Create consistent hierarchy using Material 3 naming convention: displayLarge, headlineLarge, titleLarge, bodyLarge, labelLarge, etc.
 - Configure proper sizing, weights, letter spacing, and line height for readability across all screen sizes
 - Support proper text scaling for accessibility compliance
+- Use diverse fonts to create visual hierarchy and prevent monotonous typography.
 
 Theme Extensions and Component Themes
 - Create custom theme extensions extending ThemeExtension<T> for brand-specific colors
@@ -66,6 +67,7 @@ Animation and Performance
 - Configure default curve for consistent animations throughout the app
 - ADVANCED ANIMATION SUPPORT: Include theme configurations for micro-interactions, loading states, and transitions
 - Leverage Flutter's built-in theming capabilities while adding custom extensions for enhanced UX
+- **PERFORMANCE OPTIMIZATION**: Optimize theme for smooth animations and minimal rebuilds
 - **MODERN DESIGN PATTERNS**: Support for shimmer effects, lottie animations, and advanced Material 3 transitions
 
 Critical Implementation Notes
@@ -143,15 +145,15 @@ IMPORTANT NOTES:
 - Replace placeholder colors with actual values from the design system context
 
 <CHECKLIST>
-File organization follows Flutter conventions
-Material 3 ColorScheme and Typography configured correctly
-Custom theme extensions implemented and used correctly
-Component themes configured consistently across the app
-All theme component classes use correct "Data" suffixed names
-All referenced properties exist in the respective ThemeData classes
-No deprecated properties used in theme or components
-MaterialStateProperty used for state-dependent properties
-Null safety applied properly across theme and component definitions
+- File organization follows Flutter conventions
+- Material 3 ColorScheme and Typography configured correctly
+- Custom theme extensions implemented and used correctly
+- Component themes configured consistently across the app
+- All theme component classes use correct "Data" suffixed names
+- All referenced properties exist in the respective ThemeData classes
+- No deprecated properties used in theme or components
+- MaterialStateProperty used for state-dependent properties
+- Null safety applied properly across theme and component definitions
 </CHECKLIST>
 """
 

@@ -153,9 +153,10 @@ Analyze all previous context and generate Flutter screen navigation specificatio
 
 <NAVIGATION_STRATEGY_FOR_CODE_GENERATION>
 Primary Pattern: Self-contained screens with minimal inter-screen navigation
-When to Use Routing: Only for major workflow transitions (e.g., onboarding → main app, item selection → detail view)
+When to Use Routing: For major workflow transitions (e.g., onboarding → main app, item selection → detail view)
 Implementation Approach: Provide specific routing guidance for necessary transitions while emphasizing self-contained functionality
 Integration Pattern: Navigation context will guide Stage II to create cohesive screen flows without over-engineering routing complexity
+- Route paths must follow kebab-case format: '/exercise-library', '/workout-dashboard'
 </NAVIGATION_STRATEGY_FOR_CODE_GENERATION>
 
 <CONTEXT_REQUIREMENTS>
@@ -175,10 +176,9 @@ Generate organized, professional mobile navigation descriptions with:
 5. Strategic Mobile Justification: Explain WHY mobile navigation decisions were made considering platform conventions
 6. Flutter Technical Implementation: Specific Flutter guidance with concrete mobile implementation details
 7. Mobile User-Focused Analysis: How navigation serves mobile user goals and touch-based mental models
-8. For the screens to screen navigation make sure to refer to the screen name in this format only : '/exercise-library', '/workout-dashboard'
+8. For the screens to screen navigation make sure to mention the route paths must follow kebab-case format: '/exercise-library', '/workout-dashboard'
 Keep descriptions focused and actionable for Flutter mobile code generation.
 9. **Mobile Widget Details**: Structured analysis of necessity, placement, implementation, platform adaptivity, and touch interactions
-9. This is the modern era not the medieval so all the navigation decision should be according to modern navigation principles and not the medieval ones.
 </MOBILE_CONTENT_GUIDELINES>
 
 <MOBILE_ANALYSIS_FRAMEWORK>
@@ -193,16 +193,16 @@ Generate a JSON object with mobile screen navigation data organized into clear s
 Provide JSON object wrapped in <OUTPUT> </OUTPUT> tags only, with no other text or comments out of the <OUTPUT> tags
 The structure uses fixed keys (screen_navigation, screen_name) with values containing relevant sections that fit the mobile project context.
 Make sure to add the proper escape characters for the new lines and other special characters such that it'll not cause any error in the upcoming parsing of the output.
-limit all fields text to 3-4 sentences, and the screen name key should be in the format of "screen_name" as it is from previous stage context.
+limit all fields's content to 3-4 sentences, and the screen name key should be in the format of "screen_name" as it is from previous stage context.
 <OUTPUT>
 {
     "screen_navigation": {
         "screen_name": {
-            "mobile_workflow_analysis": "Primary function and mobile user goals for this screen, How this screen fits into overall mobile user workflows and touch-based interactions., Specific mobile navigation behaviors, gestures, and interactions within this screen, Screen-specific Flutter widgets needed for navigation functionality, Technical guidance for Flutter mobile implementation including routing and state management.",
+            "mobile_workflow_analysis": "Mobile Screen Purpose Analysis: [Primary function and mobile user goals for this screen.]\n\nMobile User Journey Integration: [How this screen fits into overall mobile user workflows and touch-based interactions.]\n\nMobile Navigation Patterns: [Specific mobile navigation behaviors, screen to screen navigation, gestures, and interactions within this screen.]\n\nWidget Requirements: [Screen-specific Flutter widgets needed for navigation functionality.]\n\nFlutter Implementation Notes: [Technical guidance for Flutter mobile implementation including routing and state management.]",
             
-            "mobile_interaction_design": "How mobile users navigate within this screen using touch interactions, How mobile users enter and exit this screen with appropriate animations and gestures, Screen-level state coordination and lifecycle management, Navigation adaptations across different mobile screen sizes and orientations, Inclusive design requirements for mobile screen navigation including touch targets and screen readers, Specific Flutter routing patterns needed for this mobile screen, including Navigator.push(), route parameters, and state passing between screens with mobile optimizations.",
+            "mobile_interaction_design": "Internal Mobile Navigation Strategy: [How mobile users navigate within this screen using touch interactions.]\n\nMobile Transition Patterns: [How mobile users enter and exit this screen with appropriate animations and gestures.]\n\nMobile State Management: [Screen-level state coordination and lifecycle management.]\n\nCross-Device Behavior: [Navigation adaptations across different mobile screen sizes and orientations.]\n\nMobile Accessibility Considerations: [Inclusive design requirements for mobile screen navigation including touch targets and screen readers.]\n\nFlutter Navigation Implementation: [Specific Flutter routing patterns needed for this mobile screen, route parameters, and state passing between screens with mobile optimizations.]",
             
-            "platform_adaptivity": "How this screen's navigation follows Material Design patterns, How this screen's navigation follows Cupertino patterns, How the screen adapts its navigation behavior based on the platform, Elements that remain consistent across both platforms"
+            "platform_adaptivity": "Material Design Implementation: [How this screen's navigation follows Material Design patterns.]\n\nCupertino Implementation: [How this screen's navigation follows Cupertino patterns.]\n\nPlatform Detection: [How the screen adapts its navigation behavior based on the platform.]\n\nCross-Platform Consistency: [Elements that remain consistent across both platforms.]"
         }
     }
 }

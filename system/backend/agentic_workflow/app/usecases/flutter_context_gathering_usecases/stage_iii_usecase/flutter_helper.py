@@ -72,8 +72,6 @@ class FlutterHelper:
         Generates the global mobile theme for the Flutter project.
         """
 
-        print("entered flutter global theme generation")
-
         with open(
             f"artifacts/{session_id}/project_context/stage_i.json", "r"
         ) as f:

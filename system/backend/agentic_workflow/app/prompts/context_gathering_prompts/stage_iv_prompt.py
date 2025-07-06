@@ -205,7 +205,7 @@ Each screen description must cover:
 
 <WIDGET_SPECIFICATION_REQUIREMENTS>
 - For each custom widget, provide strategic parameter interface guidance with Flutter data type considerations and default value approaches
-- Limit mock data to 3-4 representative examples that align with expected parameter structure guidance
+- Limit mock data to 2-3 representative examples that align with expected parameter structure guidance
 - Define form field initial state guidance with proper Flutter TextEditingController handling approaches
 - Provide List parameter guidance with concise mobile-appropriate mock data array strategies
 - Document widget size/variant option strategies optimized for mobile screens
@@ -252,7 +252,7 @@ EXAMPLE OUTPUT STRUCTURE:
 <OUTPUT>
 {
   "screen_name": {
-    "description": "natural language description of the mobile screen focusing on mobile user experience, touch interactions, and mobile-specific considerations(max 5 sentences)",
+    "description": "natural language description of the mobile screen focusing on mobile user experience, touch interactions, and mobile-specific considerations(max 6-7 sentences)",
     "widgets": {
       "widget_name": {
         "type": "StatefulWidget|StatelessWidget",

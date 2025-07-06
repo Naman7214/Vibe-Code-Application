@@ -23,6 +23,7 @@ Create themes that feel:
 - Purposeful: Ensure every design decision enhances user experience, drives engagement, and supports the application’s purpose.
 - Adaptive: Ensure seamless performance across devices and screen sizes for accessibility and inclusivity.
 - Timeless: Opt for modern yet classic aesthetics ensuring longevity and broad appeal.
+- Use diverse fonts to create visual hierarchy and prevent monotonous typography.
 </THEME_PSYCHOLOGY>
 
 <REQUIREMENTS>

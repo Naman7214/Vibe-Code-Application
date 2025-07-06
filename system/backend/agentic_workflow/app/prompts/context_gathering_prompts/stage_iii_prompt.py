@@ -29,7 +29,9 @@ Create a global design theme strategy that will serve as the foundation referenc
 13. Keep in mind the React implementation implications for each design decision.
 14. Balances innovation/creativity with usability and practicality
 15. This is the modern era not the medieval so all the design decision should be according to modern design principles and not the medieval ones.
+16. Select typography that reflects the business domain psychology and must use diverse fonts to create visual hierarchy and prevent monotonous typography.
 </INSTRUCTIONS>
+
 
 <OUTPUT_REQUIREMENTS>
 - Provide structured JSON object wrapped in <OUTPUT> </OUTPUT> tags only, with no other text or comments out of the <OUTPUT> tags
@@ -231,6 +233,7 @@ Create a global mobile design theme strategy that will serve as the foundation r
 14. Creates a mobile experience, not a web experience
 15. Balances innovation/creativity with usability and practicality
 16. This is the modern era not the medieval so all the design decision should be according to modern design principles and not the medieval ones.
+17. Select typography that reflects the business domain psychology and must use diverse fonts to create visual hierarchy and prevent monotonous typography.
 </INSTRUCTIONS>
 
 <OUTPUT_REQUIREMENTS>
@@ -275,6 +278,12 @@ all reasoning and rationals should be under 2 sentences
             "body": "sizing and weight strategy for body text, including mobile reading comfort and accessibility standards",
             "caption": "sizing and weight strategy for captions, including mobile space efficiency and secondary information hierarchy"
         }
+    },
+    "accessibility_considerations": ["consideration 1", "consideration 2"],
+    "brand_elements": {
+        "logo_treatment": "logo treatment description (about 2-3 sentences)",
+        "imagery_style": "imagery style description (about 2-3 sentences)",
+        "iconography_style": "iconography style description (about 2-3 sentences)"
     },
     "visual_mood": {
         "primary_mood": "mobile-focused mood description (about 1-2 sentences)",
