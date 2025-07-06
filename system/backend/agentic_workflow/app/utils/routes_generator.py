@@ -141,8 +141,48 @@ class RoutesGenerator:
             "dashboard",
             "game-setup",
             "game_setup",
+            "homepage",
+            "main",
+            "start",
+            "welcome",
+            "overview",
+            "lobby",
         ]
         return page_name.lower() in home_indicators
+
+    def _select_home_page_robust(self, pages: List[Dict]) -> Optional[Dict]:
+        """
+        Robustly select the home page with fallback logic.
+        
+        Priority order:
+        1. Pages matching home indicators
+        2. Fallback to first page alphabetically
+        
+        Args:
+            pages: List of page dictionaries
+            
+        Returns:
+            Selected home page or None if no pages
+        """
+        if not pages:
+            return None
+            
+        # Priority 1: Look for pages matching home indicators
+        home_page = next(
+            (p for p in pages if p["is_home"]),
+            None
+        )
+        
+        if home_page:
+            return home_page
+        
+        # Priority 2: Fallback to first page alphabetically
+        fallback_page = sorted(pages, key=lambda x: x["name"])[0]
+        
+        # Mark fallback page as home
+        fallback_page["is_home"] = True
+        
+        return fallback_page
 
     def analyze_components_structure(self) -> Dict:
         """
@@ -214,10 +254,8 @@ class RoutesGenerator:
         # Build routes section
         routes_content = []
 
-        # Find home page
-        home_page = next(
-            (p for p in pages if p["is_home"]), pages[0] if pages else None
-        )
+        # Robust home page selection with fallback
+        home_page = self._select_home_page_robust(pages)
 
         if home_page:
             component_name = home_page["component_name"]

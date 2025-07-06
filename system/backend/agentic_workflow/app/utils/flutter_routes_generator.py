@@ -156,6 +156,7 @@ class FlutterRoutesGenerator:
     def _is_initial_screen(self, screen_name: str) -> bool:
         """
         Determine if a screen should be the initial route.
+        Priority order: splash screens first, then other common patterns.
 
         Args:
             screen_name: Screen directory name
@@ -163,17 +164,90 @@ class FlutterRoutesGenerator:
         Returns:
             True if this should be the initial route
         """
-        initial_indicators = [
+        # Prioritize splash screens first
+        splash_indicators = [
             "splash_screen",
             "splash",
+        ]
+        
+        # Other common initial screen patterns
+        other_initial_indicators = [
             "home",
-            "home_dashboard",
+            "home_dashboard", 
             "main",
             "dashboard",
             "index",
             "landing",
+            "onboarding",
+            "welcome",
+            "intro",
         ]
-        return screen_name.lower() in initial_indicators
+        
+        screen_lower = screen_name.lower()
+        
+        # Check splash patterns first (highest priority)
+        if screen_lower in splash_indicators:
+            return True
+            
+        # Check other patterns only if no splash screen exists in the project
+        return screen_lower in other_initial_indicators
+
+    def _select_initial_screen_robust(self, screens: List[Dict]) -> Optional[Dict]:
+        """
+        Robustly select the initial screen with splash priority and fallback logic.
+        
+        Priority order:
+        1. Splash screens (splash_screen, splash)
+        2. Other initial indicators (home, dashboard, etc.)
+        3. Fallback to first screen alphabetically
+        
+        Args:
+            screens: List of screen dictionaries
+            
+        Returns:
+            Selected initial screen or None if no screens
+        """
+        if not screens:
+            return None
+            
+        # Priority 1: Look for splash screens first
+        splash_patterns = ["splash_screen", "splash"]
+        splash_screen = next(
+            (s for s in screens if s["name"].lower() in splash_patterns),
+            None
+        )
+        
+        if splash_screen:
+            # Mark splash as initial and others as not initial
+            for screen in screens:
+                screen["is_initial"] = (screen["name"] == splash_screen["name"])
+            return splash_screen
+        
+        # Priority 2: Look for other initial indicators
+        other_patterns = [
+            "home", "home_dashboard", "main", "dashboard", 
+            "index", "landing", "onboarding", "welcome", "intro"
+        ]
+        
+        initial_screen = next(
+            (s for s in screens if s["name"].lower() in other_patterns),
+            None
+        )
+        
+        if initial_screen:
+            # Mark found screen as initial and others as not initial
+            for screen in screens:
+                screen["is_initial"] = (screen["name"] == initial_screen["name"])
+            return initial_screen
+        
+        # Priority 3: Fallback to first screen alphabetically
+        fallback_screen = sorted(screens, key=lambda x: x["name"])[0]
+        
+        # Mark fallback as initial and others as not initial
+        for screen in screens:
+            screen["is_initial"] = (screen["name"] == fallback_screen["name"])
+            
+        return fallback_screen
 
     def generate_app_routes_dart(self) -> str:
         """
@@ -183,6 +257,9 @@ class FlutterRoutesGenerator:
             Generated app_routes.dart file content as string
         """
         screens = self.analyze_presentation_structure()
+
+        # Robust initial screen selection with splash priority
+        initial_screen = self._select_initial_screen_robust(screens)
 
         # Sort screens to ensure consistent order (initial screen first)
         screens.sort(key=lambda x: (not x["is_initial"], x["name"]))
@@ -204,12 +281,6 @@ class FlutterRoutesGenerator:
             route_constants.append(
                 f"  static const String {screen['route_constant']} = '/{screen['route_path']}';"
             )
-
-        # Find initial screen
-        initial_screen = next(
-            (s for s in screens if s["is_initial"]),
-            screens[0] if screens else None,
-        )
 
         # Build routes map
         routes_map = []
