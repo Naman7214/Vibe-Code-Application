@@ -272,7 +272,6 @@ class RunTerminalCmdUsecase:
             }
         except Exception as e:
             error_msg = f"Error executing command: {str(e)}"
-            print(error_msg)
             return {
                 "output": "",
                 "error": error_msg,

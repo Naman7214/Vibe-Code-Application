@@ -32,7 +32,7 @@ Create a global design theme strategy that will serve as the foundation referenc
 </INSTRUCTIONS>
 
 <OUTPUT_REQUIREMENTS>
-- Provide structured JSON output wrapped in <OUTPUT> tags, only the request JSON is required, no other text or comments
+- Provide structured JSON object wrapped in <OUTPUT> </OUTPUT> tags only, with no other text or comments out of the <OUTPUT> tags
 - Focus on creating a reusable web design foundation
 - Include rationale for major design decisions with web considerations.
 - Ensure scalability across different screen types
@@ -48,7 +48,7 @@ all reasoning and rationals should be under 2 sentences
     "design_psychology": "brief statement of overall design approach (about 4-5 sentences) with core psychological engagement principle such that it hooks the user and makes them want to use the application",
     "color_palette": {
         "primary": "detailed reasoning behind choosing this color for the primary brand, including the psychological engagement principle and usability considerations",
-        "secondary": "detailed reasoning behind choosing this color for the secondary brand, including how it complements the primary color and support mobile hierarchy",
+        "secondary": "detailed reasoning behind choosing this color for the secondary brand, including how it complements the primary color.",
         "accent": "detailed reasoning behind choosing this color for the accent brand, including interaction feedback and web engagement patterns",
         "neutral": "comprehensive rationale for neutral color strategy, including web readability, accessibility, and visual balance considerations",
         "semantic": {
@@ -59,7 +59,7 @@ all reasoning and rationals should be under 2 sentences
         }
     },
     "typography": {
-        "heading_font": "reasoning for heading font selection, including web readability, brand alignment, and cross-platform compatibility",
+        "heading_font": "reasoning for heading font selection, including web readability, brand alignment, and platform compatibility",
         "body_font": "reasoning for body font selection, including web application reading comfort, accessibility, and performance considerations",
         "hierarchy": {
             "h1": "sizing and weight strategy for primary headings, including web prominence and visual hierarchy principles",
@@ -124,8 +124,10 @@ Analyze the screen requirements to identify and categorize components into globa
 </INSTRUCTIONS>
 
 <OUTPUT_REQUIREMENTS>
-- Provide structured JSON output wrapped in <OUTPUT> tags
+- Provide structured JSON object wrapped in <OUTPUT> </OUTPUT> tags only, with no other text or comments out of the <OUTPUT> tags
 - Clearly separate global vs screen-specific components
+- Group global components into logical clusters for better organization and parallel generation
+- Include component responsibilities and usage contexts
 - If the previous output of the THIRD stage is present then just extend it by adding the new screens and their requirements and provide the extended output in the <OUTPUT> tags
 - For providing the description at the required places, make sure to provide it in a manner that it indicates deeper reasoning and understanding of the users needs.
 </OUTPUT_REQUIREMENTS>
@@ -219,7 +221,7 @@ Create a global mobile design theme strategy that will serve as the foundation r
 </INSTRUCTIONS>
 
 <OUTPUT_REQUIREMENTS>
-- Provide structured JSON output wrapped in <OUTPUT> tags, only the request JSON is required, no other text or comments
+- Provide structured JSON object wrapped in <OUTPUT> </OUTPUT> tags only, with no other text or comments out of the <OUTPUT> tags
 - Focus on creating a reusable mobile design foundation through strategic reasoning rather than exact specifications
 - Include comprehensive rationale for major design decisions with mobile considerations
 - Balance brand expression with mobile functional clarity through thoughtful design principles
@@ -325,7 +327,7 @@ Decision Rule: Default to StatelessWidget unless component needs to manage chang
 </WIDGET_STATE_DECISION_FRAMEWORK>
 
 <OUTPUT_REQUIREMENTS>
-- Provide structured JSON output wrapped in <OUTPUT> tags
+- Provide structured JSON object wrapped in <OUTPUT> </OUTPUT> tags only, with no other text or comments out of the <OUTPUT> tags
 - Focus on screen-specific mobile widgets
 - Include mobile widget responsibilities and usage contexts
 - If the previous output of the THIRD stage is present then just extend it by adding the new screens and their requirements and provide the extended output in the <OUTPUT> tags

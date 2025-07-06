@@ -15,7 +15,7 @@ class FileReadUseCase:
         self,
         file_path: str,
         start_line: int = 0,
-        end_line: int = 1500,
+        end_line: int = 1700,
     ) -> Dict[str, Any]:
 
         return await self.file_read_service.read_file(

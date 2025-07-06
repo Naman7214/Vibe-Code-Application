@@ -47,7 +47,7 @@ app.add_middleware(
 
 @app.get("/")
 async def root():
-    return {"message": "Welcome to my FastAPI application!"}
+    return {"message": "Welcome to my velocity.new tools!"}
 
 
 if __name__ == "__main__":

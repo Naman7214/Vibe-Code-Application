@@ -15,7 +15,7 @@ class ExitToolService:
         self.error_repo = error_repo
 
     async def append_summary_to_file(
-        self, file_path: str, summary: str, explanation: str
+        self, file_path: str, summary: str
     ) -> Dict[str, Any]:
         """
         Append AI agent summary content to a text file.
@@ -24,7 +24,6 @@ class ExitToolService:
         Args:
             file_path: Absolute path to the target .txt file
             summary: The summary content to append
-            explanation: Explanation of why this operation is needed
 
         Returns:
             Dictionary with success status and operation details
@@ -94,11 +93,10 @@ class ExitToolService:
 
             # Prepare the content to append
             timestamp = datetime.now().isoformat()
-            separator = "\n" + "=" * 80 + "\n"
+            separator = "\n" + "=" * 10 + "\n"
             content_to_append = (
                 f"{separator}AI Agent Exit Summary - {timestamp}\n{separator}\n"
             )
-            content_to_append += f"Explanation: {explanation}\n\n"
             content_to_append += f"Summary:\n{summary}\n"
             content_to_append += separator + "\n"
 

@@ -73,7 +73,7 @@ async def set_session_context(request: Request, call_next):
 
 @app.get("/")
 async def root():
-    return {"message": "Welcome to my FastAPI application!"}
+    return {"message": "Welcome to velocity.new"}
 
 
 if __name__ == "__main__":

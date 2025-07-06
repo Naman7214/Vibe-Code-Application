@@ -267,23 +267,23 @@ class FlutterStageIIIHelper:
         return f"""FLUTTER STAGE III - ROUTES GENERATION SUMMARY
 =============================================
 
-📍 ROUTES CREATED:
+ROUTES CREATED:
 {chr(10).join(route_list)}
 
-🏗️ ARCHITECTURE:
+ARCHITECTURE:
 • Router: Traditional Flutter Navigator with named routes
 • Route Structure: Map<String, WidgetBuilder> routes
 • Import Pattern: ../presentation/[screen_name]/[screen_name].dart
 • Navigation: Navigator.pushNamed() approach
 
-📊 SUMMARY:
+SUMMARY:
 • Total Routes: {len(screens)}
 • Screen Widgets: {len(screens)}
 • Route Constants: {len(screens)} static constants defined
 • Import Pattern: Consistent presentation layer imports
 • Initial Screen: {initial_screen.get('name', 'Not determined') if initial_screen else 'Not determined'}
 
-🚀 FEATURES:
+FEATURES:
 • Static route constants with kebab-case naming
 • Centralized route management with AppRoutes class
 • Traditional Flutter navigation patterns
@@ -291,7 +291,7 @@ class FlutterStageIIIHelper:
 • TODO comments for extensibility
 • Heuristic analysis of presentation structure
 
-🔍 ANALYSIS DETAILS:
+ANALYSIS DETAILS:
 • Screens Found: {analysis.get('screens_found', 0)}
 • Has Routing Structure: {analysis.get('has_routing_structure', False)}
 • Generation Method: Heuristic analysis of lib/presentation directory

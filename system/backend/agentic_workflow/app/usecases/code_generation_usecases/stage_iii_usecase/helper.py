@@ -143,7 +143,7 @@ class Helper:
         }
 
         screen_names = screens_to_process
-        batch_size = 5
+        batch_size = 10
         total_screens = len(screen_names)
         total_batches = (total_screens + batch_size - 1) // batch_size
 
@@ -205,7 +205,7 @@ class Helper:
         file_structure,
     ):
         """
-        Process a batch of screens (up to 5) in parallel using asyncio.
+        Process a batch of screens (up to 10) in parallel using asyncio.
         """
         batch_screens = list(batch_stage_iv.keys())
         self.logger.info(

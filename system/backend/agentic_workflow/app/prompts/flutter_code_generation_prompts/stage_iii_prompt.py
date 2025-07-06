@@ -43,7 +43,7 @@ CONTEXT_REGISTRY Requirements:
 - Document navigation patterns used
 
 # Output Format
-Strictly follow the below XML tags based output format.
+Strictly follow the below XML tags based output format. Do not include any explanations or additional text outside the <FILES> and </FILES> tags:
 
 <FILES>
 <FILE>

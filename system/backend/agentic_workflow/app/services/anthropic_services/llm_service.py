@@ -2,7 +2,7 @@ from typing import Any, Dict, List, Optional
 
 import httpx
 from anthropic import AsyncAnthropic
-from fastapi import Depends
+from fastapi import Depends, status
 
 from system.backend.agentic_workflow.app.config.settings import settings
 from system.backend.agentic_workflow.app.repositories.llm_usage_repo import (
@@ -43,7 +43,7 @@ class AnthropicService:
 
         self.timeout = httpx.Timeout(
             connect=60.0,
-            read=300.0,
+            read=700.0,
             write=150.0,
             pool=60.0,
         )
@@ -178,7 +178,10 @@ class AnthropicService:
         except Exception as exc:
             error_msg = f"Error in tool calling: {str(exc)}"
             loggers["anthropic"].error(error_msg)
-            raise JsonResponseError(status_code=500, detail=error_msg)
+            raise JsonResponseError(
+                status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
+                detail=error_msg,
+            )
 
     async def _make_anthropic_request(
         self,
@@ -275,9 +278,7 @@ class AnthropicService:
 
                 try:
                     await self.llm_usage_repo.add_llm_usage(usage_data)
-                    print(f"✅ Usage data saved to database successfully")
                 except Exception as e:
-                    print(f"❌ Failed to save usage data to database: {str(e)}")
                     loggers[provider].error(
                         f"Database insertion failed: {str(e)}"
                     )
@@ -288,7 +289,10 @@ class AnthropicService:
             error_msg = (
                 f"An error occurred while requesting {exc.request.url!r}."
             )
-            raise JsonResponseError(status_code=500, detail=error_msg)
+            raise JsonResponseError(
+                status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
+                detail=error_msg,
+            )
         except httpx.HTTPStatusError as exc:
             error_msg = f"Error response {exc.response.status_code} while requesting {exc.request.url!r}."
             raise JsonResponseError(
@@ -296,7 +300,10 @@ class AnthropicService:
             )
         except Exception as exc:
             error_msg = f"Unexpected error: {str(exc)}"
-            raise JsonResponseError(status_code=500, detail=error_msg)
+            raise JsonResponseError(
+                status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
+                detail=error_msg,
+            )
 
     async def anthropic_client_request(
         self, prompt: str, system_prompt: Optional[str] = None

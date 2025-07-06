@@ -306,7 +306,7 @@ You are not supposed to hold back on the implementation of the screen.
 </IMPLEMENTATION_REQUIREMENTS>
 
 <OUTPUT_FORMAT>
-You MUST return your response in this EXACT XML format with NO additional text, comments, or explanations:
+You MUST return your response in this EXACT XML format with NO additional text, comments, or explanations out of the <FILES> and </FILES> tags:
 
 <FILES>
 <FILE>

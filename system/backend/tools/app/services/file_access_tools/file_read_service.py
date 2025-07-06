@@ -11,15 +11,13 @@ from system.backend.tools.app.utils.path_validator import is_safe_path
 class FileReadService:
     def __init__(self, error_repo: ErrorRepo = Depends()):
         self.error_repo = error_repo
-        self.MAX_LINES = (
-            1500  # Maximum number of lines to return (matches default end_line)
-        )
+        self.MAX_LINES = 1700
 
     async def read_file(
         self,
         file_path: str,
         start_line: int = 0,
-        end_line: int = 1500,
+        end_line: int = 1700,
     ):
         try:
             # Check if path is safe
@@ -73,8 +71,6 @@ class FileReadService:
 
                 total_lines = len(lines)
 
-                # Handle line range specification
-                # Now that we have explicit defaults (0, 1500), we always have values
                 start = max(0, start_line)
                 end = min(total_lines, end_line)
 

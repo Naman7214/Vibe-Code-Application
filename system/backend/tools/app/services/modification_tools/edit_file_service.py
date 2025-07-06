@@ -40,7 +40,6 @@ class EditFileService:
         Args:
             target_file_path: Absolute path to the target file
             code_snippet: The code changes to apply
-            explanation: Explanation of what changes are being made
 
         Returns:
             Dictionary with success status and operation details
@@ -69,7 +68,6 @@ class EditFileService:
                 try:
                     Path(parent_dir).mkdir(parents=True, exist_ok=True)
                     directories_created = True
-                    print(f"Created parent directories: {parent_dir}")
                 except Exception as e:
                     await self.error_repo.insert_error(
                         Error(
@@ -91,9 +89,7 @@ class EditFileService:
                 try:
                     with open(target_file_path, "r", encoding="utf-8") as file:
                         original_content = file.read()
-                    print(
-                        f"Read existing file: {target_file_path} ({len(original_content)} characters)"
-                    )
+
                 except Exception as e:
                     await self.error_repo.insert_error(
                         Error(
@@ -121,10 +117,6 @@ class EditFileService:
                     raise ValueError(
                         "Failed to apply code changes - no merged code returned"
                     )
-
-                print(
-                    f"Successfully merged code using Relace API ({len(merged_code)} characters)"
-                )
 
                 # Log LLM usage
                 await self._log_llm_usage(
@@ -158,9 +150,6 @@ class EditFileService:
             try:
                 with open(target_file_path, "w", encoding="utf-8") as file:
                     file.write(merged_code)
-                print(
-                    f"Successfully wrote merged content to file: {target_file_path}"
-                )
             except Exception as e:
                 await self.error_repo.insert_error(
                     Error(
@@ -243,10 +232,6 @@ class EditFileService:
                 "Content-Type": "application/json",
             }
 
-            print(
-                f"Calling Relace API with payload: initial_code_length={len(initial_code)}, edit_snippet_length={len(edit_snippet)}"
-            )
-
             async with httpx.AsyncClient(
                 timeout=self.timeout, verify=False
             ) as client:
@@ -262,9 +247,6 @@ class EditFileService:
                 if not merged_code:
                     raise ValueError("No merged code returned from Relace API")
 
-                print(
-                    f"Relace API response: merged_code_length={len(merged_code)}, usage={usage_data}"
-                )
                 return merged_code, usage_data
 
         except httpx.RequestError as e:
@@ -292,7 +274,6 @@ class EditFileService:
 
         Args:
             tool_name: Name of the tool making the request
-            explanation: User-provided explanation
             file_path: Path to the file being edited
             usage_data: Usage statistics from Relace API
             file_existed: Whether the file existed before editing
@@ -316,9 +297,6 @@ class EditFileService:
             }
 
             await self.llm_usage_repo.add_llm_usage(llm_usage_entry)
-            print(
-                f"Logged LLM usage: {usage_data.get('total_tokens', 0)} total tokens"
-            )
 
         except Exception as e:
             # Log error but don't fail the main operation
@@ -329,4 +307,3 @@ class EditFileService:
                     timestamp=datetime.now().isoformat(),
                 )
             )
-            print(f"Warning: Failed to log LLM usage: {str(e)}")

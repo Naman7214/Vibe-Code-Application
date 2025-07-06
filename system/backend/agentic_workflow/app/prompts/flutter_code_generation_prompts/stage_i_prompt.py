@@ -126,7 +126,7 @@ NEVER assume property names - validate against actual Flutter API
 
 
 <OUTPUT_FORMAT>
-Generate your response in the following XML format ONLY. Do not include any explanations or additional text outside the XML:
+Generate your response in the following XML format ONLY. Do not include any explanations or additional text outside the <FILES> and </FILES> tags:
 
 <FILES>
 <FILE>

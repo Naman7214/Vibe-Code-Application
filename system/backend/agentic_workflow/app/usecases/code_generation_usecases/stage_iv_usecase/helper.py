@@ -365,25 +365,25 @@ Generated using heuristic analysis of pages directory structure
         return f"""REACT STAGE IV - ROUTES GENERATION SUMMARY
 =========================================
 
-📍 ROUTES CREATED:
+ROUTES CREATED:
 {chr(10).join(route_list)}
 
-🏗️ ARCHITECTURE:
+ARCHITECTURE:
 • Router: React Router v6 with BrowserRouter
 • Route Structure: <Routes> with <Route> elements
 • Import Pattern: ./pages/[page_name]
 • Navigation: Navigate programmatically with useNavigate()
 
-📊 SUMMARY:
+SUMMARY:
 • Total Routes: {len(pages)}
 • Page Components: {len(pages)}
 • Component Imports: {len(pages)} page imports
 • Home Page: {next((p['component_name'] for p in pages if p.get('is_home')), 'Not determined')}
 
-🚀 FEATURES:
+FEATURES:
 {chr(10).join(components_summary) if components_summary else '• No additional components detected'}
 
-🔍 ANALYSIS DETAILS:
+ANALYSIS DETAILS:
 • Pages Found: {analysis.get('pages_found', 0)}
 • Has Routing Structure: {analysis.get('has_routing_structure', False)}
 • Generation Method: Heuristic analysis of src/pages directory

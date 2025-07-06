@@ -77,7 +77,7 @@ Any additional keys and nested objects needed to fully specify the screen implem
 
 The structure should be flexible and adapted to each screen's specific needs while maintaining consistency in quality.
 
-Wrap your entire JSON response inside <OUTPUT> … </OUTPUT> XML tags.
+- Provide structured JSON object wrapped in <OUTPUT> </OUTPUT> tags only, with no other text or comments out of the <OUTPUT> tags
 Make sure to use proper escape characters for the new lines and other special characters such that it'll not cause any error in the upcoming parsing of the output.
 all reasoning/rationals/guidance should be under 2 sentences
 EXAMPLE OUTPUT STRUCTURE:
@@ -246,7 +246,7 @@ Generate a JSON object where each mobile screen name is a top-level key containi
 
 The structure should be flexible and adapted to each mobile screen's specific needs while maintaining consistency in mobile UX quality.
 
-Wrap your entire JSON response inside <OUTPUT> … </OUTPUT> XML tags.
+Provide structured JSON object wrapped in <OUTPUT> </OUTPUT> tags only, with no other text or comments out of the <OUTPUT> tags
 Make sure to use proper escape characters for the new lines and other special characters such that it'll not cause any error in the upcoming parsing of the output.
 all reasoning/rationals/guidance should be under 2 sentences
 EXAMPLE OUTPUT STRUCTURE:

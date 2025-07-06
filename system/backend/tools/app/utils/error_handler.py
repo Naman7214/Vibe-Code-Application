@@ -21,7 +21,7 @@ def handle_exceptions(func):
                 status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
                 content={
                     "data": {},
-                    "statuscode": 500,
+                    "statuscode": status.HTTP_500_INTERNAL_SERVER_ERROR,
                     "detail": "An internal server error occurred.",
                     "error": str(e),
                 },

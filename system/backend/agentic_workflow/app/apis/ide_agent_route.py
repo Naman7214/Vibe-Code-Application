@@ -6,11 +6,15 @@ from system.backend.agentic_workflow.app.controllers.ide_agent_controller import
 from system.backend.agentic_workflow.app.models.schemas.ide_agent_schema import (
     IDEAgentRequest,
 )
+from system.backend.agentic_workflow.app.utils.error_handler import (
+    handle_exceptions,
+)
 
 router = APIRouter()
 
 
 @router.post("/ide-agent")
+@handle_exceptions
 async def ide_agent(
     request: IDEAgentRequest,
     ide_agent_controller: IDEAgentController = Depends(),

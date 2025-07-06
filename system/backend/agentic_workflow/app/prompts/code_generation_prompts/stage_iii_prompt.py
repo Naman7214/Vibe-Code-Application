@@ -22,16 +22,14 @@ Previous stages have established:
 
 <INPUT_DATA>
 You will receive:
-1. **screen**: Detailed screen requirements and other screen specific component specifications
-2. **screen_navigation**: Screen-specific navigation context and routing information
-3. **package_data**: Project dependencies and configuration from package.json
-4. **global_scratchpad**: Design system and global component registry emphasize on that, from that you get the valuable context like what is done so far and how to use the global components and how to use the tailwind classes.
-5. **file_structure**: Current project organization and absolute file paths
+1. screen: Detailed screen requirements and other screen specific component specifications
+2. screen_navigation: Screen-specific navigation context and routing information
+3. package_data: Project dependencies and configuration from package.json
+4. global_scratchpad: Design system and global component registry emphasize on that, from that you get the valuable context like what is done so far and how to use the global components and how to use the tailwind classes.
+5. file_structure: Current project organization and absolute file paths
 
-<NOTES>
 - Implement code using the exact dependency versions specified in package.json.
 - Thoroughly understand the screen context before implementation.
-</NOTES>
 </INPUT_DATA>
 
 
@@ -319,26 +317,19 @@ pages/screen_name/
     src="https://www.google.com/maps?q={{lat}},{{lng}}&z=14&output=embed"
     className="rounded-md shadow-sm"
 />
+```
 - Ensure the map is responsive, using Tailwind classes (e.g., w-full h-64 md:h-96) to define dimensions.
 - Use mock coordinates (e.g., lat: 40.7128, lng: -74.0060 for New York) relevant to the screen’s context.
 </MAP_INTEGRATION>
 
-<NOTE>
 You are not supposed to hold back on the implementation of the screen.
-</NOTE>
 </IMPLEMENTATION_REQUIREMENTS>
 
 <OUTPUT_FORMAT>
 You MUST return your response in this EXACT XML format with NO additional text, comments, or explanations:
+Generate each file in the following XML format don't include any other text or comments out of the xml tags <FILES> and </FILES>:
 
 <FILES>
-<FILE>
-<FILE_PATH>{base_path}/codebase/src/pages/screen_name/index.jsx</FILE_PATH>
-<CODE_SNIPPET>
-// Main screen component code here
-</CODE_SNIPPET>
-</FILE>
-
 <FILE>
 <FILE_PATH>{base_path}/codebase/src/pages/screen_name/components/ComponentName.jsx</FILE_PATH>
 <CODE_SNIPPET>
@@ -349,6 +340,12 @@ You MUST return your response in this EXACT XML format with NO additional text, 
 .
 .
 .
+<FILE>
+<FILE_PATH>{base_path}/codebase/src/pages/screen_name/index.jsx</FILE_PATH>
+<CODE_SNIPPET>
+// Main screen component code here
+</CODE_SNIPPET>
+</FILE>
 
 <FILE>
 <FILE_PATH>{base_path}/scratchpads/screen_scratchpads/screen_name.txt</FILE_PATH>
@@ -385,7 +382,7 @@ For each screen, create a scratchpad entry that includes:
 - Navigation patterns: Record whether the screen uses routing, modals, or in-page interactions for different user actions
 </SCRATCHPAD_REQUIREMENTS>
 
-<FREQUENTLY_OCCURED_ERRORS>
+<FREQUENTLY_OCCURRED_ERRORS>
 <ARRAY_OBJECT_VALIDATION>
 - Ensure props expecting arrays receive actual arrays, not primitives.
 - Verify methods like .filter(), .map(), .reduce() are called on arrays.
@@ -409,46 +406,44 @@ For each screen, create a scratchpad entry that includes:
 
 <ERROR_PREVENTION_EXAMPLES>
 ```javascript
-// ❌ WRONG - Passing primitive when array expected
+// WRONG - Passing primitive when array expected
 const user = {{ notifications: 3 }};
 <Component notifications={{user.notifications}} />
 
-// ✅ CORRECT - Proper array structure
+// CORRECT - Proper array structure
 const notifications = [
     {{ id: 1, title: "...", message: "...", read: false }}  
 ];
 <Component notifications={{notifications}} />
 
-// ❌ WRONG - No safety check
+// WRONG - No safety check
 const count = notifications.filter(n => !n.read).length;
 
-// ✅ CORRECT - With safety check
+// CORRECT - With safety check
 const count = Array.isArray(notifications) 
     ? notifications.filter(n => !n.read).length 
     : 0;
 ```
-
-
 </ERROR_PREVENTION_EXAMPLES>
 
 <CODE_GENERATION_CHECKLIST>
 Before generating any component that handles data:
-- [ ] Are all array methods called on actual arrays?
-- [ ] Do mock data structures match component expectations?
-- [ ] Are prop types consistent between definition and usage?
-- [ ] Are default values provided for optional props?
-- [ ] Will the component handle empty/loading states gracefully?
-- [ ] Are data transformations type-safe?
-- [ ] Have you maintained consistent code quality and readability?
-- [ ] Have you followed the file structure and naming conventions?
-- [ ] Have you followed the implementation requirements?
-- [ ] Have you followed the scratchpad requirements?
-- [ ] Have you followed the frequently occuring errors?
-- [ ] Have you followed the code generation checklist?
-- [ ] Have you followed the output format?
+- Are all array methods called on actual arrays?
+- Do mock data structures match component expectations?
+- Are prop types consistent between definition and usage?
+- Are default values provided for optional props?
+- Will the component handle empty/loading states gracefully?
+- Are data transformations type-safe?
+- Have you maintained consistent code quality and readability?
+- Have you followed the file structure and naming conventions?
+- Have you followed the implementation requirements?
+- Have you followed the scratchpad requirements?
+- Have you followed the frequently occurring errors?
+- Have you followed the code generation checklist?
+- Have you followed the output format?
 </CODE_GENERATION_CHECKLIST>
 
-</FREQUENTLY_OCCURED_ERRORS>
+</FREQUENTLY_OCCURRED_ERRORS>
 
 Your generated code will be directly integrated into a React application, so it must be syntactically correct, properly formatted, and ready for immediate execution.
 Don't hold back give it your all to generate the fully error, run time issue free React code.

@@ -44,7 +44,7 @@ Create themes that feel:
 - file_name: tailwind.css
 - Always remember that tailwind.css is the `foundation` for a design theme of web application, an `implementation` of the tailwind.config.js.
 - Must include standard Tailwind imports: @tailwind base, @tailwind components, @tailwind utilities
-- priortize creating custom classes for the application requirements if the existing tailwind classes are not enough.
+- prioritize creating custom classes for the application requirements if the existing tailwind classes are not enough.
 - Keep the file lean by relying on tailwind.config.js for theme definitions.
 - Include modern design patterns like glassmorphism, subtle shadows, gradient backgrounds, and sophisticated hover states.
 - Use proper hex color values for all color scales
@@ -156,7 +156,7 @@ boxShadow: {
 </PROFESSIONAL_CSS_PATTERNS>
 
 <OUTPUT_FORMAT>
-Generate your response in the following XML format ONLY. Do not include any explanations or additional text outside the XML:
+Generate response in the following XML format don't include any other text or comments out of the xml tags <FILES> and </FILES>:
 
 <FILES>
 <FILE>

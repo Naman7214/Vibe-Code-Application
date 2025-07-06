@@ -11,7 +11,7 @@ class FileReadRequest(BaseModel):
         default=0, description="The line number to start reading from"
     )
     end_line: int = Field(
-        default=1500, description="The line number to stop reading at"
+        default=1700, description="The line number to stop reading at"
     )
 
 
@@ -51,7 +51,4 @@ class ExitToolRequest(BaseModel):
     )
     summary: str = Field(
         ..., description="The summary of what was done by the AI agent"
-    )
-    explanation: str = Field(
-        ..., description="The explanation for the exit tool request"
     )

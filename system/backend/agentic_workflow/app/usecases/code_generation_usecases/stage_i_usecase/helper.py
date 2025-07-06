@@ -13,7 +13,6 @@ from system.backend.agentic_workflow.app.utils.xml_parser import (
 
 class StageIHelper:
     def __init__(self):
-        # Set up a simple logger for code generation
         self.logger = logging.getLogger("code_generation_stage_i")
         if not self.logger.handlers:
             handler = logging.StreamHandler()

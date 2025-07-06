@@ -75,8 +75,8 @@ class FlutterStageIVUsecase:
                 )
             )
 
-            # Process screens in batches of 5
-            batch_size = 5
+            # Process screens in batches of 10
+            batch_size = 10
             all_results = {}
 
             for i in range(0, len(screen_names), batch_size):
@@ -164,14 +164,13 @@ class FlutterStageIVUsecase:
             }
 
             user_message_str = json.dumps(user_message, indent=None)
-            print("GOING TO SEND FLUTTER MESSAGE")
             # Make LLM call with Flutter-specific prompts
             response = await self.anthropic_service.generate_text(
                 prompt=user_message_str,
                 system_prompt=FLUTTER_SYSTEM_PROMPT,
                 provider="anthropic",
             )
-            print("FLUTTER MESSAGE SENT")
+
             # Extract text content
             content = response  # response is already the text content
 

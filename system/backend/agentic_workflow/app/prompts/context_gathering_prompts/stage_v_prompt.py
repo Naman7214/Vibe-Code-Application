@@ -39,23 +39,30 @@ Keep descriptions focused and actionable for code generation.
 
 <OUTPUT_STRUCTURE>
 Generate a JSON object with navigation data organized into clear sections:
-Your output must be wrapped in <OUTPUT> tags.
+Provide JSON object wrapped in <OUTPUT> </OUTPUT> tags only, with no other text or comments out of the <OUTPUT> tags
 The structure uses fixed keys (navigation_structure, global_navigation, screen_navigation, screen_name) but values inside can be any relevant sections that fit the project context.
 Make sure to add the proper escape characters for the new lines and other special characters such that it'll not cause any error in the upcoming parsing of the output.
 limit all fields text to 3-4 sentences
+
+<OUTPUT_STRUCTURE>
+Generate a JSON object with navigation data organized into clear sections:
+Your output must be wrapped in <OUTPUT> tags.
+The structure uses fixed keys (navigation_structure, global_navigation, screen_navigation, screen_name) but values inside can be any relevant sections that fit the project context.
+Make sure to add the proper escape characters for the new lines and other special characters such that it'll not cause any error in the upcoming parsing of the output.
+
 <OUTPUT>
 {
     "navigation_structure": {
         "global_navigation": {
-            "navigation_architecture": "Analyze how this navigation serves the specific app type and user needs. Include screen categorization and workflow analysis, Selected Pattern Name and Strategic justification for why this pattern fits the project needs, Navigation Hierarchy:\n- **[Item 1]**: [Purpose and user goal it serves]\n- **[Item 2]**: [Purpose and user goal it serves]\n\n, Explain how the navigation reflects user mental models and supports user workflows, Mobile and desktop navigation behavior with specific breakpoints and adaptations, Implementation Guidelines for Flutter specific guidance for component structure and state management",
+            "navigation_architecture": "Project Context Analysis: [Analyze how this navigation serves the specific app type and user needs. Include screen categorization and workflow analysis.]\n\nNavigation Pattern Selection: **[Selected Pattern Name]** - [Strategic justification for why this pattern fits the project needs.]\n\nNavigation Hierarchy:\n- **[Item 1]**: [Purpose and user goal it serves]\n- **[Item 2]**: [Purpose and user goal it serves]\n\nInformation Architecture Strategy: [Explain how the navigation reflects user mental models and supports user workflows.]\n\nResponsive Strategy: [Mobile and desktop navigation behavior with specific breakpoints and adaptations.]\n\nImplementation Guidelines: [React/Flutter specific guidance for component structure and state management.]",
             
             "component_coordination": "Component Necessity Framework: [Explain which components are essential and why.]\n\nEssential Navigation Components:\n\n**[ComponentName1]**:\n- Necessity: [Why this component is required]\n- Placement: [Where and how it's positioned]\n- Implementation: [Technical implementation details]\n- Responsive: [Cross-device behavior]\n\n**[ComponentName2]**:\n- Necessity: [Why this component is required]\n- Placement: [Where and how it's positioned] \n- Implementation: [Technical implementation details]\n- Responsive: [Cross-device behavior]\n\nComponent Integration Rules: [How components coordinate and communicate.]\n\nCode Architecture Reasoning: [State management patterns, component interfaces, and CSS positioning frameworks.]"
         },
         "screen_navigation": {
             "screen_name": {
-                "workflow_analysis": "Primary function and user goals for this screen, How this screen fits into overall user workflows, Specific navigation behaviors and interactions within this screen, Screen-specific components and their coordination with global navigation, Technical guidance for React implementation, Define specific scenarios when this screen should navigate to other screens. Include routing triggers, target screens, and data passing requirements avoid the screen to screen navigation unless it's necessary",
+                "workflow_analysis": "Screen Purpose Analysis: [Primary function and user goals for this screen.]\n\nUser Journey Integration: [How this screen fits into overall user workflows.]\n\nNavigation Patterns: [Specific navigation behaviors and interactions within this screen.]\n\nComponent Requirements: [Screen-specific components and their coordination with global navigation.]\n\nImplementation Notes: [Technical guidance for React/Flutter implementation.]\n\nRouting Specifications: [Define specific scenarios when this screen should navigate to other screens. Include routing triggers, target screens, and data passing requirements.]avoid the screen to screen navigation unless it's necessary",
                 
-                "interaction_design": "How users navigate within this screen, How users enter and exit this screen, Screen-level state coordination with global navigation, Cross-device interaction adaptations , Inclusive design requirements for this screen, Specific routing code patterns needed for this screen, including navigate() calls, route parameters, and state passing between screens."
+                "interaction_design": "Internal Navigation Strategy: [How users navigate within this screen.]\n\nTransition Patterns: [How users enter and exit this screen.]\n\nState Management: [Screen-level state coordination with global navigation.]\n\nResponsive Behavior: [Cross-device interaction adaptations.]\n\nAccessibility Considerations: [Inclusive design requirements for this screen.]\n\nNavigation Implementation: [Specific routing code patterns needed for this screen, including navigate() calls, route parameters, and state passing between screens.]"
             }
         }
     }
@@ -93,7 +100,7 @@ Make sure to use proper escape characters for the new lines and other special ch
 
 <OUTPUT_STRUCTURE>
 Generate a JSON object with navigation data organized into clear sections:
-Your output must be wrapped in <OUTPUT> tags.
+Provide JSON object wrapped in <OUTPUT> </OUTPUT> tags only, with no other text or comments out of the <OUTPUT> tags
 make sure to add the proper escape characters for the new lines and other special characters.
 The structure uses fixed keys (navigation_structure, global_navigation, screen_navigation, screen_name) but values inside can be any relevant sections that fit the project context.
 Make sure to add the proper escape characters for the new lines and other special characters such that it'll not cause any error in the upcoming parsing of the output.
@@ -163,18 +170,27 @@ Generate organized, professional mobile navigation descriptions with:
 1. Your pure focus is on the flutter app, Exclude out web, desktop, or non Flutter concerns
 2. make sure to use smooth transitions and offline capabilities
 3. Exclude authentication, role-based menus, live API data
+4. Use swipe for back and forward navigation, implement pull to refresh where needed
 4. Concise Mobile Explanations: Focused, specific guidance for mobile navigation without repetitive verbose text
 5. Strategic Mobile Justification: Explain WHY mobile navigation decisions were made considering platform conventions
 6. Flutter Technical Implementation: Specific Flutter guidance with concrete mobile implementation details
 7. Mobile User-Focused Analysis: How navigation serves mobile user goals and touch-based mental models
 8. For the screens to screen navigation make sure to refer to the screen name in this format only : '/exercise-library', '/workout-dashboard'
 Keep descriptions focused and actionable for Flutter mobile code generation.
+9. **Mobile Widget Details**: Structured analysis of necessity, placement, implementation, platform adaptivity, and touch interactions
 9. This is the modern era not the medieval so all the navigation decision should be according to modern navigation principles and not the medieval ones.
 </MOBILE_CONTENT_GUIDELINES>
 
+<MOBILE_ANALYSIS_FRAMEWORK>
+1. What mobile navigation patterns best serve each screen's purpose and mobile user needs across platforms?
+3. How does screen navigation support user workflows and conversion goals with touch interactions?
+4. What are the specific implementation requirements for Flutter cross-platform mobile development?
+5. How does each screen's navigation adapt between Material Design (Android) and Cupertino (iOS) patterns?
+</MOBILE_ANALYSIS_FRAMEWORK>
+
 <OUTPUT_STRUCTURE>
 Generate a JSON object with mobile screen navigation data organized into clear sections:
-Your output must be wrapped in <OUTPUT> tags.
+Provide JSON object wrapped in <OUTPUT> </OUTPUT> tags only, with no other text or comments out of the <OUTPUT> tags
 The structure uses fixed keys (screen_navigation, screen_name) with values containing relevant sections that fit the mobile project context.
 Make sure to add the proper escape characters for the new lines and other special characters such that it'll not cause any error in the upcoming parsing of the output.
 limit all fields text to 3-4 sentences, and the screen name key should be in the format of "screen_name" as it is from previous stage context.

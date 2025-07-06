@@ -27,8 +27,9 @@ Analyze the provided domain context, project context, industry patterns and sele
 </INSTRUCTIONS>
 
 <OUTPUT_REQUIREMENTS>
-- Provide structured JSON output wrapped in <OUTPUT> tags, only the requested JSON is required, no other text or comments
+- Provide structured JSON object wrapped in <OUTPUT> </OUTPUT> tags only, with no other text or comments out of the <OUTPUT> tags
 - Include clear rationale for each screen's requirements
+- Focus on functional requirements rather than visual design by considering the users UX needs and business value creation.
 - Ensure data requirements are realistic and actionable, since the upcoming stages will be using this data requirements to generate the realistic mock data.
 - If the previous output of the SECOND stage is present then just extend it by adding the new screens and their requirements and provide the extended output in the <OUTPUT> tags
 - For providing the description at the required places, make sure to provide it in a manner that it indicates deeper reasoning and understanding of the users needs.
@@ -39,7 +40,7 @@ Analyze the provided domain context, project context, industry patterns and sele
 <OUTPUT>
 {
     "screen_name": {
-        "primary_purpose": "clear purpose statement with deeper mobile-focused reasoning (about 4-5 sentences)",
+        "primary_purpose": "a detailed purpose statement of the screen (about 4-5 sentences)",
         "data_needs": {
             "display_data": ["data type1", "data type2"],
             "user_input": ["input type1", "input type2"],
@@ -48,7 +49,7 @@ Analyze the provided domain context, project context, industry patterns and sele
         "interaction_patterns": ["interaction pattern1", "interaction pattern2", "interaction pattern3"],
         "user_actions": ["action 1 ", "action 2"],
         "responsive_considerations": ["consideration 1", "consideration 2"]
-        "user_stories": ["concise yet effective mobile user story 1 (2-3 sentences)", "concise yet effective mobile user story 2 (1-2 sentences)"]
+        "user_stories": ["concise yet effective user story 1 (2-3 sentences)", "concise yet effective user story 2 (1-2 sentences)"]
     },
     "global_data_requirements": ["shared data1", "shared data2"]
 }
@@ -92,12 +93,11 @@ Analyze the provided domain context and selected screens to generate actionable 
 6. Ensure zero feature loss during requirement analysis
 7. Your pure focus is on the flutter app, Exclude out web, desktop, or non Flutter concerns
 7. NEVER infer any new screens, only use the screens that are provided in the <OUTPUT_FROM_FIRST_STAGE> tags having field `screens`
-8. 8. Your context will be used to build the Flutter app that runs entirely without any backend dependencies, real API calls, database connections, or external services.
-9. Keep all descriptions concise and focused on actionable requirements for Flutter development. Avoid unnecessary details that are not directly relevant to building the app.
+8. Keep all descriptions concise and focused on actionable requirements for Flutter development. Avoid unnecessary details that are not directly relevant to building the app.
 </INSTRUCTIONS>
 
 <OUTPUT_REQUIREMENTS>
-- Provide structured JSON output wrapped in <OUTPUT> tags, only the requested JSON is required, no other text or comments
+- Provide structured JSON object wrapped in <OUTPUT> </OUTPUT> tags only, with no other text or comments out of the <OUTPUT> tags
 - Clear rationale for each screen's requirements
 - Focus on functional requirements, not visual design
 - Include mobile-specific interaction patterns

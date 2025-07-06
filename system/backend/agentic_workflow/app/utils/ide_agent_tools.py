@@ -257,7 +257,6 @@ class IDEAgentTools:
             tool_input["file_path"] = (
                 f"artifacts/{session_id}/scratchpads/global_scratchpad.txt"
             )
-            tool_input["explanation"] = "IDE Agent task completion summary"
 
         try:
             endpoint_map = {
@@ -373,7 +372,6 @@ class IDEAgentTools:
             return {
                 "file_path": tool_input.get("file_path"),
                 "summary": tool_input.get("summary"),
-                "explanation": tool_input.get("explanation"),
             }
         else:
             # For most tools, the input can be passed directly

@@ -54,8 +54,6 @@ class FlutterContextGatheringUsecase:
                 status_code=status.HTTP_400_BAD_REQUEST,
             )
 
-        print("stage 1 completed")
-
         stage_ii_result = await self.stage_ii_usecase.execute(request)
         if not stage_ii_result["success"]:
             return JSONResponse(
@@ -67,8 +65,6 @@ class FlutterContextGatheringUsecase:
                 status_code=status.HTTP_400_BAD_REQUEST,
             )
 
-        print("stage 2 completed")
-
         stage_iii_result = await self.stage_iii_usecase.execute(request)
         if not stage_iii_result["success"]:
             return JSONResponse(
@@ -79,8 +75,6 @@ class FlutterContextGatheringUsecase:
                 },
                 status_code=status.HTTP_400_BAD_REQUEST,
             )
-
-        print("stage 3 completed")
 
         # Stage IV: Screen Detailed Planning (Flutter-specific)
         stage_iv_result = await self.stage_iv_usecase.execute(
@@ -96,8 +90,6 @@ class FlutterContextGatheringUsecase:
                 status_code=status.HTTP_400_BAD_REQUEST,
             )
 
-        print("stage 4 completed")
-
         # Stage V: Navigation & State (Flutter-specific)
         stage_v_result = await self.stage_v_usecase.execute(request)
         if not stage_v_result["success"]:
@@ -109,8 +101,6 @@ class FlutterContextGatheringUsecase:
                 },
                 status_code=status.HTTP_400_BAD_REQUEST,
             )
-
-        print("stage 5 completed")
 
         return JSONResponse(
             content={

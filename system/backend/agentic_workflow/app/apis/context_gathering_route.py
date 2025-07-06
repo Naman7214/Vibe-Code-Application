@@ -6,11 +6,15 @@ from system.backend.agentic_workflow.app.controllers.context_gathering_controlle
 from system.backend.agentic_workflow.app.models.schemas.context_gathering_schema import (
     ContextGatheringRequest,
 )
+from system.backend.agentic_workflow.app.utils.error_handler import (
+    handle_exceptions,
+)
 
 router = APIRouter()
 
 
 @router.post("/context-gathering")
+@handle_exceptions
 async def context_gathering(
     request: ContextGatheringRequest,
     context_gathering_controller: ContextGatheringController = Depends(),

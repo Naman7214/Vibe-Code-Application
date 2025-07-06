@@ -61,8 +61,6 @@ class GrepSearchUsecase:
         cmd.extend([query, search_path])
 
         try:
-            # Debug: Print the command being executed
-            print(f"Executing command: {' '.join(cmd)}")
 
             # Execute the command and capture output
             result = subprocess.run(
@@ -112,7 +110,6 @@ class GrepSearchUsecase:
                 "count": str(match_count),
                 "status": "success",
             }
-            print(f"{ans}")
             return {
                 "results": (
                     "\n".join(matches) if matches else "No matches found"
@@ -139,7 +136,6 @@ class GrepSearchUsecase:
                 "count": 0,
                 "status": "error",
             }
-            print(f"error: {error}")
             return {
                 "results": f"Error executing search: {str(e)}",
                 "count": 0,

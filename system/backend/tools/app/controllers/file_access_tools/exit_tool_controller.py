@@ -18,13 +18,13 @@ class ExitToolController:
         Execute the exit tool request to append AI agent summary to a text file.
 
         Args:
-            request: ExitToolRequest containing file_path, summary, and explanation
+            request: ExitToolRequest containing file_path, summary
 
         Returns:
             JSONResponse with operation results
         """
         response = await self.exit_tool_usecase.execute(
-            request.file_path, request.summary, request.explanation
+            request.file_path, request.summary
         )
 
         if response.get("success", False):
