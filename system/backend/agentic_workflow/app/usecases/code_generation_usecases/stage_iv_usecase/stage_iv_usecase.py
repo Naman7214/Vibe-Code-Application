@@ -104,7 +104,7 @@ class StageIVUsecase:
             )
 
             # Create context registry content
-            context_registry_content = self._generate_context_registry(analysis)
+            context_registry_content = self.helper.generate_context_registry(analysis)
 
             # Update file structure to reflect newly generated files
             await self.helper.update_file_structure(session_id, codebase_path)
@@ -218,62 +218,4 @@ class StageIVUsecase:
                 "error": str(e),
             }
 
-    def _generate_context_registry(self, analysis: Dict) -> str:
-        """
-        Generate context registry content based on routes analysis.
-        
-        Args:
-            analysis: Analysis results from the routes generator
-            
-        Returns:
-            Formatted context registry content
-        """
-        pages = analysis.get("pages", [])
-        components = analysis.get("components", {})
-        
-        # Build route list
-        route_list = []
-        for page in pages:
-            routes_str = ", ".join(page.get("routes", []))
-            route_list.append(
-                f"• {page['component_name']} → {routes_str} {'(HOME)' if page.get('is_home') else ''}"
-            )
-        
-        # Build components summary
-        components_summary = []
-        if components.get("scroll_to_top"):
-            components_summary.append("• ScrollToTop component")
-        if components.get("error_boundary"):
-            components_summary.append("• ErrorBoundary component")
-        if components.get("has_ui_components"):
-            components_summary.append("• UI components directory")
-        
-        return f"""REACT STAGE IV - ROUTES GENERATION SUMMARY
-=========================================
 
-📍 ROUTES CREATED:
-{chr(10).join(route_list)}
-
-🏗️ ARCHITECTURE:
-• Router: React Router v6 with BrowserRouter
-• Route Structure: <Routes> with <Route> elements
-• Import Pattern: ./pages/[page_name]
-• Navigation: Navigate programmatically with useNavigate()
-
-📊 SUMMARY:
-• Total Routes: {len(pages)}
-• Page Components: {len(pages)}
-• Component Imports: {len(pages)} page imports
-• Home Page: {next((p['component_name'] for p in pages if p.get('is_home')), 'Not determined')}
-
-🚀 FEATURES:
-{chr(10).join(components_summary) if components_summary else '• No additional components detected'}
-
-🔍 ANALYSIS DETAILS:
-• Pages Found: {analysis.get('pages_found', 0)}
-• Has Routing Structure: {analysis.get('has_routing_structure', False)}
-• Generation Method: Heuristic analysis of src/pages directory
-• Component Names: Extracted from directory names (converted to PascalCase)
-• Route Paths: Generated from directory names (converted to kebab-case)
-• Home Page Detection: Based on common naming patterns (main_menu, home, etc.)
-"""

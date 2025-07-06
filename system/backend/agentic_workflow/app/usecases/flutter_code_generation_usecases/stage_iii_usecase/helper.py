@@ -240,6 +240,62 @@ class FlutterStageIIIHelper:
             f"Updated global_scratchpad.txt with generated routes content at {flutter_scratchpad_path}"
         )
 
+    def generate_context_registry(self, analysis: Dict) -> str:
+        """
+        Generate context registry content based on routes analysis.
+        
+        Args:
+            analysis: Analysis results from the routes generator
+            
+        Returns:
+            Formatted context registry content
+        """
+        screens = analysis.get("screens", [])
+        initial_screen = analysis.get("initial_screen", {})
+        
+        # Build route list
+        route_list = []
+        for screen in screens:
+            route_list.append(
+                f"• {screen['route_constant']} → {screen['class_name']} (path: /{screen['route_path']})"
+            )
+        
+        return f"""FLUTTER STAGE III - ROUTES GENERATION SUMMARY
+=============================================
+
+📍 ROUTES CREATED:
+{chr(10).join(route_list)}
+
+🏗️ ARCHITECTURE:
+• Router: Traditional Flutter Navigator with named routes
+• Route Structure: Map<String, WidgetBuilder> routes
+• Import Pattern: ../presentation/[screen_name]/[screen_name].dart
+• Navigation: Navigator.pushNamed() approach
+
+📊 SUMMARY:
+• Total Routes: {len(screens)}
+• Screen Widgets: {len(screens)}
+• Route Constants: {len(screens)} static constants defined
+• Import Pattern: Consistent presentation layer imports
+• Initial Screen: {initial_screen.get('name', 'Not determined') if initial_screen else 'Not determined'}
+
+🚀 FEATURES:
+• Static route constants with kebab-case naming
+• Centralized route management with AppRoutes class
+• Traditional Flutter navigation patterns
+• Consistent screen import structure
+• TODO comments for extensibility
+• Heuristic analysis of presentation structure
+
+🔍 ANALYSIS DETAILS:
+• Screens Found: {analysis.get('screens_found', 0)}
+• Has Routing Structure: {analysis.get('has_routing_structure', False)}
+• Generation Method: Heuristic analysis of lib/presentation directory
+• Class Names: Extracted from actual screen files
+• Route Paths: Generated from directory names (snake_case → kebab-case)
+• Route Constants: Generated from directory names (snake_case → camelCase)
+"""
+
     def _get_timestamp(self) -> str:
         """Get current timestamp as string"""
         from datetime import datetime
