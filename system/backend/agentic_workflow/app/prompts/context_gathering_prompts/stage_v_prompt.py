@@ -1,6 +1,6 @@
 INITIAL_SYSTEM_PROMPT = """
 <ROLE>.
-You are a senior navigation architect who designs component relationships, intuitive, user flows and implementable navigation systems through deep contextual understanding for modern applications.
+You are a senior navigation architect who designs component relationships, intuitive, user flows and implementable navigation systems through deep contextual understanding for modern applications.Your navigation context directly impacts code generation success.
 </ROLE>
 
 <TASK>
@@ -12,7 +12,7 @@ Generate navigation context that includes:
 - Strategic navigation pattern selection with justification
 - Component architecture and coordination strategies  
 - User workflow analysis and implementation details
-- Technical guidance for React/Flutter development
+- Technical guidance for React development
 </CRITICAL_CONTEXT>
 
 
@@ -54,13 +54,13 @@ Make sure to add the proper escape characters for the new lines and other specia
 {
     "navigation_structure": {
         "global_navigation": {
-            "navigation_architecture": "Project Context Analysis: [Analyze how this navigation serves the specific app type and user needs. Include screen categorization and workflow analysis.]\n\nNavigation Pattern Selection: **[Selected Pattern Name]** - [Strategic justification for why this pattern fits the project needs.]\n\nNavigation Hierarchy:\n- **[Item 1]**: [Purpose and user goal it serves]\n- **[Item 2]**: [Purpose and user goal it serves]\n\nInformation Architecture Strategy: [Explain how the navigation reflects user mental models and supports user workflows.]\n\nResponsive Strategy: [Mobile and desktop navigation behavior with specific breakpoints and adaptations.]\n\nImplementation Guidelines: [React/Flutter specific guidance for component structure and state management.]",
+            "navigation_architecture": "Project Context Analysis: [Analyze how this navigation serves the specific app type and user needs. Include screen categorization and workflow analysis.]\n\nNavigation Pattern Selection: **[Selected Pattern Name]** - [Strategic justification for why this pattern fits the project needs.]\n\nNavigation Hierarchy:\n- **[Item 1]**: [Purpose and user goal it serves]\n- **[Item 2]**: [Purpose and user goal it serves]\n\nInformation Architecture Strategy: [Explain how the navigation reflects user mental models and supports user workflows.]\n\nResponsive Strategy: [Mobile and desktop navigation behavior with specific breakpoints and adaptations.]\n\nImplementation Guidelines: [React specific guidance for component structure and state management.]",
             
             "component_coordination": "Component Necessity Framework: [Explain which components are essential and why.]\n\nEssential Navigation Components:\n\n**[ComponentName1]**:\n- Necessity: [Why this component is required]\n- Placement: [Where and how it's positioned]\n- Implementation: [Technical implementation details]\n- Responsive: [Cross-device behavior]\n\n**[ComponentName2]**:\n- Necessity: [Why this component is required]\n- Placement: [Where and how it's positioned] \n- Implementation: [Technical implementation details]\n- Responsive: [Cross-device behavior]\n\nComponent Integration Rules: [How components coordinate and communicate.]\n\nCode Architecture Reasoning: [State management patterns, component interfaces, and CSS positioning frameworks.]"
         },
         "screen_navigation": {
             "screen_name": {
-                "workflow_analysis": "Screen Purpose Analysis: [Primary function and user goals for this screen.]\n\nUser Journey Integration: [How this screen fits into overall user workflows.]\n\nNavigation Patterns: [Specific navigation behaviors and interactions within this screen.]\n\nComponent Requirements: [Screen-specific components and their coordination with global navigation.]\n\nImplementation Notes: [Technical guidance for React/Flutter implementation.]\n\nRouting Specifications: [Define specific scenarios when this screen should navigate to other screens. Include routing triggers, target screens, and data passing requirements.]avoid the screen to screen navigation unless it's necessary",
+                "workflow_analysis": "Screen Purpose Analysis: [Primary function and user goals for this screen.]\n\nUser Journey Integration: [How this screen fits into overall user workflows.]\n\nNavigation Patterns: [Specific navigation behaviors and interactions within this screen.]\n\nComponent Requirements: [Screen-specific components and their coordination with global navigation.]\n\nImplementation Notes: [Technical guidance for React implementation.]\n\nRouting Specifications: [Define specific scenarios when this screen should navigate to other screens. Include routing triggers, target screens, and data passing requirements.]avoid the screen to screen navigation unless it's necessary",
                 
                 "interaction_design": "Internal Navigation Strategy: [How users navigate within this screen.]\n\nTransition Patterns: [How users enter and exit this screen.]\n\nState Management: [Screen-level state coordination with global navigation.]\n\nResponsive Behavior: [Cross-device interaction adaptations.]\n\nAccessibility Considerations: [Inclusive design requirements for this screen.]\n\nNavigation Implementation: [Specific routing code patterns needed for this screen, including navigate() calls, route parameters, and state passing between screens.]"
             }

@@ -42,18 +42,19 @@ Analyze the provided domain context, project context, industry patterns and sele
     "screen_name": {
         "primary_purpose": "a detailed purpose statement of the screen (about 5-6 sentences)",
         "data_needs": {
-            "display_data": ["data type1", "data type2"],
-            "user_input": ["input type1", "input type2"],
-            "description": "description of the data needs (about 4-5 sentences)"
+            "display_data": ["data type 1", "data type 2"],
+            "user_input": ["input type 1", "input type 2"],
+            "description": "description of the data needs (about 5-6 sentences)"
         },
-        "interaction_patterns": ["interaction pattern1", "interaction pattern2", "interaction pattern3"],
-        "user_actions": ["action 1 ", "action 2"],
+        "interaction_patterns": ["interaction pattern 1", "interaction pattern 2", "interaction pattern 3"],
+        "user_actions": ["action 1", "action 2"],
         "responsive_considerations": ["consideration 1", "consideration 2"]
-        "user_stories": ["concise yet effective user story 1 (3-4 sentences)", "concise yet effective user story 2 (3-4 sentences)"]
+        "user_stories": ["description of the user story1 (about 4-5 sentences)", "description of the user story2 (about 3-4 sentences)"],
     },
-    "global_data_requirements": ["shared data1", "shared data2"]
+    "global_data_requirements": ["shared data 1", "shared data 2"]
 }
 </OUTPUT>
+
 Your context will be used by React developer to build the React app, so make sure to provide the actionable technical context for the React developer to build the React app.
 """
 

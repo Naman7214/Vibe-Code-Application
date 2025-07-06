@@ -116,9 +116,9 @@ EXAMPLE OUTPUT STRUCTURE:
         ]
       }
     },
-    "interactions": "strategic guidance for the interactions through screen navigation",
-    "responsive": "strategic guidance for the responsive behavior of the screen and key areas to focus on"
-    "design": "strategic guidance for the design of the screen"
+    "interactions": "description of the interactions through screen navigation",
+    "responsive": "description of the the responsive behavior of the screen and key areas to focus on"
+    "design": "description of th the design of the screen"
   }
 }
 </OUTPUT>

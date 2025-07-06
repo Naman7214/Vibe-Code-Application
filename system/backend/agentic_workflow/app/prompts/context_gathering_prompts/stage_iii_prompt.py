@@ -49,7 +49,13 @@ Make sure to use proper escape characters for the new lines and other special ch
         "primary": "detailed reasoning behind choosing this color for the primary brand, including the psychological engagement principle and usability considerations",
         "secondary": "detailed reasoning behind choosing this color for the secondary brand, including how it complements the primary color.",
         "accent": "detailed reasoning behind choosing this color for the accent brand, including interaction feedback and web engagement patterns",
-        "neutral": "comprehensive rationale for neutral color strategy, including web readability, accessibility, and visual balance considerations",
+        "neutral":  {
+            "background": "description of the background color",
+            "surface": "description of the surface color",
+            "text_primary": "description of the primary text color",
+            "text_secondary": "description of the secondary text color",
+            "description": "description of the neutral colors and its psychological impact on the user"
+        },
         "semantic": {
             "success": "reasoning for success color approach, including web feedback patterns and positive reinforcement psychology",
             "warning": "reasoning for warning color approach, including web attention-grabbing and caution communication",
@@ -71,6 +77,12 @@ Make sure to use proper escape characters for the new lines and other special ch
         "primary_mood": "web focused mood description (about 2-3 sentences)",
         "style_direction": ["web style1", "web style2"],
         "personality_traits": ["web trait1", "web trait2"
+    },
+    "accessibility_considerations": ["consideration 1", "consideration 2"],
+    "brand_elements": {
+        "logo_treatment": "web logo treatment description (about 2-3 sentences)",
+        "imagery_style": "web imagery style description (about 2-3 sentences)",
+        "iconography_style": "web iconography style description (about 2-3 sentences)"
     }
 }
 </OUTPUT>
@@ -115,6 +127,7 @@ Analyze the screen requirements to identify and categorize components into globa
 7. Analyze reusability potential and establish component variants
 8. Define component relationships, responsibilities and data flow
 9. Consider component composition and modularity
+10. Focus on functional component architecture rather than visual details by considering the users UX and UI needs.
 10. If required then suggest Grid System, Lists & Item Components, Table Components,Card Components ,Modal & Dialog Components, Overlays, etc. for the screen specific components.
 11. BE SELECTIVE: Only identify components that are truly essential and provide clear value. Avoid over-engineering the component system.
 12. GLOBAL COMPONENTS: Only promote to global if it provides significant architectural value (e.g., Header, Footer, Button, Modal)
@@ -238,7 +251,13 @@ all reasoning and rationals should be under 2 sentences
         "primary": "detailed reasoning for primary color choice, including psychological impact and mobile usability considerations",
         "secondary": "detailed reasoning for secondary color choice, including how it complements primary and supports mobile hierarchy",
         "accent": "detailed reasoning for accent color choice, including touch interaction feedback and mobile engagement principles",
-        "neutral": "comprehensive rationale for neutral color strategy, including mobile readability, accessibility, and visual balance considerations",
+        "neutral": {
+            "background": "description of the background color",
+            "surface": "description of the surface color",
+            "text_primary": "description of the primary text color",
+            "text_secondary": "description of the secondary text color",
+            "description": "description of the neutral colors and its psychological impact on the user"
+        },
         "semantic": {
             "success": "reasoning for success color approach, including mobile feedback patterns and positive reinforcement psychology",
             "warning": "reasoning for warning color approach, including mobile attention-grabbing and caution communication",
