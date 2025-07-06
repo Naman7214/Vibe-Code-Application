@@ -57,10 +57,10 @@ class FlutterStageIUsecase:
             # Format user prompt with context
             user_prompt = USER_PROMPT.format(
                 stage_iii_a_context=json.dumps(
-                    context_data["stage_iii_a"], indent=2
+                    context_data["stage_iii_a"], indent=None
                 ),
                 stage_iv_a_context=json.dumps(
-                    context_data["stage_iv_a"], indent=2
+                    context_data["stage_iv_a"], indent=None
                 ),
                 pubspec_yaml=context_data["pubspec_yaml"],
                 codebase_path=context_data["codebase_path"],

@@ -98,8 +98,8 @@ class StageVUsecase:
 
         # Create user prompt with context and screens
         user_prompt = INITIAL_USER_PROMPT.format(
-            context=json.dumps(stage_iv_data, indent=1),
-            screens=json.dumps(request.dict_of_screens, indent=1),
+            context=json.dumps(stage_iv_data, indent=None),
+            screens=json.dumps(request.dict_of_screens, indent=None),
         )
 
         # Call LLM service
@@ -144,8 +144,8 @@ class StageVUsecase:
 
         # Create user prompt for follow-up
         user_prompt = FOLLOWUP_USER_PROMPT.format(
-            global_navigation=json.dumps(existing_global_nav, indent=1),
-            new_screens=json.dumps(request.dict_of_screens, indent=1),
+            global_navigation=json.dumps(existing_global_nav, indent=None),
+            new_screens=json.dumps(request.dict_of_screens, indent=None),
         )
 
         # Call LLM service

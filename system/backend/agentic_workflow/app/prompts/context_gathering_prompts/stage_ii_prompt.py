@@ -19,15 +19,16 @@ Analyze the provided domain context, project context, industry patterns and sele
 2. Always think from user centric perspective.
 2. Determine data requirements for each screen (what data it needs to display/collect)
 3. Map interaction patterns and user actions available on each screen
-4. Consider responsive design needs and mobile-first approach
+4. Consider responsive design needs and Web/Desktop first approach
 6. Ensure all features specified in the user query are included in the requirements
 6. NEVER infer any new screens, only use the screens that are provided in the <OUTPUT_FROM_FIRST_STAGE> tags having field `screens`
+7. Ensure zero feature loss during requirement analysis
+8. Your context will be used to build the React app that runs entirely without any backend dependencies, real API calls, database connections, or external services.
 </INSTRUCTIONS>
 
 <OUTPUT_REQUIREMENTS>
 - Provide structured JSON output wrapped in <OUTPUT> tags, only the requested JSON is required, no other text or comments
 - Include clear rationale for each screen's requirements
-- Focus on functional requirements rather than visual design by considering the users UX needs and business value creation.
 - Ensure data requirements are realistic and actionable, since the upcoming stages will be using this data requirements to generate the realistic mock data.
 - If the previous output of the SECOND stage is present then just extend it by adding the new screens and their requirements and provide the extended output in the <OUTPUT> tags
 - For providing the description at the required places, make sure to provide it in a manner that it indicates deeper reasoning and understanding of the users needs.
@@ -38,21 +39,23 @@ Analyze the provided domain context, project context, industry patterns and sele
 <OUTPUT>
 {
     "screen_name": {
-        "primary_purpose": "a detailed purpose statement of the screen (about 5-6 sentences)",
+        "primary_purpose": "clear purpose statement with deeper mobile-focused reasoning (about 4-5 sentences)",
         "data_needs": {
-            "display_data": ["data_type1", "data_type2"],
-            "user_input": ["input_type1", "input_type2"],
-            "description": "description of the data needs (about 5-6 sentences)"
+            "display_data": ["data type1", "data type2"],
+            "user_input": ["input type1", "input type2"],
+            "description": "description of the data needs (about 3-4 sentences)"
         },
-        "interaction_patterns": ["interaction_pattern1", "interaction_pattern2", "interaction_pattern3"],
-        "user_actions": ["action1", "action2"],
-        "responsive_considerations": ["consideration1", "consideration2"]
-        "user_stories": ["description of the user story1 (about 4-5 sentences)", "description of the user story2 (about 3-4 sentences)"],
+        "interaction_patterns": ["interaction pattern1", "interaction pattern2", "interaction pattern3"],
+        "user_actions": ["action 1 ", "action 2"],
+        "responsive_considerations": ["consideration 1", "consideration 2"]
+        "user_stories": ["concise yet effective mobile user story 1 (2-3 sentences)", "concise yet effective mobile user story 2 (1-2 sentences)"]
     },
-    "global_data_requirements": ["shared_data1", "shared_data2"]
+    "global_data_requirements": ["shared data1", "shared data2"]
 }
 </OUTPUT>
+Your context will be used by React developer to build the React app, so make sure to provide the actionable technical context for the React developer to build the React app.
 """
+
 
 USER_PROMPT = """
 <OUTPUT_FROM_FIRST_STAGE>
@@ -91,7 +94,7 @@ Analyze the provided domain context and selected screens to generate actionable 
 6. Ensure zero feature loss during requirement analysis
 7. Your pure focus is on the flutter app, Exclude out web, desktop, or non Flutter concerns
 7. NEVER infer any new screens, only use the screens that are provided in the <OUTPUT_FROM_FIRST_STAGE> tags having field `screens`
-8. Your context will be used to build the flutter app that runs entirely without any backend dependencies. Use mock data, hardcoded values, and simulated responses instead of real API calls, database connections, or external services. For features requiring permissions (camera, location, etc.) or third-party integrations (payments, GPS, social login), create mock implementations that demonstrate the UI/UX flow without actual functionality. Focus on creating a complete, interactive frontend experience that showcases the app's design and user interface rather than implementing real-world integrations.
+8. 8. Your context will be used to build the Flutter app that runs entirely without any backend dependencies, real API calls, database connections, or external services.
 9. Keep all descriptions concise and focused on actionable requirements for Flutter development. Avoid unnecessary details that are not directly relevant to building the app.
 </INSTRUCTIONS>
 
@@ -116,11 +119,11 @@ Make sure to use proper escape characters for the new lines and other special ch
             "user_input": ["none"],
             "offline_data": ["cached activity data", "stored notifications"]  // Data to be stored locally
         }
-        "interaction_patterns": ["mobile_pattern1", "gesture_pattern2", "platform_specific_pattern3"],
-        "user_actions": ["mobile_action1", "gesture_action2", "navigation_action3"],
+        "interaction_patterns": ["mobile pattern1", "gesture pattern2", "platform specific pattern3"],
+        "user_actions": ["mobile action1", "gesture action2", "navigation action3"],
         "user_stories": ["concise yet effective mobile user story 1 (2-3 sentences)", "concise yet effective mobile user story 2 (1-2 sentences)"]
     },
-    "global_data_requirements": ["shared_mobile_data1", "cached_data2", "sync_data3"]
+    "global_data_requirements": ["shared mobile data1", "cached mobile data2", "sync mobile data3"]
 }
 </OUTPUT>
 Your context will be used by flutter developer to build the flutter app, so make sure to provide the actionable technical context for the flutter developer to build the flutter app.

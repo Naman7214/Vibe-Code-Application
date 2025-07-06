@@ -85,8 +85,8 @@ class FlutterHelper:
             second_stage_output = json.load(f)
 
         user_prompt = FLUTTER_USER_PROMPT_A.format(
-            first_stage_output=json.dumps(first_stage_output, indent=2),
-            second_stage_output=json.dumps(second_stage_output, indent=2),
+            first_stage_output=json.dumps(first_stage_output, indent=None),
+            second_stage_output=json.dumps(second_stage_output, indent=None),
         )
         response = await self.anthropic_service.generate_text(
             system_prompt=FLUTTER_SYSTEM_PROMPT_A,
@@ -132,7 +132,7 @@ class FlutterHelper:
                 previous_output = json.load(f)
 
         user_prompt = FLUTTER_USER_PROMPT_B.format(
-            second_stage_output=json.dumps(second_stage_output, indent=2),
+            second_stage_output=json.dumps(second_stage_output, indent=None),
             previous_output=previous_output,
         )
         response = await self.anthropic_service.generate_text(

@@ -163,7 +163,7 @@ class FlutterStageIVUsecase:
                 },
             }
 
-            user_message_str = json.dumps(user_message, indent=2)
+            user_message_str = json.dumps(user_message, indent=None)
             print("GOING TO SEND FLUTTER MESSAGE")
             # Make LLM call with Flutter-specific prompts
             response = await self.anthropic_service.generate_text(

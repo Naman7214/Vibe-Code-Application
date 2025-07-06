@@ -153,35 +153,32 @@ class RoutesGenerator:
     def _select_home_page_robust(self, pages: List[Dict]) -> Optional[Dict]:
         """
         Robustly select the home page with fallback logic.
-        
+
         Priority order:
         1. Pages matching home indicators
         2. Fallback to first page alphabetically
-        
+
         Args:
             pages: List of page dictionaries
-            
+
         Returns:
             Selected home page or None if no pages
         """
         if not pages:
             return None
-            
+
         # Priority 1: Look for pages matching home indicators
-        home_page = next(
-            (p for p in pages if p["is_home"]),
-            None
-        )
-        
+        home_page = next((p for p in pages if p["is_home"]), None)
+
         if home_page:
             return home_page
-        
+
         # Priority 2: Fallback to first page alphabetically
         fallback_page = sorted(pages, key=lambda x: x["name"])[0]
-        
+
         # Mark fallback page as home
         fallback_page["is_home"] = True
-        
+
         return fallback_page
 
     def analyze_components_structure(self) -> Dict:

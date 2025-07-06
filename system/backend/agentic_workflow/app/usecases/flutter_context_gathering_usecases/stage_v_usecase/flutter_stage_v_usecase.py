@@ -96,8 +96,8 @@ class FlutterStageVUsecase:
 
         # Create user prompt with context and screens
         user_prompt = FLUTTER_USER_PROMPT.format(
-            context=json.dumps(stage_iv_data, indent=1),
-            screens=json.dumps(request.dict_of_screens, indent=1),
+            context=json.dumps(stage_iv_data, indent=None),
+            screens=json.dumps(request.dict_of_screens, indent=None),
         )
 
         # Call LLM service with Flutter-specific prompts

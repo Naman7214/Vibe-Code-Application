@@ -86,7 +86,7 @@ class FlutterStageIIIHelper:
         import json
 
         context_data["screen_scratchpads"] = json.dumps(
-            screen_scratchpads, indent=2
+            screen_scratchpads, indent=None
         )
 
         # Read existing app_routes.dart if this is a follow-up

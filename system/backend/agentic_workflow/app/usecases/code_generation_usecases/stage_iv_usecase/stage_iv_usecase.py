@@ -129,7 +129,7 @@ class StageIVUsecase:
 
             # Debug: Try JSON serialization before using it in prompt
             try:
-                screen_descriptions_json = json.dumps(screen_dict, indent=2)
+                screen_descriptions_json = json.dumps(screen_dict, indent=None)
                 self.logger.info("JSON serialization of screen_dict successful")
             except TypeError as e:
                 self.logger.error(f"JSON serialization failed: {e}")
@@ -143,7 +143,7 @@ class StageIVUsecase:
                     else:
                         safe_screen_dict[key] = str(value)
                 screen_descriptions_json = json.dumps(
-                    safe_screen_dict, indent=2
+                    safe_screen_dict, indent=None
                 )
                 self.logger.info(
                     "Using safe version of screen_dict for JSON serialization"

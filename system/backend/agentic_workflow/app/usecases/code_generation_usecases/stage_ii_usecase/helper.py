@@ -212,12 +212,12 @@ class StageIIHelper:
 
         # Format the user prompt with cluster-specific context data
         user_prompt = USER_PROMPT.format(
-            global_components=json.dumps(cluster_context, indent=2),
+            global_components=json.dumps(cluster_context, indent=None),
             navigation_structure=json.dumps(
-                context_data["navigation_structure"], indent=2
+                context_data["navigation_structure"], indent=None
             ),
             scratchpads_content=json.dumps(
-                context_data["scratchpads_content"], indent=2
+                context_data["scratchpads_content"], indent=None
             ),
             file_structure=context_data["file_structure"],
         )
@@ -286,13 +286,13 @@ class StageIIHelper:
         # Format the user prompt with context data
         user_prompt = USER_PROMPT.format(
             global_components=json.dumps(
-                context_data["global_components"], indent=2
+                context_data["global_components"], indent=None
             ),
             navigation_structure=json.dumps(
-                context_data["navigation_structure"], indent=2
+                context_data["navigation_structure"], indent=None
             ),
             scratchpads_content=json.dumps(
-                context_data["scratchpads_content"], indent=2
+                context_data["scratchpads_content"], indent=None
             ),
             file_structure=context_data["file_structure"],
         )

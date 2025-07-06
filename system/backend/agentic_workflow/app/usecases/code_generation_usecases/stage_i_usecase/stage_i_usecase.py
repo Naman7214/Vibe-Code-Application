@@ -57,13 +57,15 @@ class StageIUsecase:
             # Format user prompt with context
             user_prompt = USER_PROMPT.format(
                 stage_iii_a_context=json.dumps(
-                    context_data["stage_iii_a"], indent=2
+                    context_data["stage_iii_a"], indent=None
                 ),
                 stage_iv_a_context=json.dumps(
-                    context_data["stage_iv_a"], indent=2
+                    context_data["stage_iv_a"], indent=None
                 ),
                 postcss_config=context_data["postcss_config"],
-                package_json=json.dumps(context_data["package_json"], indent=2),
+                package_json=json.dumps(
+                    context_data["package_json"], indent=None
+                ),
                 codebase_path=context_data["codebase_path"],
             )
 

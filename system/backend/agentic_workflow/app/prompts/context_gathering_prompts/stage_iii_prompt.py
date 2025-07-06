@@ -5,7 +5,7 @@ You are working in the THIRD stage of the context gathering process for web appl
 </ROLE>
 
 <TASK>
-Create a global design theme strategy that will serve as the foundation reference for generating detailed screen-specific designs across the entire application.
+Create a global design theme strategy that will serve as the foundation reference for generating detailed screen-specific designs across the entire application. it should be psychologically engaging while also being functional and practical.
 </TASK>
 
 <INPUT_CONTEXT>
@@ -29,9 +29,6 @@ Create a global design theme strategy that will serve as the foundation referenc
 13. Keep in mind the React implementation implications for each design decision.
 14. Balances innovation/creativity with usability and practicality
 15. This is the modern era not the medieval so all the design decision should be according to modern design principles and not the medieval ones.
-
-
-🚨 CRITICAL: ALWAYS include semantic colors (success, warning, error, info) in the color palette even if not explicitly mentioned in the domain context. These are essential for UI components and will cause errors if missing.
 </INSTRUCTIONS>
 
 <OUTPUT_REQUIREMENTS>
@@ -45,56 +42,42 @@ Create a global design theme strategy that will serve as the foundation referenc
 </OUTPUT_REQUIREMENTS>
 
 Make sure to use proper escape characters for the new lines and other special characters such that it'll not cause any error in the upcoming parsing of the output.
-
+all reasoning and rationals should be under 2 sentences
 <OUTPUT>
 {
     "design_psychology": "brief statement of overall design approach (about 4-5 sentences) with core psychological engagement principle such that it hooks the user and makes them want to use the application",
     "color_palette": {
-        "primary": {"description": "detailed reasoning behind choosing this color for the primary brand, including the psychological engagement principle and usability considerations"},
-        "secondary": {"description": "detailed reasoning behind choosing this color for the secondary brand, including how it complements the primary color and support mobile hierarchy"},
-        "accent": {"description": "detailed reasoning behind choosing this color for the accent brand, including interaction feedback and web engangement patterns"},
-        "neutral": {
-            "background": "description of the background color",
-            "surface": "description of the surface color",
-            "text_primary": "description of the primary text color",
-            "text_secondary": "description of the secondary text color",
-            "description": "description of the neutral colors and its psychological impact on the user"
-        },
+        "primary": "detailed reasoning behind choosing this color for the primary brand, including the psychological engagement principle and usability considerations",
+        "secondary": "detailed reasoning behind choosing this color for the secondary brand, including how it complements the primary color and support mobile hierarchy",
+        "accent": "detailed reasoning behind choosing this color for the accent brand, including interaction feedback and web engagement patterns",
+        "neutral": "comprehensive rationale for neutral color strategy, including web readability, accessibility, and visual balance considerations",
         "semantic": {
-            "success": {"description": "color for success states and positive feedback, including web feedback patterns and positive reinforcement psychology"},
-            "warning": {"description": "color for warning states and cautions, including web attention-grabbing and caution communication psychology"},
-            "error": {"description": "color for error states and negative feedback, including web error visibility and user guidance principles"},
-            "info": {"description": "color for informational states and neutral feedback, including web information communication psychology"}
+            "success": "reasoning for success color approach, including web feedback patterns and positive reinforcement psychology",
+            "warning": "reasoning for warning color approach, including web attention-grabbing and caution communication",
+            "error": "reasoning for error color approach, including web error visibility and user guidance principles",
+            "info": "reasoning for informational color approach, including web information hierarchy and neutral communication"
         }
     },
     "typography": {
-        "heading_font": {"approach": "reasoning for heading font selection, including web readability, brand alignment, and cross-platform compatibility"},
-        "body_font": {"approach": "reasoning for body font selection, including web application reading comfort, accessibility, and performance considerations"},
+        "heading_font": "reasoning for heading font selection, including web readability, brand alignment, and cross-platform compatibility",
+        "body_font": "reasoning for body font selection, including web application reading comfort, accessibility, and performance considerations",
         "hierarchy": {
-            "h1": {"approach": "sizing and weight strategy for primary headings, including web prominence and visual hierarchy principles"},
-            "h2": {"approach": "sizing and weight strategy for secondary headings, including web scanning patterns and information architecture"},
-            "body": {"approach": "sizing and weight strategy for body text, including web reading comfort and accessibility standards"},
-            "caption": {"approach": "sizing and weight strategy for captions, including web space efficiency and secondary information hierarchy"}
+            "h1": "sizing and weight strategy for primary headings, including web prominence and visual hierarchy principles",
+            "h2": "sizing and weight strategy for secondary headings, including web scanning patterns and information architecture",
+            "body": "sizing and weight strategy for body text, including web reading comfort and accessibility standards",
+            "caption": "sizing and weight strategy for captions, including web space efficiency and secondary information hierarchy"
         }
     },
     "visual_mood": {
-        "primary_mood": "mood description (about 2-3 sentences)",
-        "style_direction": ["web_style1", "web_style2"],
-        "personality_traits": ["web_trait1", "web_trait2"]
-    },
-    "responsive_approach": {
-        "breakpoints": {"mobile": "value", "tablet": "value", "desktop": "value"}
-    },
-    "accessibility_considerations": ["consideration1", "consideration2"],
-    "brand_elements": {
-        "logo_treatment": "web logo treatment description (about 2-3 sentences)",
-        "imagery_style": "web imagery style description (about 2-3 sentences)",
-        "iconography_style": "web iconography style description (about 2-3 sentences)"
+        "primary_mood": "web focused mood description (about 1-2 sentences)",
+        "style_direction": ["web style1", "web style2"],
+        "personality_traits": ["web trait1", "web trait2"
     }
 }
 </OUTPUT>
-Your output is used by the react developer to build the design system. So make sure to provide the output in a manner that it'll be easy to understand and use by the react developer.
+Your strategic design guidance is used by the React developer to build the web design system. Provide comprehensive reasoning and principles that enable flexible and intelligent implementation.
 """
+
 
 USER_PROMPT_A = """
 <OUTPUT_FROM_FIRST_STAGE>
@@ -126,17 +109,15 @@ Analyze the screen requirements to identify and categorize components into globa
 </INPUT_CONTEXT>
 
 <INSTRUCTIONS>
-1. Identify minimum global components that will be used across multiple screens
+1. Identify bare minimam global components that will be used across multiple screens
 2. Only suggest components that work with mock or static data. Exclude authentication, role-based menus, live API data, or session management. Focus on UI components that demonstrate navigation patterns, visual states, and interactions using mock data only.
 2. Group global components into logical clusters based on their functionality (e.g., "navigation", "ui_elements", "data_display", "forms", "auth", "layout", etc.)
 3. Create a "miscellaneous" cluster for components that don't fit into specific groups
 4. For the global components make sure to give the comprehensive details.
 5. Determine screen-specific components that serve unique purposes
 6. Analyze reusability potential and establish component variants
-7. Define component relationships
-8. Specify component responsibilities and data flow
+7. Define component relationships, responsibilities and data flow
 9. Consider component composition and modularity
-10. Focus on functional component architecture rather than visual details by considering the users UX and UI needs.
 11. If required then suggest Grid System, Lists & Item Components, Table Components,Card Components ,Modal & Dialog Components, Overlays, etc. for the screen specific components.
 12. BE SELECTIVE: Only identify components that are truly essential and provide clear value. Avoid over-engineering the component system.
 13. GLOBAL COMPONENTS: Only promote to global if it provides significant architectural value (e.g., Header, Footer, Button, Modal)
@@ -147,8 +128,6 @@ Analyze the screen requirements to identify and categorize components into globa
 <OUTPUT_REQUIREMENTS>
 - Provide structured JSON output wrapped in <OUTPUT> tags
 - Clearly separate global vs screen-specific components
-- Group global components into logical clusters for better organization and parallel generation
-- Include component responsibilities and usage contexts
 - If the previous output of the THIRD stage is present then just extend it by adding the new screens and their requirements and provide the extended output in the <OUTPUT> tags
 - For providing the description at the required places, make sure to provide it in a manner that it indicates deeper reasoning and understanding of the users needs.
 </OUTPUT_REQUIREMENTS>
@@ -163,7 +142,7 @@ Make sure to use proper escape characters for the new lines and other special ch
             "components": {
                 "component_name": {
                     "used_by_screens": ["screen1", "screen2"],
-                    "responsibilities": ["responsibility1", "responsibility2"],
+                    "responsibilities": ["responsibility 1", "responsibility 2"],
                     "description": "component purpose, functionality, and usage context (about 2-3 sentences)"
                 }
             }
@@ -173,7 +152,7 @@ Make sure to use proper escape characters for the new lines and other special ch
             "components": {
                 "component_name": {
                     "used_by_screens": ["screen1", "screen2"],
-                    "responsibilities": ["responsibility1", "responsibility2"],
+                    "responsibilities": ["responsibility 1", "responsibility 2"],
                     "description": "component purpose, functionality, and usage context (about 2-3 sentences)"
                 }
             }
@@ -184,7 +163,7 @@ Make sure to use proper escape characters for the new lines and other special ch
             "component_name": {
                 "component_type": "StatefulComponent | StatelessComponent",
                 "section_mapping": "which key section it serves",
-                "responsibilities": ["web_responsibility1", "web_responsibility2"],
+                "responsibilities": ["web_responsibility 1", "web_responsibility 2"],
                 "description": "component purpose, functionality, and usage context including web interactions (about 2-3 sentences)"
                 "state_management": "description of state management needs if StatefulComponent"
             }
@@ -282,8 +261,8 @@ all reasoning and rationals should be under 2 sentences
     },
     "visual_mood": {
         "primary_mood": "mobile-focused mood description (about 1-2 sentences)",
-        "style_direction": ["mobile_style1", "mobile_style2"],
-        "personality_traits": ["mobile_trait1", "mobile_trait2"]
+        "style_direction": ["mobile style1", "mobile style2"],
+        "personality_traits": ["mobile trait1", "mobile trait2"]
     }
 }
 </OUTPUT>
@@ -367,7 +346,7 @@ Make sure to use proper escape characters for the new lines and other special ch
             "widget_name": {
                 "type": "StatefulWidget | StatelessWidget",
                 "description": "mobile widget purpose, functionality, and usage context including mobile interactions (about 2 sentences)",
-                "responsibilities": ["mobile_responsibility1", "mobile_responsibility2"],
+                "responsibilities": ["mobile responsibility1", "mobile responsibility2"],
                 "state_management": "description of state management needs if StatefulWidget"
             }
         }

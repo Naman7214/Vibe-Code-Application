@@ -54,8 +54,8 @@ class Helper:
             project_context["screens"] = request.dict_of_screens
 
         user_prompt = USER_PROMPT.format(
-            first_stage_output=json.dumps(project_context, indent=2),
-            previous_output=json.dumps(previous_output, indent=2),
+            first_stage_output=json.dumps(project_context, indent=None),
+            previous_output=json.dumps(previous_output, indent=None),
         )
         response = await self.anthropic_service.generate_text(
             system_prompt=SYSTEM_PROMPT,

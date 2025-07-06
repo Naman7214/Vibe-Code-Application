@@ -57,8 +57,8 @@ class FlutterHelper:
 
         # Use Flutter-specific prompts
         user_prompt = FLUTTER_USER_PROMPT.format(
-            first_stage_output=json.dumps(project_context, indent=2),
-            previous_output=json.dumps(previous_output, indent=2),
+            first_stage_output=json.dumps(project_context, indent=None),
+            previous_output=json.dumps(previous_output, indent=None),
         )
         response = await self.anthropic_service.generate_text(
             system_prompt=FLUTTER_SYSTEM_PROMPT,
