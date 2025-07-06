@@ -256,6 +256,8 @@ pages/screen_name/
 - Each user-accessible component must include realistic sample data that will be displayed.
 - Create depth and richness in functionality that showcases why React is necessary over static HTML
 - Implement detailed responsive behavior for all screen sizes
+- Use progressive disclosure and smart spacing to fit content in constrained layouts
+- Ensure interactive elements remain clickable and accessible in narrow containers
 </CODE_QUALITY>
 
 <FUNCTIONALITY_REQUIREMENTS>
@@ -284,6 +286,8 @@ pages/screen_name/
 - Demonstrate why React is essential over static HTML with rich functionality.
 - Mock data must be embedded directly in the screen component, do not use any external data sources.
 - Never change or modify any file located at src/components or src/components/ui folder.
+- Components must work seamlessly in both full-width layouts and constrained sidebar contexts
+- Never sacrifice content readability for layout aesthetics - avoid text truncation on important information
 
 <ROUTING_DECISION_MATRIX>
 - Use navigate() ONLY when screen_navigation context explicitly specifies routing scenarios

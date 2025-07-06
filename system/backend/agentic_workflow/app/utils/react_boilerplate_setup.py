@@ -148,6 +148,8 @@ class AIReactBoilerplateSetup:
             "react": "^18.2.0",
             "react-dom": "^18.2.0",
             "react-helmet": "^6.1.0",
+            "react-beautiful-dnd": "^13.1.1",
+            "react-hot-toast": "^2.4.1",
             "react-hook-form": "^7.55.0",
             "react-router-dom": "6.0.2",
             "react-router-hash-link": "^2.4.3",
