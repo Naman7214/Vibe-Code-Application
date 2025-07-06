@@ -1,5 +1,6 @@
 import asyncio
 import json
+import os
 
 from fastapi import Depends
 
@@ -80,13 +81,47 @@ class Helper:
 
     async def run_stage_2_pipeline(self, request: CodeGenerationRequest):
         """
-        Processes the input for Stage 3 to generate the code for the screens.
+        Processes the input for Stage 2 to generate the code for the screens.
         """
         stage_iv_data, screen_navigation, global_scratchpad, file_structure = (
             self.read_context_files(request)
         )
 
-        screen_names = list(stage_iv_data.keys())
+        # Check for existing screen folders in presentation directory
+        session_id = session_state.get()
+        presentation_path = f"artifacts/{session_id}/codebase/lib/presentation"
+        
+        # Filter out screens that already have folders in presentation directory
+        all_screen_names = list(stage_iv_data.keys())
+        screens_to_process = []
+        existing_screens = []
+        
+        for screen_name in all_screen_names:
+            screen_folder_path = os.path.join(presentation_path, screen_name)
+            if os.path.exists(screen_folder_path) and os.path.isdir(screen_folder_path):
+                existing_screens.append(screen_name)
+                loggers["screen_generation"].info(f"Screen '{screen_name}' already exists in presentation folder, skipping generation")
+            else:
+                screens_to_process.append(screen_name)
+        
+        if existing_screens:
+            loggers["screen_generation"].info(f"Skipping {len(existing_screens)} existing screens: {existing_screens}")
+        
+        if not screens_to_process:
+            loggers["screen_generation"].info("All screens already exist, no screens to process")
+            return
+
+        # Filter stage_iv_data and screen_navigation to only include screens to process
+        stage_iv_data = {
+            screen: stage_iv_data[screen] 
+            for screen in screens_to_process
+        }
+        screen_navigation = {
+            screen: screen_navigation.get(screen, {})
+            for screen in screens_to_process
+        }
+
+        screen_names = screens_to_process
         batch_size = 5
 
         for i in range(0, len(screen_names), batch_size):

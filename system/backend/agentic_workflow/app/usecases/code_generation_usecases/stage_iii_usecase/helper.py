@@ -1,6 +1,7 @@
 import asyncio
 import json
 import logging
+import os
 
 from fastapi import Depends
 
@@ -102,7 +103,41 @@ class Helper:
 
         self.logger.info(f"successfully read the context files...")
 
-        screen_names = list(stage_iv_data.keys())
+        # Check for existing screen folders in pages directory
+        session_id = session_state.get()
+        pages_path = f"artifacts/{session_id}/codebase/src/pages"
+        
+        # Filter out screens that already have folders in pages directory
+        all_screen_names = list(stage_iv_data.keys())
+        screens_to_process = []
+        existing_screens = []
+        
+        for screen_name in all_screen_names:
+            screen_folder_path = os.path.join(pages_path, screen_name)
+            if os.path.exists(screen_folder_path) and os.path.isdir(screen_folder_path):
+                existing_screens.append(screen_name)
+                self.logger.info(f"Screen '{screen_name}' already exists in pages folder, skipping generation")
+            else:
+                screens_to_process.append(screen_name)
+        
+        if existing_screens:
+            self.logger.info(f"Skipping {len(existing_screens)} existing screens: {existing_screens}")
+        
+        if not screens_to_process:
+            self.logger.info("All screens already exist, no screens to process")
+            return
+
+        # Filter stage_iv_data and screen_navigation to only include screens to process
+        stage_iv_data = {
+            screen: stage_iv_data[screen] 
+            for screen in screens_to_process
+        }
+        screen_navigation = {
+            screen: screen_navigation.get(screen, {})
+            for screen in screens_to_process
+        }
+
+        screen_names = screens_to_process
         batch_size = 5
         total_screens = len(screen_names)
         total_batches = (total_screens + batch_size - 1) // batch_size
