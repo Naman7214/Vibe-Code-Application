@@ -42,6 +42,7 @@ Create a global design theme strategy that will serve as the foundation referenc
 </OUTPUT_REQUIREMENTS>
 
 Make sure to use proper escape characters for the new lines and other special characters such that it'll not cause any error in the upcoming parsing of the output.
+CRITICAL: ALWAYS include semantic colors (success, warning, error, info) in the color palette even if not explicitly mentioned in the domain context. These are essential for UI components and will cause errors if missing.
 <OUTPUT>
 {
     "design_psychology": "brief statement of overall design approach (about 4-5 sentences) with core psychological engagement principle such that it hooks the user and makes them want to use the application",
@@ -64,13 +65,13 @@ Make sure to use proper escape characters for the new lines and other special ch
         }
     },
     "typography": {
-        "heading_font": "reasoning for heading font selection, including web readability, brand alignment, and platform compatibility",
-        "body_font": "reasoning for body font selection, including web application reading comfort, accessibility, and performance considerations",
+        "heading_font": {"approach": "reasoning for heading font selection, including web readability, brand alignment, and cross-platform compatibility"},
+        "body_font": {"approach": "reasoning for body font selection, including web application reading comfort, accessibility, and performance considerations"},
         "hierarchy": {
-            "h1": "sizing and weight strategy for primary headings, including web prominence and visual hierarchy principles",
-            "h2": "sizing and weight strategy for secondary headings, including web scanning patterns and information architecture",
-            "body": "sizing and weight strategy for body text, including web reading comfort and accessibility standards",
-            "caption": "sizing and weight strategy for captions, including web space efficiency and secondary information hierarchy"
+            "h1": {"approach": "sizing and weight strategy for primary headings, including web prominence and visual hierarchy principles"},
+            "h2": {"approach": "sizing and weight strategy for secondary headings, including web scanning patterns and information architecture"},
+            "body": {"approach": "sizing and weight strategy for body text, including web reading comfort and accessibility standards"},
+            "caption": {"approach": "sizing and weight strategy for captions, including web space efficiency and secondary information hierarchy"}
         }
     },
     "visual_mood": {
@@ -153,8 +154,8 @@ Make sure to use proper escape characters for the new lines and other special ch
             "description": "Brief description of what this cluster contains and its purpose (about 2-3 sentences)",
             "components": {
                 "component_name": {
-                    "used_by_screens": ["screen1", "screen2"],
-                    "responsibilities": ["responsibility 1", "responsibility 2"],
+                    "used_by_screens": ["screen_1", "screen_2"],
+                    "responsibilities": ["responsibility_1", "responsibility_2"],
                     "description": "component purpose, functionality, and usage context (about 2-3 sentences)"
                 }
             }
@@ -163,8 +164,8 @@ Make sure to use proper escape characters for the new lines and other special ch
             "description": "Components that don't fit into specific functional clusters but are still globally reusable",
             "components": {
                 "component_name": {
-                    "used_by_screens": ["screen1", "screen2"],
-                    "responsibilities": ["responsibility 1", "responsibility 2"],
+                    "used_by_screens": ["screen_1", "screen_2"],
+                    "responsibilities": ["responsibility_1", "responsibility_2"],
                     "description": "component purpose, functionality, and usage context (about 2-3 sentences)"
                 }
             }

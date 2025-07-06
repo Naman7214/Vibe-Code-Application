@@ -33,14 +33,13 @@ Analyze the provided domain context, project context, industry patterns and sele
 - Ensure data requirements are realistic and actionable, since the upcoming stages will be using this data requirements to generate the realistic mock data.
 - If the previous output of the SECOND stage is present then just extend it by adding the new screens and their requirements and provide the extended output in the <OUTPUT> tags
 - For providing the description at the required places, make sure to provide it in a manner that it indicates deeper reasoning and understanding of the users needs.
-- Add 2-3 concise user stories per screen focused on core use cases
 - Make sure to add the proper escape characters for the new lines and other special characters such that it'll not cause any error in the upcoming parsing of the output.
 </OUTPUT_REQUIREMENTS>
 
 <OUTPUT>
 {
     "screen_name": {
-        "primary_purpose": "a detailed purpose statement of the screen (about 5-6 sentences)",
+        "primary_purpose": "a detailed and clear purpose statement of the screen with deeper web first reasoning (about 5-6 sentences)",
         "data_needs": {
             "display_data": ["data type 1", "data type 2"],
             "user_input": ["input type 1", "input type 2"],
@@ -54,8 +53,6 @@ Analyze the provided domain context, project context, industry patterns and sele
     "global_data_requirements": ["shared data 1", "shared data 2"]
 }
 </OUTPUT>
-
-Your context will be used by React developer to build the React app, so make sure to provide the actionable technical context for the React developer to build the React app.
 """
 
 

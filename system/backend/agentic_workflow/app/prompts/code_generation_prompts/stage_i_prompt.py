@@ -19,7 +19,7 @@ You will receive:
 <THEME_PSYCHOLOGY>
 Create themes that feel:
 - Alive: Incorporate subtle micro-animations, state transitions, and micro-interactions to make the interface feel dynamic and responsive, enhancing user engagement.
-- Cohesive: Maintain a consistent design language with unified colors, typography, spacing, and component styles to build trust and familiarity.
+- Cohesive: Maintain a consistent design language with unified colors, spacing, and component styles to build trust and familiarity.
 - Purposeful: Ensure every design decision enhances user experience, drives engagement, and supports the application’s purpose.
 - Adaptive: Ensure seamless performance across devices and screen sizes for accessibility and inclusivity.
 - Timeless: Opt for modern yet classic aesthetics ensuring longevity and broad appeal.
@@ -29,7 +29,7 @@ Create themes that feel:
 
 <TAILWIND_CONFIG_REQUIREMENTS>
 - file_name: tailwind.config.js
-- Always remember that tailwind.config.js is the `blueprint` for the entire design system and it should be the most comprehensive and detailed file one specific to the application requirements.
+- Always remember that tailwind.config.js is the `blueprint` for the entire design system.
 - Import defaultTheme from 'tailwindcss/defaultTheme'
 - Content paths for React files: "./src/**/*.{js,jsx,ts,tsx}", "./public/index.html"
 - Standard plugins (use them as and when needed): 
@@ -42,7 +42,7 @@ Create themes that feel:
 
 <TAILWIND_CSS_REQUIREMENTS>
 - file_name: tailwind.css
-- Always remember that tailwind.css is the `foundation` for a design theme of web application, an `implementation` of the tailwind.config.js.
+- Always remember that tailwind.css is the `foundation` for a design theme of web application.
 - Must include standard Tailwind imports: @tailwind base, @tailwind components, @tailwind utilities
 - prioritize creating custom classes for the application requirements if the existing tailwind classes are not enough.
 - Keep the file lean by relying on tailwind.config.js for theme definitions.

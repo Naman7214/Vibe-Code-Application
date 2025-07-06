@@ -136,14 +136,18 @@ Build a full-fledged web application frontend, not a static demo. Every button m
 </IMPORT_PATH_STANDARDS>
 </COMPONENT_INTEGRATION>
 
+
+<MANDATORY_REQUIREMENTS>
 <LAYOUT_CONSISTENCY_AND_STANDARDS>
 
 <DESKTOP_FIRST_APPROACH>
 - CRITICAL: Use desktop-first responsive design methodology throughout all components.
-- Start with desktop styles as base (no prefix), then apply responsive breakpoints: xl:, lg:, md:, sm:, no horizontal scrolling.
-- Prioritize and optimize UI for desktop as the primary design target.
-- Design pattern: desktop → tablet → mobile (not mobile → desktop).
-- Ensure all responsive patterns follow this descending breakpoint hierarchy.
+- **Base styles (no prefix):** Optimized for desktop (1024px+)
+- **Responsive breakpoints (descending order):** xl: → lg: → md: → sm:
+- **Design progression:** Desktop → Tablet → Mobile (never reverse)
+- **Content strategy:** Start with full functionality on desktop, progressively simplify for smaller screens
+- **Layout hierarchy:** Multi-column desktop → Fewer columns tablet → Single column mobile
+- **NO horizontal scrolling on ANY device**
 </DESKTOP_FIRST_APPROACH>
 
 <LAYOUT_FOUNDATION>
@@ -156,6 +160,7 @@ Implement standardized grid system with uniform gaps across all components; alig
 
 <OVERLAY_AND_MODEL_STANDARDS>
 Center overlays and modals using Flexbox utilities with appropriate z-index for proper layering; use standardized modal widths with consistent padding and accessibility-compliant focus states; apply uniform backdrop styling ensuring proper contrast ratios; structure modals with header, content, and footer sections using consistent spacing; ensure modal content is scrollable. Ensure consistent padding and spacing in the modals and overlays. Use vertical scrolling tho handle overflow of content for better user accessibility.
+- IMPLEMENT smooth animations with framer-motion for enter/exit transitions
 </OVERLAY_AND_MODEL_STANDARDS>
 
 <PREVENT_OVERLAPPING>
@@ -163,10 +168,11 @@ Set proper z-index hierarchy using systematic layering utilities; use absolute p
 </PREVENT_OVERLAPPING>
 
 <SCREEN_UTILIZATION_PATTERNS>
-Create full-width layouts using Tailwind utilities that utilize complete viewport width on all devices; implement responsive grids using Tailwind grid classes that start with multi-column on desktop and scale down to single-column on smaller screens; use responsive Tailwind padding classes for content breathing room; avoid fixed-width containers that create excessive margins on wide screens; ensure content flows edge-to-edge with proper internal spacing using Tailwind spacing utilities rather than centering content in narrow containers that waste screen real estate.
+Create layouts using Tailwind utilities that utilize complete viewport width and hieght on all devices; implement responsive grids using Tailwind grid classes that start with multi-column on desktop and scale down to single-column on smaller screens; use responsive Tailwind padding classes for content breathing room; avoid fixed-width containers that create excessive margins on wide screens; ensure content flows edge-to-edge with proper internal spacing using Tailwind spacing utilities rather than centering content in narrow containers that waste screen real estate.
 </SCREEN_UTILIZATION_PATTERNS>
 
 </LAYOUT_CONSISTENCY_AND_STANDARDS>
+</MANDATORY_REQUIREMENTS>
 
 <DATA_STRUCTURE_CONSISTENCY>
 - ENSURE prop data types match exactly between component definitions and usage
@@ -186,6 +192,7 @@ Create full-width layouts using Tailwind utilities that utilize complete viewpor
 - Edge cases included (empty states, long text, etc.)
 - Culturally diverse content
 - Professional quality images from Unsplash
+- In the screen requirements, you will get the example data to be used in the application, infer more data from the example data and use it in the application.
 </DATA_REQUIREMENTS>
 
 <PROP_INTERFACE_VALIDATION>
@@ -202,7 +209,6 @@ Use these wrapper components when applicable:
 <ICON_IMPLEMENTATION_STANDARD>
 - Component: `src/components/AppIcon.jsx`
 - Purpose: For all icon implementations using Lucide React
-- Import: `import Icon from "components/AppIcon";`
 - Props: name (string, required), size (number, default: 24), color (string, default: "currentColor"), strokeWidth (number, default: 2), className (string)
 - Usage: `<Icon name="IconName" size={{24}} color="var(--primary)" />`
 </ICON_IMPLEMENTATION_STANDARD>
@@ -210,7 +216,6 @@ Use these wrapper components when applicable:
 <IMAGE_IMPLEMENTATION_STANDARD>
 - Component: `src/components/AppImage.jsx`
 - Purpose: For all image rendering with error fallback to no_image.png
-- Import: `import Image from "components/AppImage";`
 - Props: src (string, required), alt (string, default: "Image Name"), className (string)
 - Usage: `<Image src="https://example.com/image.jpg" alt="Description" className="w-full h-auto" />`
 </IMAGE_IMPLEMENTATION_STANDARD>
@@ -218,14 +223,12 @@ Use these wrapper components when applicable:
 <ERROR_BOUNDARY_STANDARD>
 - Component: `src/components/ErrorBoundary.jsx`
 - Purpose: Wrap complex components prone to errors
-- Import: `import ErrorBoundary from "components/ErrorBoundary";`
 - Usage: `<ErrorBoundary><YourComponent /></ErrorBoundary>`
 </ERROR_BOUNDARY_STANDARD>
 
 <SCROLL_RESET_STANDARD>
 - Component: `src/components/ScrollToTop.jsx`
 - Purpose: Include in pages requiring scroll reset on route change
-- Import: `import ScrollToTop from "components/ScrollToTop";`
 - Usage: `<ScrollToTop />` (typically in route components)
 </SCROLL_RESET_STANDARD>
 
@@ -248,7 +251,7 @@ pages/screen_name/
 <CODE_QUALITY>
 - Write production-ready, clean, and maintainable React code using functional components and hooks.
 - Keep components small, focused, and reusable, following the single responsibility principle.
-- Provide realistic, comprehensive mock data that goes beyond basic requirements - create rich, detailed, comprehensive and larger datasets that demonstrate real-world usage and create a rich user experience.
+- Provide realistic, comprehensive mock data that goes beyond basic requirements - create rich, detailed, comprehensive and larger datasets that demonstrate real-world usage and create a rich user experience, use it in the application.
 - Use recharts library for the charts and graphs.
 - Properly manage the animations, border radius, spacing, shadows, breakpoints, layout, colors, typography and other design aspects by using the tailwindCSS classes.
 - Each user-accessible component must include realistic sample data that will be displayed.
@@ -256,6 +259,7 @@ pages/screen_name/
 - Implement detailed responsive behavior for all screen sizes
 - Use progressive disclosure and smart spacing to fit content in constrained layouts
 - Ensure interactive elements remain clickable and accessible in narrow containers
+- 
 </CODE_QUALITY>
 
 <FUNCTIONALITY_REQUIREMENTS>
@@ -283,9 +287,11 @@ pages/screen_name/
 - Build as if the screen will be deployed to real users tomorrow.
 - Demonstrate why React is essential over static HTML with rich functionality.
 - Mock data must be embedded directly in the screen component, do not use any external data sources.
-- Never change or modify any file located at src/components or src/components/ui folder.
+- **CRITICAL:** Never change or modify any existing files in src/components or src/components/ui folders.
+- **ONLY:** Use existing global components as-is with their defined props and interfaces.
+- **CREATE:** New components only in the screen-specific components/ folder.
 - Components must work seamlessly in both full-width layouts and constrained sidebar contexts
-- Never sacrifice content readability for layout aesthetics - avoid text truncation on important information
+- Never sacrifice content readability - avoid text truncation on important information
 
 <ROUTING_DECISION_MATRIX>
 - Use navigate() ONLY when screen_navigation context explicitly specifies routing scenarios
