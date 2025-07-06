@@ -162,7 +162,7 @@ pip install -r requirements.txt
 uvicorn system.backend.agentic_workflow.main:app
 
 # Start the tools service
-uvicorn system.backend.tools.main:app   
+uvicorn system.backend.tools.main:app --port 8001  
 ```
 
 ### Frontend Setup
